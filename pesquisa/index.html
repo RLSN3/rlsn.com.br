@@ -75,7 +75,7 @@ button{font:inherit;color:inherit}
 .barra.on{transform:none}
 .barra .wrap{height:var(--barra-h);display:flex;align-items:center;gap:14px}
 .barra .selo{width:30px;height:30px;color:var(--branco)}
-.barra-seg{flex:1;display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
+.barra-seg{flex:1;display:grid;grid-template-columns:repeat(8,1fr);gap:4px}
 .barra-seg span,.prog-barra span{position:relative;height:5px;border-radius:99px;background:var(--preto-3);overflow:hidden}
 .barra-seg span::after,.prog-barra span::after{content:"";position:absolute;inset:0;background:var(--turquesa);transform:scaleX(0);transform-origin:left;transition:transform .6s var(--ease)}
 .barra-seg span.on::after,.prog-barra span.on::after{transform:scaleX(1)}
@@ -104,7 +104,7 @@ h1 .p{display:inline-block}
 h1 .p > span{display:inline-block}
 .intro{margin:0;color:var(--cinza);font-size:var(--t-corpo);line-height:1.6;max-width:38ch}
 .prog{display:flex;flex-direction:column;gap:12px;width:100%;margin-top:8px}
-.prog-barra{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.prog-barra{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
 .prog-barra span{height:6px;background:rgba(255,255,255,.16)}
 .prog-txt{font-size:13px;color:var(--cinza);font-weight:500;font-variant-numeric:tabular-nums}
 .prog-txt b{color:var(--turquesa);font-weight:700}
@@ -186,6 +186,10 @@ main .wrap{padding-block:30px 44px}
 
 .card.erro{border-color:var(--laranja)}
 .card.treme{animation:treme .45s}
+.chega{animation:chega .8s var(--ease)}
+@keyframes chega{0%{transform:translateY(0)}28%{transform:translateY(-12px)}52%{transform:translateY(0)}72%{transform:translateY(-4px)}100%{transform:translateY(0)}}
+.card.chega .num{animation:pulsaNum .8s var(--ease)}
+@keyframes pulsaNum{35%{transform:scale(1.12)}}
 @keyframes treme{20%{transform:translateX(-6px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}}
 .aviso{display:none;align-items:center;gap:8px;margin-top:16px;background:var(--laranja);color:var(--preto);font-size:13px;font-weight:700;padding:8px 14px;border-radius:99px;width:fit-content}
 .card.erro .aviso{display:flex;animation:sobe .35s var(--ease)}
@@ -391,8 +395,8 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
 <div class="barra" id="barra" aria-hidden="true">
   <div class="wrap">
     <div class="selo"><svg viewBox="0 0 200 200"><use href="#logo"/></svg></div>
-    <div class="barra-seg" id="barraSeg"><span></span><span></span><span></span><span></span><span></span><span></span></div>
-    <div class="barra-num" id="barraNum"><b>0</b>/6</div>
+    <div class="barra-seg" id="barraSeg"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="barra-num" id="barraNum"><b>0</b>/8</div>
   </div>
 </div>
 
@@ -410,11 +414,11 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
           <div class="slogan"><b>DESIGN QUE POSICIONA.</b>ESTRATÉGIA QUE VENDE.</div>
         </div>
         <div class="textos">
-          <h1 id="titulo">Como está sendo trabalhar com o Railson Lima</h1>
-          <p class="intro" data-in style="--d:520">Sua opinião sincera me ajuda a entregar um trabalho cada vez melhor. Leva menos de 3 minutos, e as respostas são confidenciais.</p>
+          <h1 id="titulo">Como está sendo trabalhar com o Railson Lima?</h1>
+          <p class="intro" data-in style="--d:520">Sua opinião sincera me ajuda a entregar um trabalho cada vez melhor. Leva menos de 3 minutos e as respostas são confidenciais.</p>
           <div class="prog" data-in style="--d:640" aria-live="polite">
-            <div class="prog-barra" id="progBarra"><span></span><span></span><span></span><span></span><span></span><span></span></div>
-            <div class="prog-txt" id="progTxt"><b>0</b> de 6 etapas respondidas</div>
+            <div class="prog-barra" id="progBarra"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="prog-txt" id="progTxt"><b>0</b> de 8 etapas respondidas</div>
           </div>
         </div>
       </div>
@@ -431,7 +435,7 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
       <section class="card rv" id="c-servicos" data-aviso="Escolha pelo menos um serviço">
         <fieldset>
           <legend><span class="q-top"><span class="num">01<span class="ok"></span></span><span class="tag">Pode marcar mais de um</span></span>
-            <span class="q-tit">Quais serviços você contrata com Railson Lima?</span></legend>
+            <span class="q-tit">Quais serviços você contrata com o Railson Lima?</span></legend>
           <div class="q-corpo"><div class="opcoes" data-grupo="servicos"></div></div>
           <div class="aviso" role="alert"></div>
         </fieldset>
@@ -471,7 +475,7 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
         <fieldset>
           <legend><span class="q-top"><span class="num">05<span class="ok"></span></span></span>
             <span class="q-tit">Como você avalia a estratégia por trás do trabalho?</span>
-            <span class="q-sub">Se o que é feito tem objetivo claro para o seu negócio.</span></legend>
+            <span class="q-sub">Se o que é feito tem um objetivo claro para o seu negócio.</span></legend>
           <div class="q-corpo"><div class="escala" data-escala="q5"></div></div>
           <div class="aviso" role="alert"></div>
         </fieldset>
@@ -490,7 +494,7 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
 
       <section class="card rv" id="c-valoriza" data-aviso="Escolha pelo menos uma opção">
         <fieldset>
-          <legend><span class="q-top"><span class="num">07<span class="ok"></span></span><span class="tag">Pode marcar mais de um</span></span>
+          <legend><span class="q-top"><span class="num">07<span class="ok"></span></span><span class="tag">Pode marcar mais de uma</span></span>
             <span class="q-tit">O que você mais valoriza no trabalho do Railson Lima?</span></legend>
           <div class="q-corpo"><div class="opcoes" data-grupo="valoriza"></div></div>
           <div class="aviso" role="alert"></div>
@@ -500,7 +504,7 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
       <section class="card escuro rv" id="c-nps" data-aviso="Escolha uma nota de 0 a 10">
         <fieldset>
           <legend><span class="q-top"><span class="num">08<span class="ok"></span></span></span>
-            <span class="q-tit">De 0 a 10, quanto você indicaria a RLSN para um amigo ou parceiro?</span></legend>
+            <span class="q-tit">De 0 a 10, o quanto você indicaria a RLSN para um amigo ou parceiro?</span></legend>
           <div class="q-corpo"><div class="nps" id="nps"></div>
             <div class="nps-leg"><span>0 · Não indicaria</span><span>10 · Com certeza</span></div></div>
           <div class="aviso" role="alert"></div>
@@ -509,11 +513,12 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
 
       <div class="parte rv-linha">PARTE 3 · SUA VOZ</div>
 
-      <section class="card rv" id="c-depo">
+      <section class="card rv" id="c-depo" data-aviso="Escolha uma opção">
         <fieldset>
-          <legend><span class="q-top"><span class="num">09<span class="ok"></span></span><span class="tag">Opcional</span></span>
+          <legend><span class="q-top"><span class="num">09<span class="ok"></span></span></span>
             <span class="q-tit">Posso usar seu comentário como depoimento?</span></legend>
           <div class="q-corpo"><div class="opcoes col" data-grupo="depoimento"></div></div>
+          <div class="aviso" role="alert"></div>
         </fieldset>
       </section>
 
@@ -524,16 +529,17 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
         <div class="aviso" role="alert"></div>
       </section>
 
-      <section class="card azul rv" id="c-msg">
-        <div class="q-top"><span class="num">11<span class="ok"></span></span><span class="tag">Opcional</span></div>
-        <label class="q-tit" for="msg">Quer contar mais alguma coisa?</label>
+      <section class="card azul rv" id="c-msg" data-aviso="Escreva sua mensagem">
+        <div class="q-top"><span class="num">11<span class="ok"></span></span></div>
+        <label class="q-tit" for="msg">O que mais você gostaria de me contar?</label>
         <span class="q-sub">Espaço livre para elogios, críticas, sugestões, ideias para o seu negócio ou qualquer informação que você queira compartilhar comigo.</span>
         <div class="q-corpo"><textarea class="campo" id="msg" name="msg" placeholder="Escreva aqui, sem pressa..."></textarea></div>
+        <div class="aviso" role="alert"></div>
       </section>
 
       <div class="envio">
         <button type="submit" class="btn btn-preto" id="enviar">Enviar minhas respostas <span class="seta" aria-hidden="true">→</span></button>
-        <p class="nota">Ao enviar, o WhatsApp abre com suas respostas prontas. É só tocar em enviar. Suas respostas ficam só comigo e servem para melhorar o atendimento da RLSN.</p>
+        <p class="nota">Ao enviar, o WhatsApp abre com a mensagem pronta. É só tocar em enviar. Suas respostas ficam só comigo e servem para melhorar o atendimento da RLSN.</p>
       </div>
     </form>
 
@@ -633,7 +639,7 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
     servicos:["Gestão de redes sociais","Identidade visual","Site ou landing page","Vídeos e fotos","Design avulso","Consultoria estratégica"],
     evolucao:["Sim, bastante","Sim, um pouco","Ainda não","Prefiro não responder"],
     valoriza:["Criatividade","Estratégia","Atendimento próximo","Agilidade","Organização","Qualidade visual","Resultados"],
-    depoimento:["Sim, com meu nome e empresa","Sim, sem identificação","Não"]
+    depoimento:["Sim, com meu nome e o da empresa","Sim, sem identificação","Não"]
   };
   var MULTI = {servicos:true, valoriza:true};
   var PALAVRAS = ["","Ruim","Regular","Bom","Ótimo","Excelente"];
@@ -744,28 +750,29 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
     {id:"c-evolucao", ok:function(){return !!um("evolucao");}},
     {id:"c-valoriza", ok:function(){return marcados("valoriza").length>0;}},
     {id:"c-nps", ok:function(){return um("nps")!=="";}},
-    {id:"c-nome", ok:nomeOk}
-  ];
-  var OPCIONAIS = [
     {id:"c-depo", ok:function(){return !!um("depoimento");}},
-    {id:"c-msg", ok:function(){return $("msg").value.trim().length>0;}}
+    {id:"c-nome", ok:nomeOk},
+    {id:"c-msg", ok:function(){return $("msg").value.trim().length>=2;}}
   ];
-  /* 6 etapas: serviços · notas 02 a 05 · evolução · o que valoriza · indicação · nome */
+  var OPCIONAIS = [];
+  /* 8 etapas: serviços · notas 02 a 05 · evolução · o que valoriza · indicação · depoimento · nome · mensagem */
   var ETAPAS = [
     function(){return REGRAS[0].ok();},
     function(){return REGRAS[1].ok()&&REGRAS[2].ok()&&REGRAS[3].ok()&&REGRAS[4].ok();},
     function(){return REGRAS[5].ok();},
     function(){return REGRAS[6].ok();},
     function(){return REGRAS[7].ok();},
-    function(){return REGRAS[8].ok();}
+    function(){return REGRAS[8].ok();},
+    function(){return REGRAS[9].ok();},
+    function(){return REGRAS[10].ok();}
   ];
   var segTopo = document.querySelectorAll("#progBarra span"), segBarra = document.querySelectorAll("#barraSeg span");
   function atualizar(){
     var feitas = ETAPAS.filter(function(f){return f();}).length;
-    for(var i=0;i<6;i++){ segTopo[i].classList.toggle("on", i<feitas); segBarra[i].classList.toggle("on", i<feitas); }
-    $("progTxt").innerHTML = "<b>"+feitas+"</b> de 6 etapas respondidas";
-    $("barraNum").innerHTML = "<b>"+feitas+"</b>/6";
-    $("enviar").classList.toggle("completo", feitas===6);
+    for(var i=0;i<8;i++){ segTopo[i].classList.toggle("on", i<feitas); segBarra[i].classList.toggle("on", i<feitas); }
+    $("progTxt").innerHTML = "<b>"+feitas+"</b> de 8 etapas respondidas";
+    $("barraNum").innerHTML = "<b>"+feitas+"</b>/8";
+    $("enviar").classList.toggle("completo", feitas===8);
     REGRAS.concat(OPCIONAIS).forEach(function(r){
       var c=$(r.id), ok=r.ok();
       c.classList.toggle("feito", ok);
@@ -801,23 +808,59 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
                       : (window.scrollY + r.top - barraH - 20);
     window.scrollTo({top:Math.max(0,alvo), behavior: reduz ? "auto" : "smooth"});
   }
+  /* Avanço automático: depois de cada resposta, rola até a próxima e dá um pequeno salto nela */
   var timerAvanco;
-  form.addEventListener("change", function(e){
-    var inp = e.target;
-    if(!porToque || inp.type !== "radio") return;
-    porToque = false;
-    var card = inp.closest(".card"), idx = cards.indexOf(card), prox = cards[idx+1];
+  function saltar(el){
+    if(reduz) return;
+    el.classList.remove("chega"); void el.offsetWidth; el.classList.add("chega");
+    setTimeout(function(){ el.classList.remove("chega"); }, 900);
+  }
+  function proximoDe(card){
+    var idx = cards.indexOf(card);
+    return idx >= 0 && idx < cards.length - 1 ? cards[idx+1] : document.querySelector(".envio");
+  }
+  function avancar(card, atraso){
+    var prox = proximoDe(card);
     if(!prox) return;
     clearTimeout(timerAvanco);
     timerAvanco = setTimeout(function(){
       var r = prox.getBoundingClientRect(), topoLivre = $("barra").offsetHeight + 8;
-      if(r.top >= topoLivre && r.bottom <= window.innerHeight - 8){ if(prox.id === "c-nome") $("nome").focus({preventScroll:true}); return; }
-      rolarPara(prox, false);
-      if(prox.id === "c-nome"){ setTimeout(function(){ $("nome").focus({preventScroll:true}); }, reduz?0:600); }
-    }, reduz ? 120 : 420);
+      var visivel = r.top >= topoLivre && r.bottom <= window.innerHeight - 8;
+      if(!visivel) rolarPara(prox, prox.classList.contains("envio"));
+      setTimeout(function(){
+        saltar(prox.classList.contains("envio") ? $("enviar") : prox);
+        var campo = prox.querySelector("input[type=text], textarea");
+        if(campo && porToqueCampo) campo.focus({preventScroll:true});
+      }, visivel || reduz ? 0 : 520);
+    }, reduz ? 120 : atraso);
+  }
+  var porToqueCampo = false;
+  form.addEventListener("change", function(e){
+    var inp = e.target, card = inp.closest(".card");
+    if(!card) return;
+    if(inp.type === "radio"){
+      if(!porToque) return;
+      porToque = false; porToqueCampo = true;
+      avancar(card, 420);
+    } else if(inp.type === "checkbox"){
+      if(!porToque) return;
+      porToque = false; porToqueCampo = true;
+      clearTimeout(timerAvanco);
+      if(marcados(inp.name).length) avancar(card, 1500);
+    }
   });
+  /* enquanto a pessoa ainda marca opções no mesmo cartão, o salto espera */
+  form.addEventListener("pointerdown", function(e){
+    if(e.target.closest(".op.check")) clearTimeout(timerAvanco);
+  }, true);
   $("nome").addEventListener("keydown", function(e){
-    if(e.key === "Enter"){ e.preventDefault(); rolarPara($("c-msg"), false); setTimeout(function(){ $("msg").focus({preventScroll:true}); }, reduz?0:600); }
+    if(e.key === "Enter"){ e.preventDefault(); if(nomeOk()){ porToqueCampo = true; avancar($("c-nome"), 0); } }
+  });
+  $("nome").addEventListener("change", function(){
+    if(nomeOk() && document.activeElement !== $("msg")){ porToqueCampo = false; avancar($("c-nome"), 250); }
+  });
+  $("msg").addEventListener("change", function(){
+    if(REGRAS[10].ok()) avancar($("c-msg"), 250);
   });
 
   /* ---------- Mensagem do WhatsApp ---------- */
