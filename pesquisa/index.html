@@ -85,7 +85,7 @@ button{font:inherit;color:inherit}
 /* ---------- Topo ---------- */
 .topo{background:var(--preto);color:var(--branco);overflow:hidden}
 .topo .wrap{padding-block:26px 34px}
-.topo-conteudo{display:flex;flex-direction:column;gap:26px;will-change:transform,opacity}
+.topo-conteudo{display:flex;flex-direction:column;gap:26px}
 .topo-linha{display:flex;justify-content:space-between;align-items:center;font-size:var(--t-rot);font-weight:700;letter-spacing:.16em}
 .topo-linha .rot{color:var(--turquesa)}
 .topo-linha .ano{color:var(--cinza);font-variant-numeric:tabular-nums}
@@ -96,8 +96,8 @@ button{font:inherit;color:inherit}
 .slogan{font-size:clamp(10.5px,3.2vw,13px);font-weight:700;letter-spacing:.14em;line-height:1.7;color:var(--cinza)}
 .slogan b{display:block;color:var(--branco);font-weight:700}
 .textos{display:flex;flex-direction:column;gap:14px}
-h1{margin:0;font-size:var(--t-h1);line-height:1.04;font-weight:700;letter-spacing:-.032em;text-wrap:balance}
-h1 .p{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.06em;margin-bottom:-.06em}
+h1{margin:0;font-size:var(--t-h1);line-height:1.1;font-weight:700;letter-spacing:-.032em;text-wrap:balance}
+h1 .p{display:inline-block}
 h1 .p > span{display:inline-block}
 .intro{margin:0;color:var(--cinza);font-size:var(--t-corpo);line-height:1.55;max-width:42ch}
 .prog{display:flex;flex-direction:column;gap:10px;padding-top:4px}
@@ -108,9 +108,9 @@ h1 .p > span{display:inline-block}
 
 /* entrada do topo depois da abertura */
 .anim .topo [data-in]{opacity:0;transform:translateY(18px)}
-.anim .topo h1 .p > span{transform:translateY(105%)}
+.anim .topo h1 .p > span{opacity:0;transform:translateY(.45em)}
 .pronto .topo [data-in]{opacity:1;transform:none;transition:opacity .8s var(--ease),transform .9s var(--ease);transition-delay:calc(var(--d,0) * 1ms)}
-.pronto .topo h1 .p > span{transform:none;transition:transform .9s var(--ease);transition-delay:calc(var(--d,0) * 1ms)}
+.pronto .topo h1 .p > span{opacity:1;transform:none;transition:opacity .7s var(--ease),transform .9s var(--ease);transition-delay:calc(var(--d,0) * 1ms)}
 
 /* ---------- Corpo ---------- */
 main .wrap{padding-block:30px 44px}
@@ -133,7 +133,7 @@ main .wrap{padding-block:30px 44px}
 .num .ok{position:absolute;left:100%;top:-2px;margin-left:4px;width:18px;height:18px;border-radius:50%;background:var(--turquesa);display:grid;place-items:center;transform:scale(0);transition:transform .4s var(--ease)}
 .num .ok::before{content:"";width:8px;height:4px;border-left:2px solid var(--preto);border-bottom:2px solid var(--preto);transform:rotate(-45deg) translate(1px,-1px)}
 .card.feito .num .ok{transform:scale(1)}
-.tag{font-size:var(--t-rot);font-weight:600;color:var(--texto-2);background:var(--fundo);padding:5px 11px;border-radius:99px;white-space:nowrap}
+.tag{font-size:var(--t-rot);font-weight:600;color:var(--texto-2);background:var(--fundo);padding:5px 11px;border-radius:99px;max-width:100%;line-height:1.35}
 .q-tit{display:block;font-weight:700;font-size:var(--t-q);line-height:1.3;letter-spacing:-.012em;text-wrap:pretty}
 .q-sub{display:block;font-size:var(--t-apoio);font-weight:400;color:var(--texto-2);line-height:1.45;margin-top:6px}
 .q-corpo{padding-top:20px}
@@ -154,7 +154,7 @@ main .wrap{padding-block:30px 44px}
 /* ---------- Opções ---------- */
 .opcoes{display:flex;flex-wrap:wrap;gap:8px}
 .op{position:relative;display:block}
-.op > span{position:relative;overflow:hidden;display:flex;align-items:center;gap:10px;min-height:46px;padding:11px 18px;border:1.5px solid var(--linha);border-radius:99px;
+.op > span{position:relative;display:flex;align-items:center;gap:10px;min-height:46px;padding:11px 18px;border:1.5px solid var(--linha);border-radius:99px;
   font-size:var(--t-op);font-weight:500;line-height:1.25;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;
   transition:background .2s,border-color .2s,color .2s,transform .15s var(--ease)}
 @media (hover:hover){.op > span:hover{border-color:var(--preto)}}
@@ -168,6 +168,7 @@ main .wrap{padding-block:30px 44px}
 .opcoes.col .op > span{border-radius:var(--r-in);padding:13px 18px}
 .opcoes.col .op > span::after{content:"";margin-left:auto;width:18px;height:18px;border-radius:50%;border:1.5px solid var(--cinza);flex:none;transition:all .2s}
 .opcoes.col .op input:checked + span::after{border:5px solid var(--preto);background:var(--branco)}
+.op .fx{position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none}
 .onda{position:absolute;border-radius:50%;background:rgba(18,18,18,.14);transform:scale(0);animation:onda .6s ease-out forwards;pointer-events:none}
 @keyframes onda{to{transform:scale(1);opacity:0}}
 
@@ -204,7 +205,7 @@ textarea.campo::placeholder{font-size:16px}
 
 /* envio */
 .envio{margin-top:18px;display:flex;flex-direction:column;align-items:center;gap:16px}
-.btn{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:12px;width:100%;min-height:60px;padding:0 22px;border:0;border-radius:99px;
+.btn{position:relative;display:flex;align-items:center;justify-content:center;gap:12px;width:100%;min-height:60px;padding:0 22px;border:0;border-radius:99px;
   font:inherit;font-size:17px;font-weight:700;letter-spacing:-.005em;cursor:pointer;text-decoration:none;text-align:center;line-height:1.25;
   transition:transform .15s var(--ease),background .2s,opacity .2s;-webkit-tap-highlight-color:transparent}
 .btn:active{transform:scale(.97)}
@@ -252,25 +253,62 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
 .btn-contorno{background:transparent;color:var(--branco);border:1.5px solid var(--preto-3);font-size:15.5px;min-height:54px}
 @media (hover:hover){.btn-contorno:hover{border-color:var(--turquesa)}}
 .btn-contorno svg{width:18px;height:18px;flex:none}
-.pdf-msg{font-size:13px;color:var(--cinza);text-align:center;min-height:1em}
 .indica{border-top:1px solid var(--preto-3);padding-top:22px;margin-top:4px;display:flex;flex-direction:column;gap:10px}
 .indica h3{margin:0;font-size:var(--t-q);font-weight:700;line-height:1.3;letter-spacing:-.01em}
 .indica .btn{margin-top:8px;font-size:15.5px;min-height:54px}
 .final > *{animation:sobe .8s var(--ease) both;animation-delay:calc(var(--d,0) * 1ms)}
 .final > .selo.cor-viva{animation:sobe .8s var(--ease) both,corLogo 12s ease-in-out infinite}
 
-.relatorio{margin-top:6px}
-.rel-resumo{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.rel-tile{background:var(--preto-2);border:1px solid var(--preto-3);border-radius:var(--r-in);padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
-.rel-tile span{font-size:var(--t-rot);font-weight:700;letter-spacing:.12em;color:var(--cinza)}
-.rel-tile b{font-size:32px;font-weight:900;line-height:1.05;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
-.rel-tile.media b{color:var(--branco)}
-.rel-tile.nps b{color:var(--turquesa)}
-.rel-tile small{font-size:13px;color:var(--cinza)}
-.rel-lista{margin:0;display:flex;flex-direction:column}
-.rel-lista div{display:flex;flex-direction:column;gap:3px;padding:13px 0;border-top:1px solid var(--preto-3)}
-.rel-lista dt{font-size:13px;color:var(--cinza);font-weight:500}
-.rel-lista dd{margin:0;font-size:var(--t-corpo);font-weight:600;color:var(--branco);overflow-wrap:anywhere;white-space:pre-line}
+/* ---------- Relatório no visual do PDF ---------- */
+.modo-relatorio main .wrap{max-width:720px;padding-block:24px 40px}
+.modo-relatorio > footer{display:none}
+.folha{background:var(--branco);border-radius:var(--r);overflow:hidden;box-shadow:0 24px 60px -34px rgba(18,18,18,.35);animation:sobe .8s var(--ease) both}
+.folha-topo{background:var(--preto);color:var(--branco);padding:28px 24px 26px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.folha-topo-txt{display:flex;flex-direction:column;gap:10px;min-width:0}
+.folha-rot{font-size:var(--t-rot);font-weight:700;letter-spacing:.16em;color:var(--turquesa)}
+.folha-nome{margin:0;font-size:clamp(24px,6.4vw,34px);line-height:1.15;font-weight:700;letter-spacing:-.02em;overflow-wrap:anywhere;text-wrap:balance}
+.folha-data{margin:0;font-size:var(--t-apoio);color:var(--cinza)}
+.folha-topo .selo{width:clamp(64px,18vw,96px);height:clamp(64px,18vw,96px);color:var(--branco);align-self:flex-start}
+.folha-corpo{padding:24px 24px 8px;display:flex;flex-direction:column;gap:30px}
+.folha-resumo{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.folha-tile{border-radius:var(--r-in);padding:16px 18px 18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.folha-tile span{font-size:11px;font-weight:700;letter-spacing:.1em;line-height:1.35}
+.folha-tile b{font-size:clamp(34px,10vw,46px);font-weight:900;line-height:1.05;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.folha-tile.claro{background:var(--fundo)}
+.folha-tile.claro span{color:var(--texto-2)}
+.folha-tile.claro b{color:var(--azul)}
+.folha-tile.escuro{background:var(--preto);color:var(--branco)}
+.folha-tile.escuro span{color:var(--cinza)}
+.folha-tile.escuro b{color:var(--turquesa)}
+.folha-nps{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.folha-nps em{font-style:normal;font-size:15px;font-weight:700}
+.folha-sec{display:flex;flex-direction:column;gap:14px}
+.folha-parte{margin:0;display:flex;align-items:center;gap:12px;font-size:var(--t-rot);font-weight:700;letter-spacing:.16em;line-height:1.4}
+.folha-parte::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--laranja);flex:none}
+.folha-parte::after{content:"";flex:1;height:1px;background:var(--linha)}
+.folha-sub{margin:4px 0 0;font-size:15px;font-weight:700}
+.folha-linhas{margin:0;display:flex;flex-direction:column;gap:12px}
+.folha-linhas > div{display:grid;grid-template-columns:1fr;gap:3px}
+.folha-linhas dt{font-size:14px;color:var(--texto-2)}
+.folha-linhas dd{margin:0;font-size:16px;font-weight:700;line-height:1.45;overflow-wrap:anywhere}
+.folha-notas{display:flex;flex-direction:column;gap:12px}
+.folha-nota{display:grid;grid-template-columns:1fr auto;grid-template-areas:"rot val" "barra barra";gap:6px 12px;align-items:center}
+.folha-nota .rot{grid-area:rot;font-size:15px}
+.folha-nota .val{grid-area:val;font-size:15px;font-weight:700;white-space:nowrap}
+.folha-nota .barra-n{grid-area:barra;height:8px;border-radius:99px;background:var(--fundo);overflow:hidden}
+.folha-nota .barra-n i{display:block;height:100%;border-radius:99px;background:var(--azul);transform-origin:left;animation:enche 1s .3s var(--ease) both;transform:scaleX(0)}
+.folha-msg{margin:0;background:#E6F1FF;border-radius:var(--r-in);padding:16px 18px 16px 20px;border-left:3px solid var(--azul);font-size:16px;line-height:1.55;white-space:pre-line;overflow-wrap:anywhere}
+.folha-rodape{margin-top:24px;background:var(--fundo);padding:16px 24px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;font-size:12px}
+.folha-rodape b{font-weight:700;letter-spacing:.16em}
+.folha-rodape span{color:var(--texto-2)}
+@media (min-width:640px){
+  .folha-topo{padding:34px 36px 32px}
+  .folha-corpo{padding:30px 36px 10px}
+  .folha-rodape{padding:18px 36px}
+  .folha-linhas > div{grid-template-columns:200px 1fr;gap:16px}
+  .folha-nota{grid-template-columns:200px 1fr 110px;grid-template-areas:"rot barra val";gap:16px}
+  .folha-nota .val{text-align:right}
+}
 @media (min-width:480px){
   .card{padding:28px 28px}
   .final{padding:40px 32px 34px}
@@ -454,7 +492,7 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
       <div id="estadoPronto" style="display:flex;flex-direction:column;gap:20px">
         <span class="rot" style="--d:80">RESPOSTAS PRONTAS</span>
         <h2 id="prontoTit" style="--d:140">Tudo pronto.</h2>
-        <p style="--d:200">Toque no botão abaixo para enviar suas respostas no WhatsApp. O PDF com todas as informações também já está pronto.</p>
+        <p style="--d:200">Toque no botão abaixo para enviar suas respostas no WhatsApp.</p>
         <div class="acoes" style="--d:260">
           <a class="btn btn-turq" id="btnWhats" href="https://wa.me/5588999878583" target="_blank" rel="noopener">Enviar no WhatsApp <span class="seta" aria-hidden="true">→</span></a>
         </div>
@@ -468,14 +506,6 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
         </div>
       </div>
 
-      <div class="acoes" style="--d:320">
-        <button type="button" class="btn btn-contorno" id="btnPdf">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 12v6"/><path d="m9 15 3 3 3-3"/></svg>
-          <span id="btnPdfTxt">Baixar o PDF</span>
-        </button>
-        <div class="pdf-msg" id="pdfMsg"></div>
-      </div>
-
       <div class="indica" style="--d:380">
         <h3>Conhece alguém que precisa se posicionar melhor?</h3>
         <p>Quem chega por indicação tem condição especial para começar.</p>
@@ -483,21 +513,46 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
       </div>
     </section>
 
-    <section class="final relatorio" id="relatorio" hidden aria-live="polite">
-      <div class="selo cor-viva" role="img" aria-label="Logo Railson Lima Design"><svg viewBox="0 0 200 200"><use href="#logo-gira"/></svg></div>
-      <span class="rot">RELATÓRIO DA PESQUISA</span>
-      <h2 id="relNome">Respostas</h2>
-      <p id="relData"></p>
-      <div class="acoes">
-        <button type="button" class="btn btn-turq" id="relPdf"><span id="relPdfTxt">Baixar o PDF</span> <span class="seta" aria-hidden="true">↓</span></button>
-        <div class="pdf-msg" id="relMsg">Preparando o PDF...</div>
+    <article class="folha" id="relatorio" hidden aria-live="polite">
+      <header class="folha-topo">
+        <div class="folha-topo-txt">
+          <span class="folha-rot">PESQUISA DE SATISFAÇÃO</span>
+          <h1 class="folha-nome" id="relNome">Respostas</h1>
+          <p class="folha-data" id="relData"></p>
+        </div>
+        <div class="selo" aria-hidden="true"><svg viewBox="0 0 200 200"><use href="#logo"/></svg></div>
+      </header>
+      <div class="folha-corpo">
+        <div class="folha-resumo">
+          <div class="folha-tile claro"><span>MÉDIA DAS NOTAS (1 A 5)</span><b id="relMedia">–</b></div>
+          <div class="folha-tile escuro"><span>INDICARIA (0 A 10)</span><div class="folha-nps"><b id="relNps">–</b><em id="relPerfil"></em></div></div>
+        </div>
+        <section class="folha-sec">
+          <h2 class="folha-parte">PARTE 1 · O TRABALHO</h2>
+          <dl class="folha-linhas"><div><dt>Serviços</dt><dd id="relServicos"></dd></div></dl>
+          <h3 class="folha-sub">Notas (1 a 5)</h3>
+          <div class="folha-notas" id="relNotas"></div>
+        </section>
+        <section class="folha-sec">
+          <h2 class="folha-parte">PARTE 2 · RESULTADOS</h2>
+          <dl class="folha-linhas">
+            <div><dt>Evolução no negócio</dt><dd id="relEvolucao"></dd></div>
+            <div><dt>O que mais valoriza</dt><dd id="relValoriza"></dd></div>
+            <div><dt>Indicaria (0 a 10)</dt><dd id="relNps2"></dd></div>
+          </dl>
+        </section>
+        <section class="folha-sec">
+          <h2 class="folha-parte">PARTE 3 · SUA VOZ</h2>
+          <dl class="folha-linhas">
+            <div><dt>Depoimento</dt><dd id="relDepo"></dd></div>
+            <div><dt>Cliente</dt><dd id="relCliente"></dd></div>
+          </dl>
+          <h3 class="folha-sub">Mensagem</h3>
+          <blockquote class="folha-msg" id="relMsgTxt"></blockquote>
+        </section>
       </div>
-      <div class="rel-resumo">
-        <div class="rel-tile media"><span>MÉDIA</span><b id="relMedia">–</b><small>Notas de 1 a 5</small></div>
-        <div class="rel-tile nps"><span>INDICARIA</span><b id="relNps">–</b><small id="relPerfil"></small></div>
-      </div>
-      <dl class="rel-lista" id="relLista"></dl>
-    </section>
+      <footer class="folha-rodape"><b>RAILSON LIMA · RLSN</b><span>Design que posiciona. Estratégia que vende.</span></footer>
+    </article>
   </div>
 </main>
 
@@ -513,7 +568,7 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
     <div class="selo"><svg viewBox="0 0 200 200"><use href="#logo-rapido"/></svg></div>
     <ol class="passos" id="passos">
       <li><i></i>Organizando suas respostas</li>
-      <li><i></i>Gerando o PDF</li>
+      <li><i></i>Montando o relatório</li>
       <li><i></i>Preparando o WhatsApp</li>
     </ol>
   </div>
@@ -523,7 +578,6 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
 (function(){
   "use strict";
   var WHATSAPP = "5588999878583";
-  var JSPDF_URL = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
   var OPCOES = {
     servicos:["Gestão de redes sociais","Identidade visual","Site ou landing page","Vídeos e fotos","Design avulso","Consultoria estratégica"],
     evolucao:["Sim, bastante","Sim, um pouco","Ainda não","Prefiro não responder"],
@@ -556,6 +610,16 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
       box.appendChild(el('<label class="op" style="--i:'+n+'"><input class="sr" type="radio" name="'+q+'" id="'+q+'-'+n+'" value="'+n+'"><span><b class="n">'+n+'</b><span class="w">'+PALAVRAS[n]+'</span></span></label>'));
     }
   });
+  function ajustarEscala(){
+    document.querySelectorAll(".escala .w").forEach(function(w){
+      w.style.fontSize = "";
+      var max = w.parentNode.clientWidth - 6, tam = parseFloat(getComputedStyle(w).fontSize);
+      while(w.scrollWidth > max && tam > 8){ tam -= .5; w.style.fontSize = tam + "px"; }
+    });
+  }
+  window.addEventListener("resize", function(){ clearTimeout(ajustarEscala.t); ajustarEscala.t = setTimeout(ajustarEscala, 150); });
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(ajustarEscala);
+  setTimeout(ajustarEscala, 50);
   for(var k=0;k<=10;k++){
     $("nps").appendChild(el('<label class="op" style="--i:'+k+'"><input class="sr" type="radio" name="nps" id="nps-'+k+'" value="'+k+'" aria-label="Nota '+k+'"><span>'+k+'</span></label>'));
   }
@@ -577,7 +641,6 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
     document.body.classList.remove("travado");
     requestAnimationFrame(function(){ root.classList.add("pronto"); });
     setTimeout(function(){ ld.remove(); }, reduz ? 50 : 900);
-    setTimeout(function(){ carregarJsPDF().catch(function(){}); }, 1500);
   }
   var minimo = reduz ? 250 : 1750;
   var fontes = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
@@ -608,7 +671,7 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
     tick = false;
     var h = topo.offsetHeight, y = window.scrollY || 0;
     var p = Math.min(Math.max(y / h, 0), 1);
-    if(!reduz){ topoC.style.transform = "translateY(" + (p*60).toFixed(1) + "px)"; topoC.style.opacity = (1 - p*.85).toFixed(3); }
+    if(!reduz){ topoC.style.opacity = (1 - p*.7).toFixed(3); }
     barra.classList.toggle("on", y > h - 40 && !$("form").hidden && !document.body.classList.contains("modo-relatorio"));
   }
   window.addEventListener("scroll", function(){ if(!tick){ tick = true; requestAnimationFrame(aoRolar); } }, {passive:true});
@@ -672,7 +735,9 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
       var o = document.createElement("i"); o.className = "onda";
       o.style.width = o.style.height = s+"px";
       o.style.left = (e.clientX - r.left - s/2)+"px"; o.style.top = (e.clientY - r.top - s/2)+"px";
-      alvo.appendChild(o); setTimeout(function(){o.remove();}, 650);
+      var fx = alvo.querySelector(":scope > .fx");
+      if(!fx){ fx = document.createElement("span"); fx.className = "fx"; alvo.appendChild(fx); }
+      fx.appendChild(o); setTimeout(function(){o.remove();}, 650);
     }
     if(navigator.vibrate){ try{navigator.vibrate(8);}catch(_){} }
   });
@@ -719,6 +784,7 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
     };
   }
   function mensagem(d){
+    if(d.link) return "*Formulário preenchido com sucesso.*\n\n" + d.link;
     return [
       "*PESQUISA DE SATISFAÇÃO · RLSN*","",
       "*Cliente:* "+d.nome,
@@ -735,171 +801,8 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
       "*Depoimento:* "+d.depoimento,"",
       "*Mensagem:*",
       d.mensagem
-    ].concat(d.link ? ["","*PDF com as respostas:*", d.link] : []).join("\n");
+    ].join("\n");
   }
-
-  /* ---------- PDF ---------- */
-  var jsPDFPronto = null;
-  function carregarJsPDF(){
-    if(jsPDFPronto) return jsPDFPronto;
-    jsPDFPronto = new Promise(function(ok, falha){
-      if(window.jspdf && window.jspdf.jsPDF) return ok(window.jspdf.jsPDF);
-      var s = document.createElement("script");
-      s.src = JSPDF_URL; s.async = true;
-      s.onload = function(){ (window.jspdf && window.jspdf.jsPDF) ? ok(window.jspdf.jsPDF) : falha(new Error("jsPDF indisponível")); };
-      s.onerror = function(){ jsPDFPronto = null; falha(new Error("jsPDF não carregou")); };
-      document.head.appendChild(s);
-    });
-    return jsPDFPronto;
-  }
-  function logoPNG(cor){
-    return new Promise(function(ok){
-      try{
-        var sym = document.getElementById("logo");
-        var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="400" height="400"><g fill="'+cor+'">'+sym.innerHTML.replace(/currentColor/g,cor)+'</g></svg>';
-        var img = new Image();
-        img.onload = function(){
-          try{ var c=document.createElement("canvas"); c.width=400; c.height=400; c.getContext("2d").drawImage(img,0,0,400,400); ok(c.toDataURL("image/png")); }
-          catch(_){ ok(null); }
-        };
-        img.onerror = function(){ ok(null); };
-        img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
-      }catch(_){ ok(null); }
-    });
-  }
-  function hexRGB(h){ h=h.replace("#",""); return [parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16)]; }
-  function gerarPDF(d){
-    return Promise.all([carregarJsPDF(), logoPNG("#FFFFFF")]).then(function(res){
-      var JsPDF = res[0], logo = res[1];
-      var doc = new JsPDF({unit:"mm", format:"a4"});
-      var W = 210, M = 18, CW = W - M*2, y = 0;
-      var PRETO=hexRGB("#121212"), AZUL=hexRGB("#007BFF"), TURQ=hexRGB("#40E0D0"), LARANJA=hexRGB("#FF5733"), CINZA=hexRGB("#CDCDCD"), FUNDO=hexRGB("#EFEFED"), T2=hexRGB("#5B5B59");
-      function cor(c){doc.setTextColor(c[0],c[1],c[2]);}
-      function fill(c){doc.setFillColor(c[0],c[1],c[2]);}
-      function fonte(peso,tam){doc.setFont("helvetica",peso);doc.setFontSize(tam);}
-      function quebra(alt){ if(y + alt > 280){ rodape(); doc.addPage(); y = 20; } }
-      var pagina = 0;
-      function rodape(){
-        pagina++;
-        fill(FUNDO); doc.rect(0,284,W,13,"F");
-        fonte("bold",7.5); cor(PRETO);
-        doc.text("RAILSON LIMA · RLSN", M, 291.5, {charSpace:.6});
-        fonte("normal",7.5); cor(T2);
-        doc.text("Design que posiciona. Estratégia que vende.", W-M, 291.5, {align:"right"});
-      }
-      function secao(titulo){
-        quebra(16);
-        fill(LARANJA); doc.circle(M+1.6, y-1.3, 1.6, "F");
-        fonte("bold",8.5); cor(PRETO);
-        doc.text(titulo, M+6, y, {charSpace:.8});
-        doc.setDrawColor(220,220,217); doc.setLineWidth(.3);
-        doc.line(M+6+doc.getTextWidth(titulo)+titulo.length*.8+4, y-1.3, W-M, y-1.3);
-        y += 8;
-      }
-      function campo(rot, valor){
-        var linhas = doc.splitTextToSize(valor, CW-52);
-        var alt = Math.max(1, linhas.length)*5.4 + 3.2;
-        quebra(alt);
-        fonte("normal",9.5); cor(T2); doc.text(rot, M, y);
-        fonte("bold",10.5); cor(PRETO); doc.text(linhas, M+52, y, {lineHeightFactor:1.45});
-        y += alt;
-      }
-
-      /* Cabeçalho */
-      fill(PRETO); doc.rect(0,0,W,58,"F");
-      if(logo){ doc.addImage(logo, "PNG", W-M-30, 13, 30, 30); }
-      fonte("bold",8); cor(TURQ); doc.text("PESQUISA DE SATISFAÇÃO", M, 20, {charSpace:1});
-      fonte("bold",22); doc.setTextColor(255,255,255);
-      doc.text(doc.splitTextToSize(d.nome, CW-44), M, 33);
-      fonte("normal",9.5); cor(CINZA);
-      var agora = d.t ? new Date(d.t) : new Date();
-      var data = agora.toLocaleDateString("pt-BR") + " às " + agora.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
-      doc.text("Respondida em " + data, M, 48);
-      y = 72;
-
-      /* Resumo em destaque */
-      var bw = (CW - 6)/2;
-      fill(FUNDO); doc.roundedRect(M, y, bw, 30, 4, 4, "F");
-      fill(PRETO); doc.roundedRect(M+bw+6, y, bw, 30, 4, 4, "F");
-      fonte("bold",7.5); cor(T2); doc.text("MÉDIA DAS NOTAS (1 A 5)", M+6, y+8, {charSpace:.5});
-      fonte("bold",26); cor(AZUL); doc.text(d.media, M+6, y+23);
-      fonte("bold",7.5); cor(CINZA); doc.text("INDICARIA (0 A 10)", M+bw+12, y+8, {charSpace:.5});
-      fonte("bold",26); cor(TURQ); doc.text(String(d.nps), M+bw+12, y+23);
-      fonte("bold",10); doc.setTextColor(255,255,255);
-      doc.text(d.perfil, M+bw+12 + doc.getTextWidth(String(d.nps))*(26/10) + 4, y+22.5);
-      y += 44;
-
-      secao("PARTE 1 · O TRABALHO");
-      campo("Serviços", d.servicos.join(", "));
-      y += 2;
-      fonte("bold",9.5); cor(PRETO); doc.text("Notas (1 a 5)", M, y); y += 6;
-      d.notas.forEach(function(n){
-        quebra(10);
-        var v = Number(n[1]);
-        fonte("normal",9.5); cor(PRETO); doc.text(n[0], M, y+3.2);
-        var bx = M+62, bwid = CW-62-32;
-        fill(FUNDO); doc.roundedRect(bx, y, bwid, 4.6, 2.3, 2.3, "F");
-        fill(AZUL); doc.roundedRect(bx, y, Math.max(4.6, bwid*v/5), 4.6, 2.3, 2.3, "F");
-        fonte("bold",9.5); cor(PRETO); doc.text(v + " · " + PALAVRAS[v], W-M, y+3.4, {align:"right"});
-        y += 9;
-      });
-      y += 6;
-
-      secao("PARTE 2 · RESULTADOS");
-      campo("Evolução no negócio", d.evolucao);
-      campo("O que mais valoriza", d.valoriza.join(", "));
-      campo("Indicaria (0 a 10)", d.nps + " · " + d.perfil);
-      y += 6;
-
-      secao("PARTE 3 · SUA VOZ");
-      campo("Depoimento", d.depoimento);
-      campo("Cliente", d.nome);
-      y += 2;
-      fonte("normal",10.5);
-      var linhasMsg = doc.splitTextToSize(d.mensagem, CW-14);
-      quebra(Math.min(linhasMsg.length,4)*5.6 + 24);
-      fonte("bold",9.5); cor(PRETO); doc.text("Mensagem", M, y); y += 5;
-      fonte("normal",10.5);
-      var i0 = 0;
-      while(i0 < linhasMsg.length){
-        var cabe = Math.max(1, Math.floor((280 - y - 10) / 5.6));
-        var parte = linhasMsg.slice(i0, i0+cabe);
-        var alt = parte.length*5.6 + 10;
-        fill(hexRGB("#E6F1FF")); doc.roundedRect(M, y, CW, alt, 4, 4, "F");
-        fill(AZUL); doc.rect(M, y+4, 1.2, alt-8, "F");
-        cor(PRETO); doc.text(parte, M+7, y+8, {lineHeightFactor:1.5});
-        y += alt + 4; i0 += cabe;
-        if(i0 < linhasMsg.length){ rodape(); doc.addPage(); y = 20; fonte("normal",10.5); }
-      }
-      rodape();
-      return doc.output("blob");
-    });
-  }
-  function nomeArquivo(n){
-    var slug = n.normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Za-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,40) || "cliente";
-    return "Pesquisa-RLSN-" + slug + ".pdf";
-  }
-
-  /* entrega do PDF: compartilhar (celular), salvar pelo visualizador do Claude ou baixar */
-  var downloadsCap = (window.claude && typeof window.claude.use === "function") ? window.claude.use("downloads").catch(function(){return null;}) : Promise.resolve(null);
-  var pdfBlob = null, pdfNome = "Pesquisa-RLSN.pdf";
-  function podeCompartilhar(){
-    try{ return !!(pdfBlob && navigator.canShare && navigator.canShare({files:[new File([pdfBlob], pdfNome, {type:"application/pdf"})]})); }catch(_){ return false; }
-  }
-  function msgPdf(t){ $("pdfMsg").textContent = t; }
-  function baixarDireto(){
-    try{
-      var url = URL.createObjectURL(pdfBlob), a = document.createElement("a");
-      a.href = url; a.download = pdfNome; document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(function(){URL.revokeObjectURL(url);}, 4000);
-      return true;
-    }catch(_){ return false; }
-  }
-  $("btnPdf").addEventListener("click", function(){
-    if(!pdfBlob){ msgPdf("O PDF não ficou pronto. Suas respostas seguem completas na mensagem do WhatsApp."); return; }
-    msgPdf("");
-    entregarPDF(pdfBlob, pdfNome, msgPdf);
-  });
 
   /* ---------- Link do relatório (respostas dentro do link, sem servidor) ---------- */
   /* Endereço público da página. Os links do relatório apontam para cá. */
@@ -951,68 +854,46 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
     return texto.then(function(t){ return expandir(JSON.parse(t)); });
   }
 
-  /* entrega de PDF reaproveitável (tela final e relatório) */
-  function entregarPDF(blob, nomeArq, msg){
-    var arquivo = new File([blob], nomeArq, {type:"application/pdf"});
-    var baixar = function(){
-      try{
-        var u = URL.createObjectURL(blob), a = document.createElement("a");
-        a.href = u; a.download = nomeArq; document.body.appendChild(a); a.click(); a.remove();
-        setTimeout(function(){URL.revokeObjectURL(u);}, 4000); return true;
-      }catch(_){ return false; }
-    };
-    var salvar = function(){
-      return downloadsCap.then(function(dl){
-        if(dl){
-          return dl.save({filename:nomeArq, data:blob}).then(function(){ msg("PDF salvo."); })
-            .catch(function(err){ if(err && err.code === "declined") return; if(!baixar()) msg("Não foi possível baixar o PDF neste aparelho."); });
-        }
-        if(!baixar()) msg("Não foi possível baixar o PDF neste aparelho.");
-      });
-    };
-    var share = false;
-    try{ share = !!(navigator.canShare && navigator.canShare({files:[arquivo]})); }catch(_){}
-    if(share){
-      navigator.share({files:[arquivo], title:"Pesquisa de satisfação · RLSN"}).catch(function(err){ if(err && err.name === "AbortError") return; salvar(); });
-    } else { salvar(); }
-  }
-
   function modoRelatorio(hash){
     document.body.classList.add("modo-relatorio");
     $("topo").hidden = true; form.hidden = true;
-    var rel = $("relatorio"); rel.hidden = false;
-    var relMsg = function(t){ $("relMsg").textContent = t; };
+    $("relatorio").hidden = false;
+    document.title = "Relatório da pesquisa · RLSN";
+    var txt = function(id, v){ $(id).textContent = v; };
     decodificar(hash).then(function(d){
-      $("relNome").textContent = d.nome;
+      txt("relNome", d.nome);
       var quando = d.t ? new Date(d.t) : null;
-      $("relData").textContent = quando ? "Respondida em " + quando.toLocaleDateString("pt-BR") + " às " + quando.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}) : "";
-      $("relMedia").textContent = d.media;
-      $("relNps").textContent = d.nps;
-      $("relPerfil").textContent = d.perfil;
-      var linhas = [["Serviços", d.servicos.join(", ")]]
-        .concat(d.notas.map(function(n){ return [n[0], n[1] + " · " + PALAVRAS[n[1]]]; }))
-        .concat([["Evolução no negócio", d.evolucao],["O que mais valoriza", d.valoriza.join(", ")],["Depoimento", d.depoimento],["Mensagem", d.mensagem]]);
-      var dl = $("relLista");
-      linhas.forEach(function(l){
-        var w = document.createElement("div"), dt = document.createElement("dt"), dd = document.createElement("dd");
-        dt.textContent = l[0]; dd.textContent = l[1]; w.appendChild(dt); w.appendChild(dd); dl.appendChild(w);
+      txt("relData", quando ? "Respondida em " + quando.toLocaleDateString("pt-BR") + " às " + quando.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}) : "");
+      txt("relMedia", d.media);
+      txt("relNps", d.nps); txt("relPerfil", d.perfil);
+      txt("relServicos", d.servicos.join(", ") || "Não respondeu");
+      var box = $("relNotas");
+      d.notas.forEach(function(n){
+        var v = Number(n[1]) || 0;
+        var linha = document.createElement("div"); linha.className = "folha-nota";
+        var rot = document.createElement("span"); rot.className = "rot"; rot.textContent = n[0];
+        var barra = document.createElement("span"); barra.className = "barra-n";
+        var fill = document.createElement("i"); fill.style.width = (v/5*100) + "%"; barra.appendChild(fill);
+        var val = document.createElement("span"); val.className = "val"; val.textContent = v + " · " + (PALAVRAS[v] || "");
+        linha.appendChild(rot); linha.appendChild(barra); linha.appendChild(val); box.appendChild(linha);
       });
-      var arq = nomeArquivo(d.nome), blob = null;
-      $("relPdf").addEventListener("click", function(){
-        if(!blob){ relMsg("O PDF ainda está sendo gerado. Tente de novo em instantes."); return; }
-        relMsg(""); entregarPDF(blob, arq, relMsg);
-      });
-      gerarPDF(d).then(function(b){
-        blob = b; relMsg("PDF pronto com todas as respostas.");
-      }).catch(function(){ relMsg("Não foi possível gerar o PDF agora. As respostas estão todas nesta página."); });
+      txt("relEvolucao", d.evolucao);
+      txt("relValoriza", d.valoriza.join(", ") || "Não respondeu");
+      txt("relNps2", d.nps + " · " + d.perfil);
+      txt("relDepo", d.depoimento);
+      txt("relCliente", d.nome);
+      txt("relMsgTxt", d.mensagem);
     }).catch(function(){
-      $("relNome").textContent = "Link incompleto";
-      $("relData").textContent = "Não foi possível ler as respostas deste link. Peça para o cliente enviar a pesquisa de novo.";
-      $("relPdf").hidden = true; relMsg("");
+      txt("relNome", "Link incompleto");
+      txt("relData", "Não foi possível ler as respostas deste link. Peça para o cliente enviar a pesquisa de novo.");
+      $("relatorio").querySelector(".folha-corpo").hidden = true;
     });
   }
   var hashAtual = (location.hash || "").replace(/^#/, "");
   if(/^r[zu][A-Za-z0-9_-]+$/.test(hashAtual)) modoRelatorio(hashAtual);
+  window.addEventListener("hashchange", function(){
+    if(/^#r[zu][A-Za-z0-9_-]+$/.test(location.hash)) location.reload();
+  });
 
   /* ---------- Envio ---------- */
   function espera(ms){ return new Promise(function(r){ setTimeout(r, reduz ? Math.min(ms,150) : ms); }); }
@@ -1044,7 +925,6 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
     };
     montarLink();
     var linkP = codificar(d).then(function(h){ d.link = ART_URL + "#" + h; montarLink(); }).catch(function(){});
-    pdfNome = nomeArquivo(d.nome);
     var primeiroNome = d.nome.split(/[\s·]+/)[0];
     $("prontoTit").textContent = "Tudo pronto, " + primeiroNome + ".";
 
@@ -1053,13 +933,11 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
     document.body.classList.add("travado");
     $("barra").classList.remove("on");
 
-    var pdfP = gerarPDF(d).then(function(b){ pdfBlob = b; }).catch(function(){ pdfBlob = null; });
-    var limitePdf = new Promise(function(r){ setTimeout(r, 7000); });
 
     passos[0].className = "vez";
     espera(800).then(function(){
       passos[0].className = "ok"; passos[1].className = "vez";
-      return Promise.all([Promise.race([pdfP, limitePdf]), espera(700)]);
+      return espera(800);
     }).then(function(){
       passos[1].className = "ok"; passos[2].className = "vez";
       return Promise.all([linkP, espera(700)]);
@@ -1070,10 +948,6 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
       form.hidden = true;
       var fim = $("final");
       fim.hidden = false;
-      var compartilha = podeCompartilhar();
-      $("btnPdfTxt").textContent = compartilha ? "Enviar o PDF no WhatsApp" : "Baixar o PDF";
-      if(compartilha && pdfBlob) msgPdf("No menu que abrir, escolha o WhatsApp e a conversa com o Railson Lima.");
-      if(!pdfBlob) msgPdf("O PDF não ficou pronto agora. Suas respostas seguem completas na mensagem do WhatsApp.");
       window.scrollTo(0, Math.max(0, $("topo").offsetHeight - 8));
       tela.classList.remove("on"); tela.classList.add("sai");
       document.body.classList.remove("travado");
