@@ -82,29 +82,62 @@ button{font:inherit;color:inherit}
 .barra-num{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--cinza);min-width:34px;text-align:right}
 .barra-num b{color:var(--turquesa)}
 
-/* ---------- Topo ---------- */
-.topo{background:var(--preto);color:var(--branco);overflow:hidden}
-.topo .wrap{padding-block:26px 34px}
-.topo-conteudo{display:flex;flex-direction:column;gap:26px}
+/* ---------- Topo (capa) ----------
+   Celular: rótulo · selo grande centralizado · slogan · título · texto · progresso (eixo central).
+   Notebook: duas colunas, texto à esquerda e selo à direita. Espaços em múltiplos de 8. */
+.topo{position:relative;isolation:isolate;background:var(--preto);color:var(--branco);overflow:hidden}
+.topo .wrap{position:relative;padding-block:24px 40px}
+.topo-conteudo{display:flex;flex-direction:column;gap:32px}
 .topo-linha{display:flex;justify-content:space-between;align-items:center;font-size:var(--t-rot);font-weight:700;letter-spacing:.16em}
 .topo-linha .rot{color:var(--turquesa)}
 .topo-linha .ano{color:var(--cinza);font-variant-numeric:tabular-nums}
-.marca{display:flex;align-items:center;gap:20px}
-.marca .selo{width:clamp(96px,30vw,148px);height:clamp(96px,30vw,148px);color:var(--branco)}
+.topo-grid{display:flex;flex-direction:column;align-items:center;gap:32px;text-align:center}
+.marca{display:flex;flex-direction:column;align-items:center;gap:18px}
+.marca .selo{width:clamp(176px,54vw,240px);height:clamp(176px,54vw,240px);color:var(--branco);border-radius:50%;background:radial-gradient(circle,rgba(18,18,18,.6) 0 56%,rgba(18,18,18,0) 72%);filter:drop-shadow(0 10px 40px rgba(0,0,0,.35))}
 .cor-viva{animation:corLogo 12s ease-in-out infinite}
 @keyframes corLogo{0%,8%,100%{color:var(--branco)}18%,30%{color:var(--turquesa)}40%,52%{color:var(--azul)}62%,66%{color:var(--branco)}76%,90%{color:var(--laranja)}}
-.slogan{font-size:clamp(10.5px,3.2vw,13px);font-weight:700;letter-spacing:.14em;line-height:1.7;color:var(--cinza)}
+.slogan{font-size:clamp(11px,3.2vw,13px);font-weight:700;letter-spacing:.16em;line-height:1.75;color:var(--cinza)}
 .slogan b{display:block;color:var(--branco);font-weight:700}
-.textos{display:flex;flex-direction:column;gap:14px}
+.textos{display:flex;flex-direction:column;align-items:center;gap:16px;width:100%}
 h1{margin:0;font-size:var(--t-h1);line-height:1.1;font-weight:700;letter-spacing:-.032em;text-wrap:balance}
 h1 .p{display:inline-block}
 h1 .p > span{display:inline-block}
-.intro{margin:0;color:var(--cinza);font-size:var(--t-corpo);line-height:1.55;max-width:42ch}
-.prog{display:flex;flex-direction:column;gap:10px;padding-top:4px}
+.intro{margin:0;color:var(--cinza);font-size:var(--t-corpo);line-height:1.6;max-width:38ch}
+.prog{display:flex;flex-direction:column;gap:12px;width:100%;margin-top:8px}
 .prog-barra{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
-.prog-barra span{height:6px}
+.prog-barra span{height:6px;background:rgba(255,255,255,.16)}
 .prog-txt{font-size:13px;color:var(--cinza);font-weight:500;font-variant-numeric:tabular-nums}
 .prog-txt b{color:var(--turquesa);font-weight:700}
+
+/* fundo animado: luzes nas cores da marca atrás de um vidro canelado */
+.fundo-capa{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.aurora{position:absolute;inset:-30%;filter:blur(64px);opacity:.62}
+.aurora i{position:absolute;border-radius:50%;width:62%;aspect-ratio:1;animation:matiz 18s linear infinite, flutua 16s ease-in-out infinite alternate}
+.aurora .b1{left:2%;bottom:4%;background:var(--azul)}
+.aurora .b2{right:0;top:6%;width:50%;background:var(--turquesa);animation-delay:-6s,-4s;animation-duration:18s,19s}
+.aurora .b3{left:34%;bottom:-6%;width:44%;background:var(--laranja);animation-delay:-12s,-9s;animation-duration:18s,22s;opacity:.85}
+@keyframes matiz{0%,100%{background:var(--azul)}33%{background:var(--turquesa)}66%{background:var(--laranja)}}
+@keyframes flutua{0%{transform:translate(0,0) scale(1)}50%{transform:translate(8%,-6%) scale(1.12)}100%{transform:translate(-6%,5%) scale(.94)}}
+.vidro{position:absolute;inset:0;display:grid;grid-template-columns:repeat(6,1fr)}
+.vidro span{border-left:1px solid rgba(255,255,255,.07);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(18,18,18,.22) 55%,rgba(255,255,255,.035))}
+.vidro span:nth-child(even){background:linear-gradient(180deg,rgba(18,18,18,.2),rgba(255,255,255,.045) 50%,rgba(18,18,18,.28))}
+.vidro span:nth-child(n+7){display:none}
+.fundo-capa::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,18,18,.62) 0%,rgba(18,18,18,.25) 40%,rgba(18,18,18,.35) 70%,rgba(18,18,18,.7) 100%)}
+
+@media (min-width:900px){
+  .topo .wrap{max-width:1080px;padding-block:36px 72px}
+  .topo-conteudo{gap:48px}
+  .topo-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);align-items:center;gap:64px;text-align:left}
+  .topo-grid .marca{order:2}
+  .textos{align-items:flex-start;gap:20px}
+  .marca .selo{width:clamp(240px,26vw,320px);height:clamp(240px,26vw,320px)}
+  h1{font-size:clamp(44px,4.6vw,60px)}
+  .intro{font-size:18px;max-width:44ch}
+  .prog{max-width:520px;margin-top:16px}
+  .vidro{grid-template-columns:repeat(10,1fr)}
+  .vidro span:nth-child(n+7){display:block}
+}
 
 /* entrada do topo depois da abertura */
 .anim .topo [data-in]{opacity:0;transform:translateY(18px)}
@@ -114,6 +147,18 @@ h1 .p > span{display:inline-block}
 
 /* ---------- Corpo ---------- */
 main .wrap{padding-block:30px 44px}
+@media (min-width:640px) and (max-width:899px){ main .wrap{max-width:640px} }
+@media (min-width:900px){
+  main .wrap{max-width:1080px;padding-block:48px 64px}
+  .barra .wrap{max-width:1080px}
+  main #form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:stretch}
+  #form > .parte, #form > .envio, #c-servicos, #c-nps, #c-msg{grid-column:1 / -1}
+  #form > .parte{margin:32px 0 0}
+  #form > .parte:first-child{margin-top:0}
+  #form > .envio{width:100%;max-width:560px;justify-self:center;margin-top:24px}
+  #c-nps .nps{grid-template-columns:repeat(11,minmax(0,1fr))}
+  .final{max-width:640px;margin:0 auto}
+}
 #form{display:flex;flex-direction:column;gap:14px}
 .parte{display:flex;align-items:center;gap:12px;font-size:var(--t-rot);font-weight:700;letter-spacing:.16em;margin:26px 0 4px}
 .parte:first-child{margin-top:0}
@@ -322,7 +367,7 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-delay:0ms!important}
-  .anel.gira,.anel.gira-rapido,.cor-viva{animation:none!important}
+  .anel.gira,.anel.gira-rapido,.cor-viva,.aurora i{animation:none!important}
 }
 </style>
 </head>
@@ -352,20 +397,26 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
 </div>
 
 <header class="topo" id="topo">
+  <div class="fundo-capa" aria-hidden="true">
+    <div class="aurora"><i class="b1"></i><i class="b2"></i><i class="b3"></i></div>
+    <div class="vidro"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  </div>
   <div class="wrap">
     <div class="topo-conteudo" id="topoConteudo">
       <div class="topo-linha" data-in style="--d:0"><span class="rot">PESQUISA DE SATISFAÇÃO</span><span class="ano" id="ano">2026</span></div>
-      <div class="marca" data-in style="--d:90">
-        <div class="selo cor-viva" role="img" aria-label="Logo Railson Lima Design"><svg viewBox="0 0 200 200"><use href="#logo-gira"/></svg></div>
-        <div class="slogan"><b>DESIGN QUE POSICIONA.</b>ESTRATÉGIA QUE VENDE.</div>
-      </div>
-      <div class="textos">
-        <h1 id="titulo">Como está sendo trabalhar com o Railson Lima</h1>
-        <p class="intro" data-in style="--d:520">Sua opinião sincera me ajuda a entregar um trabalho cada vez melhor. Leva menos de 3 minutos, e as respostas são confidenciais.</p>
-      </div>
-      <div class="prog" data-in style="--d:640" aria-live="polite">
-        <div class="prog-barra" id="progBarra"><span></span><span></span><span></span><span></span><span></span><span></span></div>
-        <div class="prog-txt" id="progTxt"><b>0</b> de 6 etapas respondidas</div>
+      <div class="topo-grid">
+        <div class="marca" data-in style="--d:90">
+          <div class="selo cor-viva" role="img" aria-label="Logo Railson Lima Design"><svg viewBox="0 0 200 200"><use href="#logo-gira"/></svg></div>
+          <div class="slogan"><b>DESIGN QUE POSICIONA.</b>ESTRATÉGIA QUE VENDE.</div>
+        </div>
+        <div class="textos">
+          <h1 id="titulo">Como está sendo trabalhar com o Railson Lima</h1>
+          <p class="intro" data-in style="--d:520">Sua opinião sincera me ajuda a entregar um trabalho cada vez melhor. Leva menos de 3 minutos, e as respostas são confidenciais.</p>
+          <div class="prog" data-in style="--d:640" aria-live="polite">
+            <div class="prog-barra" id="progBarra"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="prog-txt" id="progTxt"><b>0</b> de 6 etapas respondidas</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -759,6 +810,8 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
     if(!prox) return;
     clearTimeout(timerAvanco);
     timerAvanco = setTimeout(function(){
+      var r = prox.getBoundingClientRect(), topoLivre = $("barra").offsetHeight + 8;
+      if(r.top >= topoLivre && r.bottom <= window.innerHeight - 8){ if(prox.id === "c-nome") $("nome").focus({preventScroll:true}); return; }
       rolarPara(prox, false);
       if(prox.id === "c-nome"){ setTimeout(function(){ $("nome").focus({preventScroll:true}); }, reduz?0:600); }
     }, reduz ? 120 : 420);
