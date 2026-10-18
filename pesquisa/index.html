@@ -835,18 +835,64 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
       depoimento:OPCOES.depoimento[c.d] || "Não respondeu",
       mensagem:c.m || "Sem mensagem."};
   }
+  /* Formato compacto: nome-do-cliente.DADOS
+     DADOS = 9 bytes com as escolhas + nome e mensagem em texto (compactados quando ficar menor) */
+  var EPOCA = Date.UTC(2026,0,1);
+  function slug(n){
+    return (n||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase()
+      .replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,32).replace(/-+$/,"");
+  }
+  function mascara(lista, escolhidos){ return escolhidos.reduce(function(m,v){ var k=OPCOES[lista].indexOf(v); return k>=0 ? m|(1<<k) : m; },0); }
+  function deMascara(lista, m){ return OPCOES[lista].filter(function(_,k){ return m & (1<<k); }); }
+  function deflar(bytes){
+    if(typeof CompressionStream !== "function") return Promise.resolve(null);
+    try{ return lerStream(new Blob([bytes]).stream().pipeThrough(new CompressionStream("deflate-raw"))).catch(function(){return null;}); }
+    catch(_){ return Promise.resolve(null); }
+  }
   function codificar(d){
-    var bytes = new TextEncoder().encode(JSON.stringify(compactar(d)));
-    if(typeof CompressionStream === "function"){
-      try{
-        var cs = new CompressionStream("deflate-raw");
-        return lerStream(new Blob([bytes]).stream().pipeThrough(cs)).then(function(z){ return "rz" + b64url(z); })
-          .catch(function(){ return "ru" + b64url(bytes); });
-      }catch(_){}
-    }
-    return Promise.resolve("ru" + b64url(bytes));
+    var min = Math.max(0, Math.round(((d.t||Date.now()) - EPOCA)/60000)) & 0xFFFFFF;
+    var q = d.notas.map(function(n){ return Number(n[1])||0; });
+    var ev = Math.max(0, OPCOES.evolucao.indexOf(d.evolucao));
+    var dp = OPCOES.depoimento.indexOf(d.depoimento) + 1;
+    var msg = d.mensagem === "Sem mensagem." ? "" : d.mensagem;
+    var texto = new TextEncoder().encode(d.nome + (msg ? "\n" + msg : ""));
+    return deflar(texto).then(function(z){
+      var comp = !!(z && z.length < texto.length);
+      var corpo = comp ? z : texto;
+      var cab = new Uint8Array([
+        1 | (comp ? 2 : 0),
+        (min>>16)&255, (min>>8)&255, min&255,
+        mascara("servicos", d.servicos), mascara("valoriza", d.valoriza),
+        (q[0]<<4)|q[1], (q[2]<<4)|q[3],
+        ((Number(d.nps)&15)<<4) | (ev<<2) | dp
+      ]);
+      var tudo = new Uint8Array(cab.length + corpo.length);
+      tudo.set(cab, 0); tudo.set(corpo, cab.length);
+      return slug(d.nome) + "." + b64url(tudo);
+    });
+  }
+  function decodificarCompacto(b64){
+    var b = deB64url(b64);
+    if(b.length < 9 || !(b[0] & 1)) return Promise.reject(new Error("formato"));
+    var comp = !!(b[0] & 2), corpo = b.slice(9);
+    var textoP = comp
+      ? lerStream(new Blob([corpo]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).then(function(x){ return new TextDecoder().decode(x); })
+      : Promise.resolve(new TextDecoder().decode(corpo));
+    return textoP.then(function(t){
+      var quebra = t.indexOf("\n");
+      var nomeC = quebra >= 0 ? t.slice(0, quebra) : t, msg = quebra >= 0 ? t.slice(quebra+1) : "";
+      var min = (b[1]<<16)|(b[2]<<8)|b[3];
+      var q = [b[6]>>4, b[6]&15, b[7]>>4, b[7]&15];
+      return expandir({t: EPOCA + min*60000, n: nomeC,
+        s: OPCOES.servicos.map(function(_,k){return k;}).filter(function(k){ return b[4] & (1<<k); }),
+        q: q, e: (b[8]>>2)&3,
+        a: OPCOES.valoriza.map(function(_,k){return k;}).filter(function(k){ return b[5] & (1<<k); }),
+        p: b[8]>>4, d: (b[8]&3) - 1, m: msg});
+    });
   }
   function decodificar(hash){
+    var m = /^[a-z0-9-]*\.([A-Za-z0-9_-]+)$/.exec(hash);
+    if(m) return decodificarCompacto(m[1]);
     var tipo = hash.slice(0,2), bytes = deB64url(hash.slice(2));
     var texto = tipo === "rz"
       ? lerStream(new Blob([bytes]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).then(function(b){ return new TextDecoder().decode(b); })
@@ -890,9 +936,10 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
     });
   }
   var hashAtual = (location.hash || "").replace(/^#/, "");
-  if(/^r[zu][A-Za-z0-9_-]+$/.test(hashAtual)) modoRelatorio(hashAtual);
+  var ehRelatorio = function(h){ return /^r[zu][A-Za-z0-9_-]+$/.test(h) || /^[a-z0-9-]*\.[A-Za-z0-9_-]{12,}$/.test(h); };
+  if(ehRelatorio(hashAtual)) modoRelatorio(hashAtual);
   window.addEventListener("hashchange", function(){
-    if(/^#r[zu][A-Za-z0-9_-]+$/.test(location.hash)) location.reload();
+    if(ehRelatorio(location.hash.replace(/^#/,""))) location.reload();
   });
 
   /* ---------- Envio ---------- */
