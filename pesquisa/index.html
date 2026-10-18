@@ -1,0 +1,1099 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Pesquisa de Satisfação RLSN</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Pesquisa de satisfação dos clientes da RLSN, de Railson Lima.">
+<meta name="theme-color" content="#121212">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;900&display=swap">
+<style>
+/* Layout: coluna única de 560px. Topo preto em faixa cheia, partes marcadas por linha com ponto laranja,
+   cartões com número no canto superior esquerdo e tudo alinhado a uma única borda esquerda.
+   Visual único da marca RLSN (claro com topo preto), definido por escolha. */
+@font-face{font-family:"Nomixa";src:local("Nomixa"),local("Nomixa-Regular"),local("Nomixa Regular");font-weight:400}
+@font-face{font-family:"Nomixa";src:local("Nomixa Medium"),local("Nomixa-Medium");font-weight:500}
+@font-face{font-family:"Nomixa";src:local("Nomixa SemiBold"),local("Nomixa-SemiBold");font-weight:600}
+@font-face{font-family:"Nomixa";src:local("Nomixa Bold"),local("Nomixa-Bold");font-weight:700}
+@font-face{font-family:"Nomixa";src:local("Nomixa Black"),local("Nomixa-Black");font-weight:900}
+:root{
+  --preto:#121212; --azul:#007BFF; --turquesa:#40E0D0; --laranja:#FF5733;
+  --branco:#FFFFFF; --cinza:#CDCDCD; --fundo:#EFEFED;
+  --texto-2:#5b5b59; --linha:#dcdcd9; --preto-2:#1e1e1e; --preto-3:#2f2f2f;
+  --font:"Nomixa","Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+  /* escala de texto */
+  --t-rot:12px; --t-apoio:14.5px; --t-op:15px; --t-corpo:16px; --t-q:19px; --t-num:44px;
+  --t-h1:clamp(32px,9vw,46px);
+  --r:20px; --r-in:14px;
+  --ease:cubic-bezier(.22,1,.36,1); --ease-io:cubic-bezier(.7,0,.2,1);
+  --barra-h:56px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:calc(var(--barra-h) + 24px)}
+body{margin:0;background:var(--fundo);color:var(--preto);font-family:var(--font);font-size:var(--t-corpo);line-height:1.5;overflow-x:clip;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--preto)}
+body.travado{overflow:hidden}
+.wrap{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.sr{position:absolute;opacity:0;width:1px;height:1px;margin:0;pointer-events:none}
+button{font:inherit;color:inherit}
+
+/* ---------- Logo ---------- */
+.selo{flex:none;display:block}
+.selo svg{width:100%;height:100%;display:block;overflow:visible}
+.anel.gira{animation:gira 40s linear infinite;transform-origin:97.2px 105.1px;transform-box:view-box}
+.anel.gira-rapido{animation:gira 7s linear infinite;transform-origin:97.2px 105.1px;transform-box:view-box}
+@keyframes gira{to{transform:rotate(360deg)}}
+
+/* ---------- Tela de abertura ---------- */
+.loader{position:fixed;inset:0;z-index:100;background:var(--preto);color:var(--branco);display:grid;place-items:center;
+  padding:max(24px,env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left));
+  animation:loaderSeguranca .6s 5s forwards}
+@keyframes loaderSeguranca{to{opacity:0;visibility:hidden}}
+.loader-in{display:flex;flex-direction:column;align-items:center;gap:26px;text-align:center}
+.loader .selo{width:132px;height:132px;color:var(--branco);animation:seloEntra 1s var(--ease) both,corLogo 3s .4s ease-in-out infinite}
+@keyframes seloEntra{from{opacity:0;transform:scale(.7) rotate(-40deg)}to{opacity:1;transform:none}}
+.loader-txt{display:flex;flex-direction:column;gap:6px;animation:sobe .8s .25s var(--ease) both}
+.loader-txt b{font-size:var(--t-rot);letter-spacing:.18em;color:var(--turquesa);font-weight:700}
+.loader-txt span{font-size:var(--t-apoio);color:var(--cinza)}
+.loader-linha{width:160px;height:3px;border-radius:99px;background:var(--preto-3);overflow:hidden;animation:sobe .8s .35s var(--ease) both}
+.loader-linha i{display:block;height:100%;width:100%;background:var(--turquesa);transform-origin:left;transform:scaleX(0);animation:enche 1.3s .45s var(--ease) forwards}
+@keyframes enche{to{transform:scaleX(1)}}
+@keyframes sobe{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.loader.sai{animation:cortina .8s var(--ease-io) forwards}
+.loader.sai .loader-in{animation:somePraCima .5s var(--ease-io) forwards}
+@keyframes cortina{to{clip-path:inset(0 0 100% 0)}}
+@keyframes somePraCima{to{opacity:0;transform:translateY(-30px)}}
+
+/* ---------- Barra fixa de progresso ---------- */
+.barra{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(18,18,18,.92);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  color:var(--branco);padding-top:env(safe-area-inset-top,0px);transform:translateY(-110%);transition:transform .45s var(--ease)}
+.barra.on{transform:none}
+.barra .wrap{height:var(--barra-h);display:flex;align-items:center;gap:14px}
+.barra .selo{width:30px;height:30px;color:var(--branco)}
+.barra-seg{flex:1;display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
+.barra-seg span,.prog-barra span{position:relative;height:5px;border-radius:99px;background:var(--preto-3);overflow:hidden}
+.barra-seg span::after,.prog-barra span::after{content:"";position:absolute;inset:0;background:var(--turquesa);transform:scaleX(0);transform-origin:left;transition:transform .6s var(--ease)}
+.barra-seg span.on::after,.prog-barra span.on::after{transform:scaleX(1)}
+.barra-num{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--cinza);min-width:34px;text-align:right}
+.barra-num b{color:var(--turquesa)}
+
+/* ---------- Topo ---------- */
+.topo{background:var(--preto);color:var(--branco);overflow:hidden}
+.topo .wrap{padding-block:26px 34px}
+.topo-conteudo{display:flex;flex-direction:column;gap:26px;will-change:transform,opacity}
+.topo-linha{display:flex;justify-content:space-between;align-items:center;font-size:var(--t-rot);font-weight:700;letter-spacing:.16em}
+.topo-linha .rot{color:var(--turquesa)}
+.topo-linha .ano{color:var(--cinza);font-variant-numeric:tabular-nums}
+.marca{display:flex;align-items:center;gap:20px}
+.marca .selo{width:clamp(96px,30vw,148px);height:clamp(96px,30vw,148px);color:var(--branco)}
+.cor-viva{animation:corLogo 12s ease-in-out infinite}
+@keyframes corLogo{0%,8%,100%{color:var(--branco)}18%,30%{color:var(--turquesa)}40%,52%{color:var(--azul)}62%,66%{color:var(--branco)}76%,90%{color:var(--laranja)}}
+.slogan{font-size:clamp(10.5px,3.2vw,13px);font-weight:700;letter-spacing:.14em;line-height:1.7;color:var(--cinza)}
+.slogan b{display:block;color:var(--branco);font-weight:700}
+.textos{display:flex;flex-direction:column;gap:14px}
+h1{margin:0;font-size:var(--t-h1);line-height:1.04;font-weight:700;letter-spacing:-.032em;text-wrap:balance}
+h1 .p{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.06em;margin-bottom:-.06em}
+h1 .p > span{display:inline-block}
+.intro{margin:0;color:var(--cinza);font-size:var(--t-corpo);line-height:1.55;max-width:42ch}
+.prog{display:flex;flex-direction:column;gap:10px;padding-top:4px}
+.prog-barra{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.prog-barra span{height:6px}
+.prog-txt{font-size:13px;color:var(--cinza);font-weight:500;font-variant-numeric:tabular-nums}
+.prog-txt b{color:var(--turquesa);font-weight:700}
+
+/* entrada do topo depois da abertura */
+.anim .topo [data-in]{opacity:0;transform:translateY(18px)}
+.anim .topo h1 .p > span{transform:translateY(105%)}
+.pronto .topo [data-in]{opacity:1;transform:none;transition:opacity .8s var(--ease),transform .9s var(--ease);transition-delay:calc(var(--d,0) * 1ms)}
+.pronto .topo h1 .p > span{transform:none;transition:transform .9s var(--ease);transition-delay:calc(var(--d,0) * 1ms)}
+
+/* ---------- Corpo ---------- */
+main .wrap{padding-block:30px 44px}
+#form{display:flex;flex-direction:column;gap:14px}
+.parte{display:flex;align-items:center;gap:12px;font-size:var(--t-rot);font-weight:700;letter-spacing:.16em;margin:26px 0 4px}
+.parte:first-child{margin-top:0}
+.parte::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--laranja);flex:none}
+.parte::after{content:"";flex:1;height:1px;background:var(--linha);transform-origin:left}
+.anim .parte::after{transform:scaleX(0);transition:transform 1s var(--ease)}
+.anim .parte.in::after{transform:scaleX(1)}
+
+/* ---------- Cartões ---------- */
+.card{position:relative;background:var(--branco);border-radius:var(--r);padding:24px 22px;border:2px solid transparent;
+  transition:border-color .25s,box-shadow .5s var(--ease),transform .5s var(--ease)}
+.card fieldset{border:0;margin:0;padding:0;min-width:0}
+.card legend{float:left;width:100%;padding:0;margin:0}
+.card legend + *{clear:both}
+.q-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 12px;margin-bottom:14px;min-height:40px}
+.num{position:relative;display:inline-flex;align-items:center;font-weight:900;font-size:var(--t-num);line-height:1;color:var(--azul);letter-spacing:-.045em;font-variant-numeric:tabular-nums}
+.num .ok{position:absolute;left:100%;top:-2px;margin-left:4px;width:18px;height:18px;border-radius:50%;background:var(--turquesa);display:grid;place-items:center;transform:scale(0);transition:transform .4s var(--ease)}
+.num .ok::before{content:"";width:8px;height:4px;border-left:2px solid var(--preto);border-bottom:2px solid var(--preto);transform:rotate(-45deg) translate(1px,-1px)}
+.card.feito .num .ok{transform:scale(1)}
+.tag{font-size:var(--t-rot);font-weight:600;color:var(--texto-2);background:var(--fundo);padding:5px 11px;border-radius:99px;white-space:nowrap}
+.q-tit{display:block;font-weight:700;font-size:var(--t-q);line-height:1.3;letter-spacing:-.012em;text-wrap:pretty}
+.q-sub{display:block;font-size:var(--t-apoio);font-weight:400;color:var(--texto-2);line-height:1.45;margin-top:6px}
+.q-corpo{padding-top:20px}
+.card.ativo{box-shadow:0 18px 40px -22px rgba(18,18,18,.28)}
+
+.card.erro{border-color:var(--laranja)}
+.card.treme{animation:treme .45s}
+@keyframes treme{20%{transform:translateX(-6px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}}
+.aviso{display:none;align-items:center;gap:8px;margin-top:16px;background:var(--laranja);color:var(--preto);font-size:13px;font-weight:700;padding:8px 14px;border-radius:99px;width:fit-content}
+.card.erro .aviso{display:flex;animation:sobe .35s var(--ease)}
+
+/* revelação ao rolar */
+.anim .card.rv{opacity:0;transform:translateY(42px) scale(.97)}
+.anim .card.rv.in{opacity:1;transform:none;transition:opacity .7s var(--ease),transform .9s var(--ease),border-color .25s,box-shadow .5s var(--ease)}
+.anim .card.rv .op{opacity:0;transform:translateY(10px)}
+.anim .card.rv.in .op{opacity:1;transform:none;transition:opacity .5s var(--ease),transform .6s var(--ease);transition-delay:calc(180ms + var(--i,0) * 35ms)}
+
+/* ---------- Opções ---------- */
+.opcoes{display:flex;flex-wrap:wrap;gap:8px}
+.op{position:relative;display:block}
+.op > span{position:relative;overflow:hidden;display:flex;align-items:center;gap:10px;min-height:46px;padding:11px 18px;border:1.5px solid var(--linha);border-radius:99px;
+  font-size:var(--t-op);font-weight:500;line-height:1.25;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;
+  transition:background .2s,border-color .2s,color .2s,transform .15s var(--ease)}
+@media (hover:hover){.op > span:hover{border-color:var(--preto)}}
+.op > span:active{transform:scale(.96)}
+.op input:checked + span{background:var(--turquesa);border-color:var(--turquesa);color:var(--preto);font-weight:600;animation:pop .35s var(--ease)}
+@keyframes pop{40%{transform:scale(1.05)}}
+.op input:focus-visible + span{outline:3px solid var(--azul);outline-offset:2px}
+.op.check > span::before{content:"";width:18px;height:18px;flex:none;border-radius:6px;border:1.5px solid var(--cinza);transition:background .2s,border-color .2s}
+.op.check input:checked + span::before{border-color:var(--preto);background:var(--preto) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='%2340E0D0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat}
+.opcoes.col{flex-direction:column}
+.opcoes.col .op > span{border-radius:var(--r-in);padding:13px 18px}
+.opcoes.col .op > span::after{content:"";margin-left:auto;width:18px;height:18px;border-radius:50%;border:1.5px solid var(--cinza);flex:none;transition:all .2s}
+.opcoes.col .op input:checked + span::after{border:5px solid var(--preto);background:var(--branco)}
+.onda{position:absolute;border-radius:50%;background:rgba(18,18,18,.14);transform:scale(0);animation:onda .6s ease-out forwards;pointer-events:none}
+@keyframes onda{to{transform:scale(1);opacity:0}}
+
+/* escala 1 a 5 */
+.escala{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.escala .op > span{flex-direction:column;justify-content:center;gap:4px;border-radius:var(--r-in);padding:14px 0 12px;min-height:76px;text-align:center}
+.escala .n{font-size:26px;font-weight:900;line-height:1;font-variant-numeric:tabular-nums}
+.escala .w{max-width:100%;font-size:clamp(9.5px,2.8vw,12px);font-weight:600;letter-spacing:-.01em;color:var(--texto-2);white-space:nowrap}
+.escala .op input:checked + span .w{color:var(--preto)}
+
+/* indicação 0 a 10 */
+.card.escuro{background:var(--preto);color:var(--branco)}
+.card.escuro .num{color:var(--turquesa)}
+.card.escuro.ativo{box-shadow:0 18px 40px -18px rgba(18,18,18,.55)}
+.nps{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.nps .op > span{justify-content:center;border-color:var(--preto-3);color:var(--branco);font-size:19px;font-weight:900;border-radius:12px;padding:0;min-height:50px;font-variant-numeric:tabular-nums}
+@media (hover:hover){.nps .op > span:hover{border-color:var(--turquesa)}}
+.nps .op input:checked + span{color:var(--preto)}
+.nps-leg{display:flex;justify-content:space-between;gap:12px;margin-top:14px;font-size:13px;color:var(--cinza)}
+
+/* campos */
+.campo{display:block;width:100%;font:inherit;font-size:16px;color:var(--preto);background:var(--fundo);border:1.5px solid transparent;border-radius:var(--r-in);padding:14px 16px;min-height:52px;transition:border-color .2s,background .2s}
+.campo::placeholder{color:#8a8a87;font-size:clamp(13px,4.1vw,16px)}
+textarea.campo::placeholder{font-size:16px}
+.campo:focus{outline:none;border-color:var(--azul);background:var(--branco)}
+.card.azul{background:var(--azul);color:var(--branco)}
+.card.azul .num{color:var(--branco)}
+.card.azul .tag{background:rgba(255,255,255,.18);color:var(--branco)}
+.card.azul .q-tit{font-weight:700}
+.card.azul .q-sub{color:var(--branco)}
+.card.azul textarea{background:rgba(0,0,0,.14);color:var(--branco);border-color:rgba(255,255,255,.4);min-height:150px;resize:vertical;line-height:1.5}
+.card.azul textarea::placeholder{color:rgba(255,255,255,.85)}
+.card.azul textarea:focus{border-color:var(--branco);background:rgba(0,0,0,.2)}
+
+/* envio */
+.envio{margin-top:18px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.btn{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:12px;width:100%;min-height:60px;padding:0 22px;border:0;border-radius:99px;
+  font:inherit;font-size:17px;font-weight:700;letter-spacing:-.005em;cursor:pointer;text-decoration:none;text-align:center;line-height:1.25;
+  transition:transform .15s var(--ease),background .2s,opacity .2s;-webkit-tap-highlight-color:transparent}
+.btn:active{transform:scale(.97)}
+.btn:focus-visible{outline:3px solid var(--azul);outline-offset:3px}
+.btn-preto{background:var(--preto);color:var(--branco)}
+.btn .seta{display:inline-block;color:var(--turquesa);font-size:22px;line-height:1;transition:transform .3s var(--ease)}
+@media (hover:hover){.btn:hover .seta{transform:translateX(5px)}}
+.btn-preto.completo .seta{animation:empurra 1.4s var(--ease) infinite}
+@keyframes empurra{50%{transform:translateX(6px)}}
+.nota{margin:0;font-size:var(--t-apoio);color:var(--texto-2);text-align:center;max-width:40ch;line-height:1.5}
+
+/* rodapé */
+footer{padding-block:6px 40px}
+footer .wrap{display:flex;align-items:center;justify-content:center;gap:12px;font-size:var(--t-rot);font-weight:700;letter-spacing:.18em}
+footer .selo{width:34px;height:34px;color:var(--preto)}
+
+/* ---------- Tela de envio ---------- */
+.enviando{position:fixed;inset:0;z-index:90;background:var(--preto);color:var(--branco);display:grid;place-items:center;
+  padding:max(24px,env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left));
+  clip-path:inset(100% 0 0 0);visibility:hidden}
+.enviando.on{visibility:visible;animation:cortinaSobe .7s var(--ease-io) forwards}
+.enviando.sai{visibility:visible;clip-path:inset(0 0 0 0);animation:cortina .8s var(--ease-io) forwards}
+@keyframes cortinaSobe{from{clip-path:inset(100% 0 0 0)}to{clip-path:inset(0 0 0 0)}}
+.env-in{display:flex;flex-direction:column;align-items:center;gap:28px;width:min(300px,100%)}
+.enviando .selo{width:120px;height:120px;color:var(--branco);animation:corLogo 3s ease-in-out infinite}
+.passos{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px;width:100%}
+.passos li{display:flex;align-items:center;gap:12px;font-size:var(--t-corpo);color:#7a7a78;transition:color .3s}
+.passos li i{width:22px;height:22px;border-radius:50%;border:2px solid var(--preto-3);flex:none;display:grid;place-items:center;transition:all .3s}
+.passos li.vez{color:var(--branco)}
+.passos li.vez i{border-color:var(--turquesa);border-right-color:transparent;animation:gira .8s linear infinite}
+.passos li.ok{color:var(--branco)}
+.passos li.ok i{border-color:var(--turquesa);background:var(--turquesa);animation:none}
+.passos li.ok i::before{content:"";width:9px;height:5px;border-left:2px solid var(--preto);border-bottom:2px solid var(--preto);transform:rotate(-45deg) translate(1px,-1px)}
+
+/* ---------- Tela final ---------- */
+.final{background:var(--preto);color:var(--branco);border-radius:var(--r);padding:34px 24px 30px;display:flex;flex-direction:column;gap:20px}
+.final .selo{width:112px;height:112px;color:var(--branco)}
+.final .rot{font-size:var(--t-rot);font-weight:700;letter-spacing:.16em;color:var(--turquesa)}
+.final h2{margin:0;font-size:clamp(28px,7.6vw,36px);line-height:1.08;font-weight:700;letter-spacing:-.028em;text-wrap:balance}
+.final p{margin:0;color:var(--cinza);line-height:1.55}
+.final .acoes{display:flex;flex-direction:column;gap:10px}
+.btn-turq{background:var(--turquesa);color:var(--preto)}
+.btn-turq .seta{color:var(--preto)}
+.btn-branco{background:var(--branco);color:var(--preto);font-size:15.5px;min-height:54px}
+.btn-contorno{background:transparent;color:var(--branco);border:1.5px solid var(--preto-3);font-size:15.5px;min-height:54px}
+@media (hover:hover){.btn-contorno:hover{border-color:var(--turquesa)}}
+.btn-contorno svg{width:18px;height:18px;flex:none}
+.pdf-msg{font-size:13px;color:var(--cinza);text-align:center;min-height:1em}
+.indica{border-top:1px solid var(--preto-3);padding-top:22px;margin-top:4px;display:flex;flex-direction:column;gap:10px}
+.indica h3{margin:0;font-size:var(--t-q);font-weight:700;line-height:1.3;letter-spacing:-.01em}
+.indica .btn{margin-top:8px;font-size:15.5px;min-height:54px}
+.final > *{animation:sobe .8s var(--ease) both;animation-delay:calc(var(--d,0) * 1ms)}
+.final > .selo.cor-viva{animation:sobe .8s var(--ease) both,corLogo 12s ease-in-out infinite}
+
+.relatorio{margin-top:6px}
+.rel-resumo{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rel-tile{background:var(--preto-2);border:1px solid var(--preto-3);border-radius:var(--r-in);padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.rel-tile span{font-size:var(--t-rot);font-weight:700;letter-spacing:.12em;color:var(--cinza)}
+.rel-tile b{font-size:32px;font-weight:900;line-height:1.05;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.rel-tile.media b{color:var(--branco)}
+.rel-tile.nps b{color:var(--turquesa)}
+.rel-tile small{font-size:13px;color:var(--cinza)}
+.rel-lista{margin:0;display:flex;flex-direction:column}
+.rel-lista div{display:flex;flex-direction:column;gap:3px;padding:13px 0;border-top:1px solid var(--preto-3)}
+.rel-lista dt{font-size:13px;color:var(--cinza);font-weight:500}
+.rel-lista dd{margin:0;font-size:var(--t-corpo);font-weight:600;color:var(--branco);overflow-wrap:anywhere;white-space:pre-line}
+@media (min-width:480px){
+  .card{padding:28px 28px}
+  .final{padding:40px 32px 34px}
+}
+@media (max-width:359px){
+  .card{padding:22px 16px}
+  .escala{gap:4px;margin-inline:-6px}
+  .final{padding:30px 20px 26px}
+  .final .btn{padding:0 16px}
+  .op > span{padding:10px 15px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-delay:0ms!important}
+  .anel.gira,.anel.gira-rapido,.cor-viva{animation:none!important}
+}
+</style>
+</head>
+<body>
+
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="logo" viewBox="0 0 200 200"><g fill="currentColor"><path d="M10.08,104.11l.19-4.09c.07-1.41,1.26-2.01,2.44-1.95,1.18.06,2.08.61,2.07,1.86l.2.02c.05-1.04.5-1.13,1.78-1.31l1.95-.27-.06,1.32-1.9.26c-.99.14-1.27.2-1.31,1.07l-.09,2.03,3.14.15-.06,1.3-8.34-.39ZM14.42,100.86c.04-.89-.52-1.46-1.54-1.51-1.19-.06-1.45.4-1.5,1.28l-.1,2.22,3.04.14.1-2.14Z"/> <path d="M10.89,93.79l.2-1.41,8.67-1.74-.19,1.35-2.48.48-.42,2.93,2.25,1.15-.19,1.32-7.84-4.09ZM15.95,92.7l-2.84.55-.9-.07-.03.22.87.18,2.59,1.32.31-2.2Z"/> <path d="M11.86,88.04l.27-1.28,8.15,1.71-.27,1.28-8.15-1.71Z"/> <path d="M12.6,84.54l.34-1.26,6.94,1.89,1.02-3.74,1.11.3-1.36,5-8.05-2.19Z"/> <path d="M20.08,79.28c.89.25,1.85-.21,2.35-1.57.43-1.18.09-1.9-.66-2.18-.9-.33-1.56.9-1.92,1.58-.69,1.31-1.59,2.7-3.36,2.04-1.46-.54-1.88-1.91-1.25-3.62.68-1.84,1.97-2.44,3.58-2.16l-.09,1.28c-.87-.26-2,.06-2.43,1.23-.37,1.01-.05,1.75.68,2.01.88.32,1.36-.49,1.93-1.5.75-1.35,1.56-2.8,3.31-2.16,1.46.53,1.96,1.94,1.25,3.87-.73,1.99-2.13,2.9-3.85,2.45l.47-1.28Z"/> <path d="M20.88,72.69c-2.71-1.32-3.08-3.51-2.12-5.49.97-1.98,2.91-3.02,5.62-1.69,2.71,1.32,3.08,3.49,2.12,5.47-.96,1.97-2.91,3.04-5.62,1.72ZM23.82,66.69c-2.02-.99-3.32-.34-3.99,1.02-.67,1.37-.39,2.8,1.62,3.78,2.03.99,3.35.31,4.01-1.05.66-1.35.38-2.77-1.64-3.76Z"/> <path d="M21.67,61.91l.88-1.39,8.41.35-1.29-.42-5.06-3.19.7-1.1,7.04,4.44-.97,1.54-8.05-.34,1.42.51,4.67,2.95-.7,1.1-7.04-4.44Z"/> <path d="M28.57,51.73l.83-1.01,5.54,4.58,2.47-2.99.89.73-3.3,4-6.43-5.31Z"/> <path d="M32.87,46.7l.89-.96,6.12,5.66-.89.96-6.12-5.66Z"/> <path d="M42.51,41.41l-.78-1.21,2.81,6.65-.98.9-6.38-3.4,1.16.88,3.63,3.97-.96.88-5.62-6.15,1.35-1.25,5.82,3.19.45.41.16-.15-.37-.49-2.66-6.08,1.33-1.2,5.62,6.15-.96.88-3.63-3.97Z"/> <path d="M45.25,35.48l1.15-.84,7.3,5-1.1.81-2.08-1.44-2.39,1.75.74,2.42-1.07.79-2.55-8.47ZM49.57,38.34l-2.38-1.65-.58-.69-.18.13.48.75.86,2.78,1.8-1.32Z"/> <path d="M52.72,30.45l2.73-1.49c1.92-1.05,3.82-.85,5.3,1.85,1.48,2.71.62,4.41-1.3,5.46l-2.73,1.49-4-7.32ZM58.86,35.29c1.24-.68,1.94-1.65.73-3.85-1.2-2.2-2.4-2.14-3.64-1.46l-1.54.84,2.91,5.31,1.54-.84Z"/> <path d="M60.56,26.34l5.48-2.33.45,1.05-4.28,1.82.91,2.13,3.8-1.62.42.97-3.8,1.62,1.05,2.45,4.21-1.79.45,1.05-5.41,2.31-3.26-7.66Z"/> <path d="M70.47,28.48c.35.86,1.31,1.33,2.68.89,1.2-.38,1.56-1.1,1.31-1.86-.29-.91-1.67-.68-2.42-.55-1.46.26-3.1.4-3.67-1.4-.47-1.48.35-2.66,2.08-3.21,1.87-.59,3.14.05,3.9,1.5l-1.07.72c-.33-.85-1.27-1.54-2.46-1.16-1.02.33-1.41,1.04-1.17,1.77.28.89,1.22.77,2.37.6,1.52-.24,3.17-.49,3.74,1.29.47,1.48-.33,2.73-2.29,3.36-2.02.64-3.6.1-4.29-1.54l1.3-.41Z"/> <path d="M75.68,21.01l1.27-.31,1.99,8.09-1.27.31-1.99-8.09Z"/> <path d="M82.77,19.37c1.61-.27,3.17.3,3.99,1.88l-1.04.81c-.53-1.27-1.61-1.71-2.74-1.52-1.63.28-2.58,1.79-2.28,3.54.3,1.77,1.71,2.91,3.35,2.64,1.1-.19,2-.9,2.09-2.24l-.06-.36-2.74.46-.18-1.06,4-.67.23,1.39c0,2.1-1.42,3.33-3.2,3.64-2.29.39-4.36-1.05-4.78-3.57-.42-2.5,1.06-4.54,3.37-4.93Z"/> <path d="M88.54,18.69l1.64-.1,4.62,7.04-.42-1.29-.35-5.98,1.3-.08.49,8.31-1.81.11-4.41-6.74.41,1.45.33,5.51-1.3.08-.49-8.31Z"/> <path d="M100.28,22.56c.03-.63.54-1.11,1.15-1.08.59.03,1.05.55,1.02,1.17-.03.62-.51,1.08-1.13,1.05-.64-.03-1.07-.53-1.04-1.15Z"/> <path d="M107.61,18.89l4.04.62c1.39.21,1.86,1.46,1.68,2.63-.18,1.16-.83,2.01-2.06,1.86l-.04.19c1.02.16,1.07.61,1.11,1.9l.06,1.97-1.3-.2-.06-1.92c-.04-1-.06-1.28-.93-1.41l-2-.31-.48,3.11-1.29-.2,1.26-8.25ZM110.38,23.55c.88.13,1.5-.36,1.66-1.37.18-1.17-.24-1.49-1.12-1.62l-2.2-.34-.46,3.01,2.12.32Z"/> <path d="M117.78,20.78l1.38.35.82,8.8-1.32-.33-.22-2.52-2.87-.72-1.38,2.11-1.29-.32,4.89-7.37ZM118.33,25.92l-.25-2.88.16-.88-.21-.05-.27.84-1.58,2.44,2.16.54Z"/> <path d="M123.42,22.36l1.24.4-2.57,7.93-1.24-.4,2.57-7.93Z"/> <path d="M126.83,23.48l1.21.48-2.62,6.69,3.61,1.41-.42,1.07-4.83-1.89,3.04-7.76Z"/> <path d="M131.24,31.46c-.34.86.01,1.87,1.31,2.5,1.13.56,1.88.29,2.24-.43.42-.86-.73-1.65-1.36-2.08-1.23-.83-2.51-1.86-1.67-3.55.69-1.39,2.1-1.67,3.73-.86,1.75.87,2.22,2.21,1.77,3.78l-1.27-.22c.35-.84.15-1.99-.97-2.54-.96-.47-1.73-.23-2.07.46-.41.84.35,1.4,1.29,2.08,1.27.88,2.62,1.85,1.79,3.52-.69,1.39-2.13,1.74-3.98.83-1.9-.94-2.66-2.43-2.02-4.09l1.22.6Z"/> <path d="M137.72,32.96c1.6-2.56,3.82-2.7,5.69-1.53s2.69,3.21,1.09,5.77c-1.6,2.56-3.79,2.7-5.66,1.53-1.86-1.16-2.72-3.21-1.12-5.77ZM143.37,36.51c1.19-1.91.68-3.27-.6-4.07-1.29-.81-2.75-.69-3.93,1.21-1.2,1.92-.66,3.3.62,4.1,1.28.8,2.72.67,3.91-1.24Z"/> <path d="M148.33,34.88l1.29,1.02-1.23,8.33.55-1.24,3.7-4.7,1.02.81-5.15,6.54-1.43-1.12,1.18-7.97-.65,1.35-3.42,4.34-1.02-.81,5.15-6.54Z"/> <path d="M157.73,42.8l.91.93-5.13,5.04,2.72,2.77-.82.81-3.64-3.7,5.95-5.85Z"/> <path d="M162.3,47.62l.86.98-6.28,5.49-.86-.98,6.28-5.49Z"/> <path d="M166.54,57.75l1.29-.65-6.9,2.1-.79-1.07,4.05-5.99-1,1.06-4.33,3.2-.77-1.05,6.7-4.95,1.1,1.47-3.78,5.45-.45.41.13.18.52-.31,6.32-2.01,1.06,1.45-6.7,4.95-.77-1.05,4.33-3.2Z"/> <path d="M172.13,61.09l.71,1.23-5.74,6.73-.68-1.18,1.65-1.91-1.48-2.56-2.48.48-.67-1.15,8.69-1.64ZM168.83,65.08l1.89-2.19.75-.5-.11-.19-.79.39-2.85.56,1.12,1.92Z"/> <path d="M176.38,69.08l1.19,2.87c.84,2.02.44,3.89-2.41,5.08-2.85,1.18-4.46.15-5.3-1.88l-1.19-2.87,7.71-3.2ZM170.9,74.67c.54,1.3,1.43,2.11,3.76,1.14,2.31-.96,2.38-2.16,1.84-3.47l-.68-1.63-5.6,2.32.68,1.63Z"/> <path d="M179.63,77.3l1.74,5.7-1.09.33-1.35-4.45-2.22.68,1.21,3.96-1.01.31-1.21-3.96-2.55.78,1.33,4.38-1.09.33-1.72-5.63,7.97-2.43Z"/> <path d="M176.44,86.95c-.89.25-1.46,1.16-1.17,2.57.25,1.23.92,1.67,1.71,1.51.94-.19.85-1.59.8-2.35-.1-1.48-.07-3.13,1.78-3.51,1.52-.31,2.6.63,2.97,2.41.39,1.92-.39,3.11-1.9,3.72l-.6-1.14c.88-.24,1.67-1.1,1.42-2.32-.22-1.05-.88-1.51-1.63-1.36-.91.19-.9,1.14-.85,2.29.08,1.54.15,3.21-1.68,3.58-1.52.31-2.68-.62-3.1-2.64-.43-2.08.29-3.59,1.99-4.11l.27,1.34Z"/> <path d="M183.32,92.9l.18,1.29-8.26,1.12-.18-1.29,8.26-1.12Z"/> <path d="M184.2,100.1c.1,1.63-.64,3.12-2.29,3.77l-.7-1.12c1.32-.4,1.87-1.42,1.8-2.56-.1-1.65-1.51-2.75-3.28-2.64-1.79.11-3.08,1.39-2.97,3.06.07,1.12.69,2.08,2.01,2.32l.36-.02-.17-2.78,1.07-.07.25,4.05-1.41.09c-2.09-.22-3.17-1.76-3.28-3.57-.14-2.31,1.5-4.23,4.06-4.38,2.54-.16,4.4,1.54,4.55,3.87Z"/> <path d="M184.27,105.92l-.07,1.64-7.49,3.86,1.33-.28,5.99.27-.06,1.3-8.33-.38.08-1.82,7.17-3.69-1.48.26-5.52-.25.06-1.3,8.33.38Z"/> <path d="M179.19,117.2c.62.1,1.04.66.95,1.26-.09.59-.66.98-1.27.89-.61-.09-1.02-.62-.93-1.23.1-.63.64-1.01,1.25-.91Z"/> <path d="M181.51,124.6c-.03.52-.15,1.25-.32,1.93-.27,1.05-.63,1.68-1.18,2.04-.44.3-1.01.38-1.6.23-1.01-.26-1.51-1.06-1.58-1.93h-.03c-.35.53-.98.74-1.82.72-1.12-.02-1.9-.03-2.24.05l.26-1.02c.25-.07.94-.07,1.95-.04,1.11.04,1.61-.26,1.87-1.15l.24-.93-3.3-.84.25-.98,7.51,1.92ZM177.79,124.7l-.26,1.01c-.27,1.05.14,1.86,1.01,2.09.98.25,1.59-.35,1.87-1.39.12-.47.16-.82.16-.99l-2.78-.71Z"/> <path d="M174.35,130.63l-2.07-1.58.34-.99,6.54,5.09-.4,1.16-8.29-.04.35-1.02,2.61.02.91-2.63ZM174.25,133.32h2.39c.54.02,1.02.06,1.49.1v-.02c-.39-.26-.8-.54-1.21-.84l-1.89-1.47-.77,2.23Z"/> <path d="M176.88,139.16l-7.24-3.02.39-.93,7.24,3.02-.39.93Z"/> <path d="M176.06,141.07l-.44.91-6.31-3.03-1.45,3.03-.77-.37,1.89-3.94,7.08,3.4Z"/> <path d="M167.76,142.97c-.47.26-1,.72-1.34,1.33-.51.9-.34,1.7.35,2.09.64.36,1.21.21,2.09-.51,1.03-.89,2-1.25,2.96-.7,1.06.61,1.35,1.94.6,3.26-.4.7-.85,1.11-1.19,1.32l-.58-.65c.25-.15.71-.49,1.06-1.11.53-.93.18-1.6-.29-1.87-.64-.36-1.19-.13-2.09.61-1.1.9-1.99,1.17-3,.6-1.05-.6-1.52-1.9-.6-3.51.37-.66.98-1.27,1.43-1.49l.61.64Z"/> <path d="M163.36,155.11c-2.23-1.53-2.48-3.7-1.35-5.35,1.17-1.71,3.33-2,5.29-.66,2.06,1.41,2.52,3.61,1.34,5.34-1.21,1.77-3.35,1.98-5.28.66ZM166.7,150.01c-1.38-.95-3.14-1.05-4.04.26-.91,1.33-.21,2.91,1.27,3.92,1.29.88,3.1,1.14,4.05-.26.95-1.38.15-2.95-1.28-3.93Z"/> <path d="M159.34,153.72l6.01,5.05-.71.85-4.66-.63c-1.08-.15-2.01-.33-2.86-.56v.03c.86.6,1.6,1.2,2.54,1.99l2.52,2.11-.61.73-6.01-5.05.66-.78,4.66.65c1.02.14,2.05.32,2.95.56v-.03c-.78-.59-1.52-1.18-2.52-2.02l-2.57-2.16.61-.73Z"/> <path d="M158.2,166.78l-.73.7-4.83-5.07-2.43,2.32-.59-.62,3.17-3.02,5.42,5.69Z"/> <path d="M153.16,171.38l-5.12-5.96.77-.66,5.12,5.96-.77.66Z"/> <path d="M143.56,173.23c.7.85,1.53,1.87,2.1,2.66l.03-.02c-.33-.9-.65-1.88-.97-2.99l-1.14-3.89.62-.46,3.24,2.26c.96.67,1.81,1.3,2.54,1.92h.02c-.56-.82-1.29-1.91-1.93-2.9l-1.83-2.84.78-.57,4.21,6.65-1.04.77-3.33-2.27c-.84-.59-1.56-1.12-2.21-1.66l-.03.02c.31.76.6,1.62.9,2.62l1.12,3.89-1.04.77-5.05-6.04.8-.59,2.2,2.66Z"/> <path d="M139.66,174.56l-.55-2.54.9-.53,1.7,8.12-1.05.62-6.3-5.4.93-.55,1.98,1.7,2.4-1.42ZM137.85,176.55l1.81,1.55c.41.35.75.69,1.08,1.03h.02c-.14-.47-.27-.95-.38-1.44l-.49-2.35-2.04,1.2Z"/> <path d="M134.45,183.45c-.53.33-1.17.69-1.91,1.01-1.34.58-2.42.69-3.31.38-.9-.31-1.63-.98-2.14-2.14-.51-1.17-.57-2.29-.18-3.25.38-.97,1.33-1.81,2.73-2.43.66-.29,1.23-.5,1.73-.65l3.09,7.08ZM130.74,177.49c-.25.06-.6.2-.96.36-1.99.87-2.58,2.45-1.73,4.39.73,1.7,2.16,2.36,4.13,1.51.48-.21.83-.41,1.05-.57l-2.48-5.68Z"/> <path d="M121.68,184.08l2.89-.98-.91-2.68-3.22,1.09-.27-.81,4.18-1.42,2.53,7.44-4.02,1.36-.27-.81,3.06-1.04-.8-2.35-2.89.98-.27-.79Z"/> <path d="M119.5,182.17c-.51-.16-1.21-.21-1.89-.04-1,.26-1.45.95-1.25,1.71.19.71.7,1.01,1.83,1.14,1.36.12,2.29.56,2.57,1.63.31,1.19-.44,2.32-1.92,2.71-.78.2-1.39.17-1.78.07l.06-.87c.28.07.85.16,1.54-.02,1.04-.27,1.27-.99,1.13-1.51-.19-.71-.74-.94-1.89-1.07-1.42-.16-2.23-.61-2.52-1.73-.31-1.17.3-2.41,2.09-2.88.73-.19,1.59-.19,2.07-.02l-.03.89Z"/> <path d="M114.17,190.26l-1.58-7.7.99-.2,1.58,7.7-.99.2Z"/> <path d="M105.09,184.09c.43-.22,1.28-.61,2.33-.76,1.18-.16,2.19,0,3.05.62.76.55,1.32,1.54,1.49,2.75.31,2.32-1.05,4.24-3.66,4.6-.9.13-1.63.03-1.99-.09l.13-.85c.44.13.98.21,1.77.1,1.89-.26,2.97-1.61,2.7-3.56-.27-1.98-1.63-2.98-3.44-2.72-.66.09-1.1.25-1.31.39l.32,2.32,1.58-.22.11.81-2.56.36-.52-3.74Z"/> <path d="M103.69,183.86l.36,7.85-1.11.05-2.7-3.86c-.62-.89-1.12-1.7-1.52-2.49h-.02c.14,1.06.21,2.01.26,3.23l.15,3.28-.95.04-.36-7.85,1.02-.05,2.67,3.87c.59.85,1.15,1.72,1.59,2.55h.03c-.1-1-.17-1.94-.23-3.25l-.15-3.35.95-.04Z"/> <path d="M94.09,187.06c-.02.69-.61,1.19-1.28,1.16-.67-.03-1.19-.6-1.16-1.27.04-.69.6-1.19,1.28-1.16.67.04,1.19.59,1.16,1.27Z"/> <path d="M87.15,191.27c-.52.03-1.26-.01-1.95-.11-1.07-.15-1.74-.45-2.16-.95-.34-.4-.49-.96-.4-1.56.15-1.03.89-1.61,1.75-1.78v-.03c-.57-.29-.84-.9-.91-1.73-.1-1.12-.18-1.9-.3-2.22l1.04.15c.1.24.17.93.26,1.93.08,1.11.44,1.57,1.34,1.73l.95.13.48-3.37,1,.14-1.09,7.67ZM86.65,187.59l-1.03-.15c-1.07-.15-1.84.34-1.96,1.23-.14,1,.52,1.54,1.58,1.71.48.07.84.07,1,.05l.4-2.84Z"/> <path d="M80.33,184.8l1.35-2.22,1.02.23-4.36,7.06-1.19-.27-.85-8.25,1.06.24.26,2.6,2.71.62ZM77.65,185l.24,2.38c.06.54.06,1.02.08,1.49h.02c.22-.42.45-.86.7-1.29l1.26-2.04-2.31-.53Z"/> <path d="M72.16,188.26l2.22-7.54.97.29-2.22,7.54-.97-.29Z"/> <path d="M70.16,187.65l-.96-.34,2.33-6.6-3.16-1.12.28-.8,4.12,1.45-2.61,7.41Z"/> <path d="M67.39,179.61c-.31-.44-.82-.92-1.47-1.19-.95-.41-1.73-.15-2.04.58-.29.67-.07,1.23.74,2.02,1,.93,1.46,1.85,1.02,2.87-.49,1.12-1.78,1.56-3.18.95-.74-.32-1.2-.72-1.44-1.04l.59-.65c.18.23.57.65,1.22.93.98.43,1.61,0,1.83-.49.29-.67,0-1.2-.83-2.01-1.02-1-1.38-1.86-.92-2.91.48-1.11,1.72-1.72,3.42-.98.7.3,1.37.83,1.64,1.26l-.57.68Z"/> <path d="M54.84,176.53c1.28-2.38,3.41-2.86,5.17-1.91,1.82.98,2.34,3.09,1.22,5.18-1.18,2.19-3.32,2.89-5.16,1.9-1.89-1.02-2.33-3.12-1.22-5.17ZM60.26,179.3c.8-1.48.71-3.23-.7-3.99-1.41-.76-2.92.11-3.76,1.68-.74,1.37-.8,3.2.69,4,1.48.8,2.95-.17,3.77-1.69Z"/> <path d="M55.78,172.39l-4.38,6.52-.92-.62.13-4.7c.03-1.09.11-2.03.25-2.91h-.03c-.51.92-1.02,1.73-1.7,2.74l-1.83,2.73-.79-.53,4.38-6.52.85.57-.15,4.7c-.03,1.03-.1,2.07-.24,3h.04c.5-.84,1.01-1.64,1.74-2.73l1.87-2.79.79.53Z"/> <path d="M42.66,172.63l-.77-.65,4.52-5.34-2.56-2.17.55-.65,3.33,2.82-5.07,5.99Z"/> <path d="M37.55,168.12l5.38-5.72.74.69-5.38,5.72-.74-.69Z"/> <path d="M34.7,158.8c-.77.78-1.69,1.73-2.42,2.38l.02.03c.86-.43,1.8-.85,2.87-1.29l3.75-1.56.52.57-1.9,3.47c-.56,1.02-1.1,1.94-1.64,2.73l.02.02c.74-.64,1.75-1.49,2.66-2.24l2.62-2.12.65.71-6.16,4.91-.87-.95,1.89-3.56c.49-.89.95-1.68,1.41-2.37l-.02-.03c-.72.39-1.54.77-2.51,1.18l-3.74,1.54-.87-.95,5.46-5.67.67.73-2.41,2.48Z"/> <path d="M32.96,155.07l2.47-.83.63.84-7.89,2.57-.73-.98,4.69-6.86.65.87-1.48,2.15,1.67,2.23ZM30.79,153.48l-1.35,1.97c-.31.45-.61.82-.9,1.19v.02c.46-.19.92-.37,1.39-.53l2.28-.75-1.42-1.9Z"/> <path d="M23.57,150.83c-.39-.49-.81-1.09-1.21-1.79-.72-1.26-.94-2.33-.73-3.24.21-.92.79-1.73,1.9-2.36,1.11-.64,2.22-.81,3.21-.53,1,.27,1.95,1.13,2.7,2.45.36.63.63,1.17.83,1.64l-6.7,3.83ZM29.09,146.51c-.09-.25-.26-.57-.46-.92-1.08-1.88-2.71-2.3-4.55-1.25-1.61.91-2.11,2.4-1.05,4.26.26.45.5.78.68.98l5.38-3.08Z"/> <path d="M21.56,138.21l1.29,2.77,2.56-1.19-1.44-3.08.77-.36,1.86,4-7.11,3.31-1.79-3.84.77-.36,1.36,2.92,2.25-1.05-1.29-2.77.76-.35Z"/> <path d="M23.2,135.81c.1-.52.08-1.23-.17-1.88-.37-.97-1.1-1.34-1.84-1.06-.69.26-.93.8-.93,1.94.03,1.36-.31,2.34-1.34,2.73-1.14.44-2.35-.19-2.9-1.62-.29-.75-.32-1.36-.26-1.76l.87-.03c-.04.29-.07.86.18,1.53.38,1,1.13,1.15,1.63.96.69-.26.85-.84.86-2,0-1.42.36-2.28,1.44-2.69,1.13-.43,2.43.03,3.09,1.77.27.71.36,1.56.25,2.05l-.89.06Z"/> <path d="M14.59,131.38l7.48-2.4.31.97-7.48,2.4-.31-.97Z"/> <path d="M19.75,121.74c.27.4.75,1.2,1.01,2.23.29,1.15.24,2.17-.29,3.1-.47.81-1.38,1.48-2.57,1.78-2.27.56-4.33-.58-4.97-3.13-.22-.88-.2-1.62-.13-1.99l.86.03c-.08.45-.1,1,.1,1.77.47,1.85,1.92,2.77,3.83,2.29,1.93-.49,2.78-1.94,2.33-3.71-.16-.64-.36-1.06-.53-1.26l-2.27.57.39,1.55-.79.2-.63-2.51,3.66-.92Z"/> <path d="M19.83,120.33l-7.76,1.19-.17-1.09,3.55-3.09c.82-.72,1.57-1.29,2.31-1.78v-.02c-1.04.25-1.98.42-3.19.6l-3.25.5-.14-.94,7.76-1.19.16,1.01-3.56,3.07c-.78.67-1.59,1.33-2.37,1.85l.02.03c.97-.21,1.9-.37,3.19-.57l3.32-.51.14.94Z"/> <path d="M15.61,111.08c-.69.05-1.25-.48-1.29-1.16-.04-.67.47-1.25,1.14-1.29.69-.04,1.25.47,1.29,1.16.04.67-.46,1.25-1.14,1.29Z"/></g><g fill="currentColor"><path d="M91.11,139.56c-3.28,0-4.71,1.23-5.22,2.66l-.61,2.15h-1.64c.03-8.66.06-17.32.09-25.98h-15.95v31.81h58.81v-10.39c-11.82-.09-23.65-.17-35.47-.26Z"/> <path d="M83.72,103.18h.13s16.47,0,16.47,0c4.53,0,5.87,2.78,7,8.44l3.29,16.36h15.95l-4.43-20.07c-1.44-6.59-5.76-9.26-17.39-8.85v-1.75c14.51-1.75,19.66-7.62,19.66-17.81,0-12.04-8.03-19.45-20.48-19.45h-36.02v46.5h15.82v-3.38ZM83.85,70.45h15.95c5.15,0,8.75,3.4,8.75,11.94,0,7.31-3.4,11.63-9.47,11.63h-15.23v-23.57Z"/></g></symbol>
+  <symbol id="logo-gira" viewBox="0 0 200 200"><g class="anel gira" fill="currentColor"><path d="M10.08,104.11l.19-4.09c.07-1.41,1.26-2.01,2.44-1.95,1.18.06,2.08.61,2.07,1.86l.2.02c.05-1.04.5-1.13,1.78-1.31l1.95-.27-.06,1.32-1.9.26c-.99.14-1.27.2-1.31,1.07l-.09,2.03,3.14.15-.06,1.3-8.34-.39ZM14.42,100.86c.04-.89-.52-1.46-1.54-1.51-1.19-.06-1.45.4-1.5,1.28l-.1,2.22,3.04.14.1-2.14Z"/> <path d="M10.89,93.79l.2-1.41,8.67-1.74-.19,1.35-2.48.48-.42,2.93,2.25,1.15-.19,1.32-7.84-4.09ZM15.95,92.7l-2.84.55-.9-.07-.03.22.87.18,2.59,1.32.31-2.2Z"/> <path d="M11.86,88.04l.27-1.28,8.15,1.71-.27,1.28-8.15-1.71Z"/> <path d="M12.6,84.54l.34-1.26,6.94,1.89,1.02-3.74,1.11.3-1.36,5-8.05-2.19Z"/> <path d="M20.08,79.28c.89.25,1.85-.21,2.35-1.57.43-1.18.09-1.9-.66-2.18-.9-.33-1.56.9-1.92,1.58-.69,1.31-1.59,2.7-3.36,2.04-1.46-.54-1.88-1.91-1.25-3.62.68-1.84,1.97-2.44,3.58-2.16l-.09,1.28c-.87-.26-2,.06-2.43,1.23-.37,1.01-.05,1.75.68,2.01.88.32,1.36-.49,1.93-1.5.75-1.35,1.56-2.8,3.31-2.16,1.46.53,1.96,1.94,1.25,3.87-.73,1.99-2.13,2.9-3.85,2.45l.47-1.28Z"/> <path d="M20.88,72.69c-2.71-1.32-3.08-3.51-2.12-5.49.97-1.98,2.91-3.02,5.62-1.69,2.71,1.32,3.08,3.49,2.12,5.47-.96,1.97-2.91,3.04-5.62,1.72ZM23.82,66.69c-2.02-.99-3.32-.34-3.99,1.02-.67,1.37-.39,2.8,1.62,3.78,2.03.99,3.35.31,4.01-1.05.66-1.35.38-2.77-1.64-3.76Z"/> <path d="M21.67,61.91l.88-1.39,8.41.35-1.29-.42-5.06-3.19.7-1.1,7.04,4.44-.97,1.54-8.05-.34,1.42.51,4.67,2.95-.7,1.1-7.04-4.44Z"/> <path d="M28.57,51.73l.83-1.01,5.54,4.58,2.47-2.99.89.73-3.3,4-6.43-5.31Z"/> <path d="M32.87,46.7l.89-.96,6.12,5.66-.89.96-6.12-5.66Z"/> <path d="M42.51,41.41l-.78-1.21,2.81,6.65-.98.9-6.38-3.4,1.16.88,3.63,3.97-.96.88-5.62-6.15,1.35-1.25,5.82,3.19.45.41.16-.15-.37-.49-2.66-6.08,1.33-1.2,5.62,6.15-.96.88-3.63-3.97Z"/> <path d="M45.25,35.48l1.15-.84,7.3,5-1.1.81-2.08-1.44-2.39,1.75.74,2.42-1.07.79-2.55-8.47ZM49.57,38.34l-2.38-1.65-.58-.69-.18.13.48.75.86,2.78,1.8-1.32Z"/> <path d="M52.72,30.45l2.73-1.49c1.92-1.05,3.82-.85,5.3,1.85,1.48,2.71.62,4.41-1.3,5.46l-2.73,1.49-4-7.32ZM58.86,35.29c1.24-.68,1.94-1.65.73-3.85-1.2-2.2-2.4-2.14-3.64-1.46l-1.54.84,2.91,5.31,1.54-.84Z"/> <path d="M60.56,26.34l5.48-2.33.45,1.05-4.28,1.82.91,2.13,3.8-1.62.42.97-3.8,1.62,1.05,2.45,4.21-1.79.45,1.05-5.41,2.31-3.26-7.66Z"/> <path d="M70.47,28.48c.35.86,1.31,1.33,2.68.89,1.2-.38,1.56-1.1,1.31-1.86-.29-.91-1.67-.68-2.42-.55-1.46.26-3.1.4-3.67-1.4-.47-1.48.35-2.66,2.08-3.21,1.87-.59,3.14.05,3.9,1.5l-1.07.72c-.33-.85-1.27-1.54-2.46-1.16-1.02.33-1.41,1.04-1.17,1.77.28.89,1.22.77,2.37.6,1.52-.24,3.17-.49,3.74,1.29.47,1.48-.33,2.73-2.29,3.36-2.02.64-3.6.1-4.29-1.54l1.3-.41Z"/> <path d="M75.68,21.01l1.27-.31,1.99,8.09-1.27.31-1.99-8.09Z"/> <path d="M82.77,19.37c1.61-.27,3.17.3,3.99,1.88l-1.04.81c-.53-1.27-1.61-1.71-2.74-1.52-1.63.28-2.58,1.79-2.28,3.54.3,1.77,1.71,2.91,3.35,2.64,1.1-.19,2-.9,2.09-2.24l-.06-.36-2.74.46-.18-1.06,4-.67.23,1.39c0,2.1-1.42,3.33-3.2,3.64-2.29.39-4.36-1.05-4.78-3.57-.42-2.5,1.06-4.54,3.37-4.93Z"/> <path d="M88.54,18.69l1.64-.1,4.62,7.04-.42-1.29-.35-5.98,1.3-.08.49,8.31-1.81.11-4.41-6.74.41,1.45.33,5.51-1.3.08-.49-8.31Z"/> <path d="M100.28,22.56c.03-.63.54-1.11,1.15-1.08.59.03,1.05.55,1.02,1.17-.03.62-.51,1.08-1.13,1.05-.64-.03-1.07-.53-1.04-1.15Z"/> <path d="M107.61,18.89l4.04.62c1.39.21,1.86,1.46,1.68,2.63-.18,1.16-.83,2.01-2.06,1.86l-.04.19c1.02.16,1.07.61,1.11,1.9l.06,1.97-1.3-.2-.06-1.92c-.04-1-.06-1.28-.93-1.41l-2-.31-.48,3.11-1.29-.2,1.26-8.25ZM110.38,23.55c.88.13,1.5-.36,1.66-1.37.18-1.17-.24-1.49-1.12-1.62l-2.2-.34-.46,3.01,2.12.32Z"/> <path d="M117.78,20.78l1.38.35.82,8.8-1.32-.33-.22-2.52-2.87-.72-1.38,2.11-1.29-.32,4.89-7.37ZM118.33,25.92l-.25-2.88.16-.88-.21-.05-.27.84-1.58,2.44,2.16.54Z"/> <path d="M123.42,22.36l1.24.4-2.57,7.93-1.24-.4,2.57-7.93Z"/> <path d="M126.83,23.48l1.21.48-2.62,6.69,3.61,1.41-.42,1.07-4.83-1.89,3.04-7.76Z"/> <path d="M131.24,31.46c-.34.86.01,1.87,1.31,2.5,1.13.56,1.88.29,2.24-.43.42-.86-.73-1.65-1.36-2.08-1.23-.83-2.51-1.86-1.67-3.55.69-1.39,2.1-1.67,3.73-.86,1.75.87,2.22,2.21,1.77,3.78l-1.27-.22c.35-.84.15-1.99-.97-2.54-.96-.47-1.73-.23-2.07.46-.41.84.35,1.4,1.29,2.08,1.27.88,2.62,1.85,1.79,3.52-.69,1.39-2.13,1.74-3.98.83-1.9-.94-2.66-2.43-2.02-4.09l1.22.6Z"/> <path d="M137.72,32.96c1.6-2.56,3.82-2.7,5.69-1.53s2.69,3.21,1.09,5.77c-1.6,2.56-3.79,2.7-5.66,1.53-1.86-1.16-2.72-3.21-1.12-5.77ZM143.37,36.51c1.19-1.91.68-3.27-.6-4.07-1.29-.81-2.75-.69-3.93,1.21-1.2,1.92-.66,3.3.62,4.1,1.28.8,2.72.67,3.91-1.24Z"/> <path d="M148.33,34.88l1.29,1.02-1.23,8.33.55-1.24,3.7-4.7,1.02.81-5.15,6.54-1.43-1.12,1.18-7.97-.65,1.35-3.42,4.34-1.02-.81,5.15-6.54Z"/> <path d="M157.73,42.8l.91.93-5.13,5.04,2.72,2.77-.82.81-3.64-3.7,5.95-5.85Z"/> <path d="M162.3,47.62l.86.98-6.28,5.49-.86-.98,6.28-5.49Z"/> <path d="M166.54,57.75l1.29-.65-6.9,2.1-.79-1.07,4.05-5.99-1,1.06-4.33,3.2-.77-1.05,6.7-4.95,1.1,1.47-3.78,5.45-.45.41.13.18.52-.31,6.32-2.01,1.06,1.45-6.7,4.95-.77-1.05,4.33-3.2Z"/> <path d="M172.13,61.09l.71,1.23-5.74,6.73-.68-1.18,1.65-1.91-1.48-2.56-2.48.48-.67-1.15,8.69-1.64ZM168.83,65.08l1.89-2.19.75-.5-.11-.19-.79.39-2.85.56,1.12,1.92Z"/> <path d="M176.38,69.08l1.19,2.87c.84,2.02.44,3.89-2.41,5.08-2.85,1.18-4.46.15-5.3-1.88l-1.19-2.87,7.71-3.2ZM170.9,74.67c.54,1.3,1.43,2.11,3.76,1.14,2.31-.96,2.38-2.16,1.84-3.47l-.68-1.63-5.6,2.32.68,1.63Z"/> <path d="M179.63,77.3l1.74,5.7-1.09.33-1.35-4.45-2.22.68,1.21,3.96-1.01.31-1.21-3.96-2.55.78,1.33,4.38-1.09.33-1.72-5.63,7.97-2.43Z"/> <path d="M176.44,86.95c-.89.25-1.46,1.16-1.17,2.57.25,1.23.92,1.67,1.71,1.51.94-.19.85-1.59.8-2.35-.1-1.48-.07-3.13,1.78-3.51,1.52-.31,2.6.63,2.97,2.41.39,1.92-.39,3.11-1.9,3.72l-.6-1.14c.88-.24,1.67-1.1,1.42-2.32-.22-1.05-.88-1.51-1.63-1.36-.91.19-.9,1.14-.85,2.29.08,1.54.15,3.21-1.68,3.58-1.52.31-2.68-.62-3.1-2.64-.43-2.08.29-3.59,1.99-4.11l.27,1.34Z"/> <path d="M183.32,92.9l.18,1.29-8.26,1.12-.18-1.29,8.26-1.12Z"/> <path d="M184.2,100.1c.1,1.63-.64,3.12-2.29,3.77l-.7-1.12c1.32-.4,1.87-1.42,1.8-2.56-.1-1.65-1.51-2.75-3.28-2.64-1.79.11-3.08,1.39-2.97,3.06.07,1.12.69,2.08,2.01,2.32l.36-.02-.17-2.78,1.07-.07.25,4.05-1.41.09c-2.09-.22-3.17-1.76-3.28-3.57-.14-2.31,1.5-4.23,4.06-4.38,2.54-.16,4.4,1.54,4.55,3.87Z"/> <path d="M184.27,105.92l-.07,1.64-7.49,3.86,1.33-.28,5.99.27-.06,1.3-8.33-.38.08-1.82,7.17-3.69-1.48.26-5.52-.25.06-1.3,8.33.38Z"/> <path d="M179.19,117.2c.62.1,1.04.66.95,1.26-.09.59-.66.98-1.27.89-.61-.09-1.02-.62-.93-1.23.1-.63.64-1.01,1.25-.91Z"/> <path d="M181.51,124.6c-.03.52-.15,1.25-.32,1.93-.27,1.05-.63,1.68-1.18,2.04-.44.3-1.01.38-1.6.23-1.01-.26-1.51-1.06-1.58-1.93h-.03c-.35.53-.98.74-1.82.72-1.12-.02-1.9-.03-2.24.05l.26-1.02c.25-.07.94-.07,1.95-.04,1.11.04,1.61-.26,1.87-1.15l.24-.93-3.3-.84.25-.98,7.51,1.92ZM177.79,124.7l-.26,1.01c-.27,1.05.14,1.86,1.01,2.09.98.25,1.59-.35,1.87-1.39.12-.47.16-.82.16-.99l-2.78-.71Z"/> <path d="M174.35,130.63l-2.07-1.58.34-.99,6.54,5.09-.4,1.16-8.29-.04.35-1.02,2.61.02.91-2.63ZM174.25,133.32h2.39c.54.02,1.02.06,1.49.1v-.02c-.39-.26-.8-.54-1.21-.84l-1.89-1.47-.77,2.23Z"/> <path d="M176.88,139.16l-7.24-3.02.39-.93,7.24,3.02-.39.93Z"/> <path d="M176.06,141.07l-.44.91-6.31-3.03-1.45,3.03-.77-.37,1.89-3.94,7.08,3.4Z"/> <path d="M167.76,142.97c-.47.26-1,.72-1.34,1.33-.51.9-.34,1.7.35,2.09.64.36,1.21.21,2.09-.51,1.03-.89,2-1.25,2.96-.7,1.06.61,1.35,1.94.6,3.26-.4.7-.85,1.11-1.19,1.32l-.58-.65c.25-.15.71-.49,1.06-1.11.53-.93.18-1.6-.29-1.87-.64-.36-1.19-.13-2.09.61-1.1.9-1.99,1.17-3,.6-1.05-.6-1.52-1.9-.6-3.51.37-.66.98-1.27,1.43-1.49l.61.64Z"/> <path d="M163.36,155.11c-2.23-1.53-2.48-3.7-1.35-5.35,1.17-1.71,3.33-2,5.29-.66,2.06,1.41,2.52,3.61,1.34,5.34-1.21,1.77-3.35,1.98-5.28.66ZM166.7,150.01c-1.38-.95-3.14-1.05-4.04.26-.91,1.33-.21,2.91,1.27,3.92,1.29.88,3.1,1.14,4.05-.26.95-1.38.15-2.95-1.28-3.93Z"/> <path d="M159.34,153.72l6.01,5.05-.71.85-4.66-.63c-1.08-.15-2.01-.33-2.86-.56v.03c.86.6,1.6,1.2,2.54,1.99l2.52,2.11-.61.73-6.01-5.05.66-.78,4.66.65c1.02.14,2.05.32,2.95.56v-.03c-.78-.59-1.52-1.18-2.52-2.02l-2.57-2.16.61-.73Z"/> <path d="M158.2,166.78l-.73.7-4.83-5.07-2.43,2.32-.59-.62,3.17-3.02,5.42,5.69Z"/> <path d="M153.16,171.38l-5.12-5.96.77-.66,5.12,5.96-.77.66Z"/> <path d="M143.56,173.23c.7.85,1.53,1.87,2.1,2.66l.03-.02c-.33-.9-.65-1.88-.97-2.99l-1.14-3.89.62-.46,3.24,2.26c.96.67,1.81,1.3,2.54,1.92h.02c-.56-.82-1.29-1.91-1.93-2.9l-1.83-2.84.78-.57,4.21,6.65-1.04.77-3.33-2.27c-.84-.59-1.56-1.12-2.21-1.66l-.03.02c.31.76.6,1.62.9,2.62l1.12,3.89-1.04.77-5.05-6.04.8-.59,2.2,2.66Z"/> <path d="M139.66,174.56l-.55-2.54.9-.53,1.7,8.12-1.05.62-6.3-5.4.93-.55,1.98,1.7,2.4-1.42ZM137.85,176.55l1.81,1.55c.41.35.75.69,1.08,1.03h.02c-.14-.47-.27-.95-.38-1.44l-.49-2.35-2.04,1.2Z"/> <path d="M134.45,183.45c-.53.33-1.17.69-1.91,1.01-1.34.58-2.42.69-3.31.38-.9-.31-1.63-.98-2.14-2.14-.51-1.17-.57-2.29-.18-3.25.38-.97,1.33-1.81,2.73-2.43.66-.29,1.23-.5,1.73-.65l3.09,7.08ZM130.74,177.49c-.25.06-.6.2-.96.36-1.99.87-2.58,2.45-1.73,4.39.73,1.7,2.16,2.36,4.13,1.51.48-.21.83-.41,1.05-.57l-2.48-5.68Z"/> <path d="M121.68,184.08l2.89-.98-.91-2.68-3.22,1.09-.27-.81,4.18-1.42,2.53,7.44-4.02,1.36-.27-.81,3.06-1.04-.8-2.35-2.89.98-.27-.79Z"/> <path d="M119.5,182.17c-.51-.16-1.21-.21-1.89-.04-1,.26-1.45.95-1.25,1.71.19.71.7,1.01,1.83,1.14,1.36.12,2.29.56,2.57,1.63.31,1.19-.44,2.32-1.92,2.71-.78.2-1.39.17-1.78.07l.06-.87c.28.07.85.16,1.54-.02,1.04-.27,1.27-.99,1.13-1.51-.19-.71-.74-.94-1.89-1.07-1.42-.16-2.23-.61-2.52-1.73-.31-1.17.3-2.41,2.09-2.88.73-.19,1.59-.19,2.07-.02l-.03.89Z"/> <path d="M114.17,190.26l-1.58-7.7.99-.2,1.58,7.7-.99.2Z"/> <path d="M105.09,184.09c.43-.22,1.28-.61,2.33-.76,1.18-.16,2.19,0,3.05.62.76.55,1.32,1.54,1.49,2.75.31,2.32-1.05,4.24-3.66,4.6-.9.13-1.63.03-1.99-.09l.13-.85c.44.13.98.21,1.77.1,1.89-.26,2.97-1.61,2.7-3.56-.27-1.98-1.63-2.98-3.44-2.72-.66.09-1.1.25-1.31.39l.32,2.32,1.58-.22.11.81-2.56.36-.52-3.74Z"/> <path d="M103.69,183.86l.36,7.85-1.11.05-2.7-3.86c-.62-.89-1.12-1.7-1.52-2.49h-.02c.14,1.06.21,2.01.26,3.23l.15,3.28-.95.04-.36-7.85,1.02-.05,2.67,3.87c.59.85,1.15,1.72,1.59,2.55h.03c-.1-1-.17-1.94-.23-3.25l-.15-3.35.95-.04Z"/> <path d="M94.09,187.06c-.02.69-.61,1.19-1.28,1.16-.67-.03-1.19-.6-1.16-1.27.04-.69.6-1.19,1.28-1.16.67.04,1.19.59,1.16,1.27Z"/> <path d="M87.15,191.27c-.52.03-1.26-.01-1.95-.11-1.07-.15-1.74-.45-2.16-.95-.34-.4-.49-.96-.4-1.56.15-1.03.89-1.61,1.75-1.78v-.03c-.57-.29-.84-.9-.91-1.73-.1-1.12-.18-1.9-.3-2.22l1.04.15c.1.24.17.93.26,1.93.08,1.11.44,1.57,1.34,1.73l.95.13.48-3.37,1,.14-1.09,7.67ZM86.65,187.59l-1.03-.15c-1.07-.15-1.84.34-1.96,1.23-.14,1,.52,1.54,1.58,1.71.48.07.84.07,1,.05l.4-2.84Z"/> <path d="M80.33,184.8l1.35-2.22,1.02.23-4.36,7.06-1.19-.27-.85-8.25,1.06.24.26,2.6,2.71.62ZM77.65,185l.24,2.38c.06.54.06,1.02.08,1.49h.02c.22-.42.45-.86.7-1.29l1.26-2.04-2.31-.53Z"/> <path d="M72.16,188.26l2.22-7.54.97.29-2.22,7.54-.97-.29Z"/> <path d="M70.16,187.65l-.96-.34,2.33-6.6-3.16-1.12.28-.8,4.12,1.45-2.61,7.41Z"/> <path d="M67.39,179.61c-.31-.44-.82-.92-1.47-1.19-.95-.41-1.73-.15-2.04.58-.29.67-.07,1.23.74,2.02,1,.93,1.46,1.85,1.02,2.87-.49,1.12-1.78,1.56-3.18.95-.74-.32-1.2-.72-1.44-1.04l.59-.65c.18.23.57.65,1.22.93.98.43,1.61,0,1.83-.49.29-.67,0-1.2-.83-2.01-1.02-1-1.38-1.86-.92-2.91.48-1.11,1.72-1.72,3.42-.98.7.3,1.37.83,1.64,1.26l-.57.68Z"/> <path d="M54.84,176.53c1.28-2.38,3.41-2.86,5.17-1.91,1.82.98,2.34,3.09,1.22,5.18-1.18,2.19-3.32,2.89-5.16,1.9-1.89-1.02-2.33-3.12-1.22-5.17ZM60.26,179.3c.8-1.48.71-3.23-.7-3.99-1.41-.76-2.92.11-3.76,1.68-.74,1.37-.8,3.2.69,4,1.48.8,2.95-.17,3.77-1.69Z"/> <path d="M55.78,172.39l-4.38,6.52-.92-.62.13-4.7c.03-1.09.11-2.03.25-2.91h-.03c-.51.92-1.02,1.73-1.7,2.74l-1.83,2.73-.79-.53,4.38-6.52.85.57-.15,4.7c-.03,1.03-.1,2.07-.24,3h.04c.5-.84,1.01-1.64,1.74-2.73l1.87-2.79.79.53Z"/> <path d="M42.66,172.63l-.77-.65,4.52-5.34-2.56-2.17.55-.65,3.33,2.82-5.07,5.99Z"/> <path d="M37.55,168.12l5.38-5.72.74.69-5.38,5.72-.74-.69Z"/> <path d="M34.7,158.8c-.77.78-1.69,1.73-2.42,2.38l.02.03c.86-.43,1.8-.85,2.87-1.29l3.75-1.56.52.57-1.9,3.47c-.56,1.02-1.1,1.94-1.64,2.73l.02.02c.74-.64,1.75-1.49,2.66-2.24l2.62-2.12.65.71-6.16,4.91-.87-.95,1.89-3.56c.49-.89.95-1.68,1.41-2.37l-.02-.03c-.72.39-1.54.77-2.51,1.18l-3.74,1.54-.87-.95,5.46-5.67.67.73-2.41,2.48Z"/> <path d="M32.96,155.07l2.47-.83.63.84-7.89,2.57-.73-.98,4.69-6.86.65.87-1.48,2.15,1.67,2.23ZM30.79,153.48l-1.35,1.97c-.31.45-.61.82-.9,1.19v.02c.46-.19.92-.37,1.39-.53l2.28-.75-1.42-1.9Z"/> <path d="M23.57,150.83c-.39-.49-.81-1.09-1.21-1.79-.72-1.26-.94-2.33-.73-3.24.21-.92.79-1.73,1.9-2.36,1.11-.64,2.22-.81,3.21-.53,1,.27,1.95,1.13,2.7,2.45.36.63.63,1.17.83,1.64l-6.7,3.83ZM29.09,146.51c-.09-.25-.26-.57-.46-.92-1.08-1.88-2.71-2.3-4.55-1.25-1.61.91-2.11,2.4-1.05,4.26.26.45.5.78.68.98l5.38-3.08Z"/> <path d="M21.56,138.21l1.29,2.77,2.56-1.19-1.44-3.08.77-.36,1.86,4-7.11,3.31-1.79-3.84.77-.36,1.36,2.92,2.25-1.05-1.29-2.77.76-.35Z"/> <path d="M23.2,135.81c.1-.52.08-1.23-.17-1.88-.37-.97-1.1-1.34-1.84-1.06-.69.26-.93.8-.93,1.94.03,1.36-.31,2.34-1.34,2.73-1.14.44-2.35-.19-2.9-1.62-.29-.75-.32-1.36-.26-1.76l.87-.03c-.04.29-.07.86.18,1.53.38,1,1.13,1.15,1.63.96.69-.26.85-.84.86-2,0-1.42.36-2.28,1.44-2.69,1.13-.43,2.43.03,3.09,1.77.27.71.36,1.56.25,2.05l-.89.06Z"/> <path d="M14.59,131.38l7.48-2.4.31.97-7.48,2.4-.31-.97Z"/> <path d="M19.75,121.74c.27.4.75,1.2,1.01,2.23.29,1.15.24,2.17-.29,3.1-.47.81-1.38,1.48-2.57,1.78-2.27.56-4.33-.58-4.97-3.13-.22-.88-.2-1.62-.13-1.99l.86.03c-.08.45-.1,1,.1,1.77.47,1.85,1.92,2.77,3.83,2.29,1.93-.49,2.78-1.94,2.33-3.71-.16-.64-.36-1.06-.53-1.26l-2.27.57.39,1.55-.79.2-.63-2.51,3.66-.92Z"/> <path d="M19.83,120.33l-7.76,1.19-.17-1.09,3.55-3.09c.82-.72,1.57-1.29,2.31-1.78v-.02c-1.04.25-1.98.42-3.19.6l-3.25.5-.14-.94,7.76-1.19.16,1.01-3.56,3.07c-.78.67-1.59,1.33-2.37,1.85l.02.03c.97-.21,1.9-.37,3.19-.57l3.32-.51.14.94Z"/> <path d="M15.61,111.08c-.69.05-1.25-.48-1.29-1.16-.04-.67.47-1.25,1.14-1.29.69-.04,1.25.47,1.29,1.16.04.67-.46,1.25-1.14,1.29Z"/></g><g fill="currentColor"><path d="M91.11,139.56c-3.28,0-4.71,1.23-5.22,2.66l-.61,2.15h-1.64c.03-8.66.06-17.32.09-25.98h-15.95v31.81h58.81v-10.39c-11.82-.09-23.65-.17-35.47-.26Z"/> <path d="M83.72,103.18h.13s16.47,0,16.47,0c4.53,0,5.87,2.78,7,8.44l3.29,16.36h15.95l-4.43-20.07c-1.44-6.59-5.76-9.26-17.39-8.85v-1.75c14.51-1.75,19.66-7.62,19.66-17.81,0-12.04-8.03-19.45-20.48-19.45h-36.02v46.5h15.82v-3.38ZM83.85,70.45h15.95c5.15,0,8.75,3.4,8.75,11.94,0,7.31-3.4,11.63-9.47,11.63h-15.23v-23.57Z"/></g></symbol>
+  <symbol id="logo-rapido" viewBox="0 0 200 200"><g class="anel gira-rapido" fill="currentColor"><path d="M10.08,104.11l.19-4.09c.07-1.41,1.26-2.01,2.44-1.95,1.18.06,2.08.61,2.07,1.86l.2.02c.05-1.04.5-1.13,1.78-1.31l1.95-.27-.06,1.32-1.9.26c-.99.14-1.27.2-1.31,1.07l-.09,2.03,3.14.15-.06,1.3-8.34-.39ZM14.42,100.86c.04-.89-.52-1.46-1.54-1.51-1.19-.06-1.45.4-1.5,1.28l-.1,2.22,3.04.14.1-2.14Z"/> <path d="M10.89,93.79l.2-1.41,8.67-1.74-.19,1.35-2.48.48-.42,2.93,2.25,1.15-.19,1.32-7.84-4.09ZM15.95,92.7l-2.84.55-.9-.07-.03.22.87.18,2.59,1.32.31-2.2Z"/> <path d="M11.86,88.04l.27-1.28,8.15,1.71-.27,1.28-8.15-1.71Z"/> <path d="M12.6,84.54l.34-1.26,6.94,1.89,1.02-3.74,1.11.3-1.36,5-8.05-2.19Z"/> <path d="M20.08,79.28c.89.25,1.85-.21,2.35-1.57.43-1.18.09-1.9-.66-2.18-.9-.33-1.56.9-1.92,1.58-.69,1.31-1.59,2.7-3.36,2.04-1.46-.54-1.88-1.91-1.25-3.62.68-1.84,1.97-2.44,3.58-2.16l-.09,1.28c-.87-.26-2,.06-2.43,1.23-.37,1.01-.05,1.75.68,2.01.88.32,1.36-.49,1.93-1.5.75-1.35,1.56-2.8,3.31-2.16,1.46.53,1.96,1.94,1.25,3.87-.73,1.99-2.13,2.9-3.85,2.45l.47-1.28Z"/> <path d="M20.88,72.69c-2.71-1.32-3.08-3.51-2.12-5.49.97-1.98,2.91-3.02,5.62-1.69,2.71,1.32,3.08,3.49,2.12,5.47-.96,1.97-2.91,3.04-5.62,1.72ZM23.82,66.69c-2.02-.99-3.32-.34-3.99,1.02-.67,1.37-.39,2.8,1.62,3.78,2.03.99,3.35.31,4.01-1.05.66-1.35.38-2.77-1.64-3.76Z"/> <path d="M21.67,61.91l.88-1.39,8.41.35-1.29-.42-5.06-3.19.7-1.1,7.04,4.44-.97,1.54-8.05-.34,1.42.51,4.67,2.95-.7,1.1-7.04-4.44Z"/> <path d="M28.57,51.73l.83-1.01,5.54,4.58,2.47-2.99.89.73-3.3,4-6.43-5.31Z"/> <path d="M32.87,46.7l.89-.96,6.12,5.66-.89.96-6.12-5.66Z"/> <path d="M42.51,41.41l-.78-1.21,2.81,6.65-.98.9-6.38-3.4,1.16.88,3.63,3.97-.96.88-5.62-6.15,1.35-1.25,5.82,3.19.45.41.16-.15-.37-.49-2.66-6.08,1.33-1.2,5.62,6.15-.96.88-3.63-3.97Z"/> <path d="M45.25,35.48l1.15-.84,7.3,5-1.1.81-2.08-1.44-2.39,1.75.74,2.42-1.07.79-2.55-8.47ZM49.57,38.34l-2.38-1.65-.58-.69-.18.13.48.75.86,2.78,1.8-1.32Z"/> <path d="M52.72,30.45l2.73-1.49c1.92-1.05,3.82-.85,5.3,1.85,1.48,2.71.62,4.41-1.3,5.46l-2.73,1.49-4-7.32ZM58.86,35.29c1.24-.68,1.94-1.65.73-3.85-1.2-2.2-2.4-2.14-3.64-1.46l-1.54.84,2.91,5.31,1.54-.84Z"/> <path d="M60.56,26.34l5.48-2.33.45,1.05-4.28,1.82.91,2.13,3.8-1.62.42.97-3.8,1.62,1.05,2.45,4.21-1.79.45,1.05-5.41,2.31-3.26-7.66Z"/> <path d="M70.47,28.48c.35.86,1.31,1.33,2.68.89,1.2-.38,1.56-1.1,1.31-1.86-.29-.91-1.67-.68-2.42-.55-1.46.26-3.1.4-3.67-1.4-.47-1.48.35-2.66,2.08-3.21,1.87-.59,3.14.05,3.9,1.5l-1.07.72c-.33-.85-1.27-1.54-2.46-1.16-1.02.33-1.41,1.04-1.17,1.77.28.89,1.22.77,2.37.6,1.52-.24,3.17-.49,3.74,1.29.47,1.48-.33,2.73-2.29,3.36-2.02.64-3.6.1-4.29-1.54l1.3-.41Z"/> <path d="M75.68,21.01l1.27-.31,1.99,8.09-1.27.31-1.99-8.09Z"/> <path d="M82.77,19.37c1.61-.27,3.17.3,3.99,1.88l-1.04.81c-.53-1.27-1.61-1.71-2.74-1.52-1.63.28-2.58,1.79-2.28,3.54.3,1.77,1.71,2.91,3.35,2.64,1.1-.19,2-.9,2.09-2.24l-.06-.36-2.74.46-.18-1.06,4-.67.23,1.39c0,2.1-1.42,3.33-3.2,3.64-2.29.39-4.36-1.05-4.78-3.57-.42-2.5,1.06-4.54,3.37-4.93Z"/> <path d="M88.54,18.69l1.64-.1,4.62,7.04-.42-1.29-.35-5.98,1.3-.08.49,8.31-1.81.11-4.41-6.74.41,1.45.33,5.51-1.3.08-.49-8.31Z"/> <path d="M100.28,22.56c.03-.63.54-1.11,1.15-1.08.59.03,1.05.55,1.02,1.17-.03.62-.51,1.08-1.13,1.05-.64-.03-1.07-.53-1.04-1.15Z"/> <path d="M107.61,18.89l4.04.62c1.39.21,1.86,1.46,1.68,2.63-.18,1.16-.83,2.01-2.06,1.86l-.04.19c1.02.16,1.07.61,1.11,1.9l.06,1.97-1.3-.2-.06-1.92c-.04-1-.06-1.28-.93-1.41l-2-.31-.48,3.11-1.29-.2,1.26-8.25ZM110.38,23.55c.88.13,1.5-.36,1.66-1.37.18-1.17-.24-1.49-1.12-1.62l-2.2-.34-.46,3.01,2.12.32Z"/> <path d="M117.78,20.78l1.38.35.82,8.8-1.32-.33-.22-2.52-2.87-.72-1.38,2.11-1.29-.32,4.89-7.37ZM118.33,25.92l-.25-2.88.16-.88-.21-.05-.27.84-1.58,2.44,2.16.54Z"/> <path d="M123.42,22.36l1.24.4-2.57,7.93-1.24-.4,2.57-7.93Z"/> <path d="M126.83,23.48l1.21.48-2.62,6.69,3.61,1.41-.42,1.07-4.83-1.89,3.04-7.76Z"/> <path d="M131.24,31.46c-.34.86.01,1.87,1.31,2.5,1.13.56,1.88.29,2.24-.43.42-.86-.73-1.65-1.36-2.08-1.23-.83-2.51-1.86-1.67-3.55.69-1.39,2.1-1.67,3.73-.86,1.75.87,2.22,2.21,1.77,3.78l-1.27-.22c.35-.84.15-1.99-.97-2.54-.96-.47-1.73-.23-2.07.46-.41.84.35,1.4,1.29,2.08,1.27.88,2.62,1.85,1.79,3.52-.69,1.39-2.13,1.74-3.98.83-1.9-.94-2.66-2.43-2.02-4.09l1.22.6Z"/> <path d="M137.72,32.96c1.6-2.56,3.82-2.7,5.69-1.53s2.69,3.21,1.09,5.77c-1.6,2.56-3.79,2.7-5.66,1.53-1.86-1.16-2.72-3.21-1.12-5.77ZM143.37,36.51c1.19-1.91.68-3.27-.6-4.07-1.29-.81-2.75-.69-3.93,1.21-1.2,1.92-.66,3.3.62,4.1,1.28.8,2.72.67,3.91-1.24Z"/> <path d="M148.33,34.88l1.29,1.02-1.23,8.33.55-1.24,3.7-4.7,1.02.81-5.15,6.54-1.43-1.12,1.18-7.97-.65,1.35-3.42,4.34-1.02-.81,5.15-6.54Z"/> <path d="M157.73,42.8l.91.93-5.13,5.04,2.72,2.77-.82.81-3.64-3.7,5.95-5.85Z"/> <path d="M162.3,47.62l.86.98-6.28,5.49-.86-.98,6.28-5.49Z"/> <path d="M166.54,57.75l1.29-.65-6.9,2.1-.79-1.07,4.05-5.99-1,1.06-4.33,3.2-.77-1.05,6.7-4.95,1.1,1.47-3.78,5.45-.45.41.13.18.52-.31,6.32-2.01,1.06,1.45-6.7,4.95-.77-1.05,4.33-3.2Z"/> <path d="M172.13,61.09l.71,1.23-5.74,6.73-.68-1.18,1.65-1.91-1.48-2.56-2.48.48-.67-1.15,8.69-1.64ZM168.83,65.08l1.89-2.19.75-.5-.11-.19-.79.39-2.85.56,1.12,1.92Z"/> <path d="M176.38,69.08l1.19,2.87c.84,2.02.44,3.89-2.41,5.08-2.85,1.18-4.46.15-5.3-1.88l-1.19-2.87,7.71-3.2ZM170.9,74.67c.54,1.3,1.43,2.11,3.76,1.14,2.31-.96,2.38-2.16,1.84-3.47l-.68-1.63-5.6,2.32.68,1.63Z"/> <path d="M179.63,77.3l1.74,5.7-1.09.33-1.35-4.45-2.22.68,1.21,3.96-1.01.31-1.21-3.96-2.55.78,1.33,4.38-1.09.33-1.72-5.63,7.97-2.43Z"/> <path d="M176.44,86.95c-.89.25-1.46,1.16-1.17,2.57.25,1.23.92,1.67,1.71,1.51.94-.19.85-1.59.8-2.35-.1-1.48-.07-3.13,1.78-3.51,1.52-.31,2.6.63,2.97,2.41.39,1.92-.39,3.11-1.9,3.72l-.6-1.14c.88-.24,1.67-1.1,1.42-2.32-.22-1.05-.88-1.51-1.63-1.36-.91.19-.9,1.14-.85,2.29.08,1.54.15,3.21-1.68,3.58-1.52.31-2.68-.62-3.1-2.64-.43-2.08.29-3.59,1.99-4.11l.27,1.34Z"/> <path d="M183.32,92.9l.18,1.29-8.26,1.12-.18-1.29,8.26-1.12Z"/> <path d="M184.2,100.1c.1,1.63-.64,3.12-2.29,3.77l-.7-1.12c1.32-.4,1.87-1.42,1.8-2.56-.1-1.65-1.51-2.75-3.28-2.64-1.79.11-3.08,1.39-2.97,3.06.07,1.12.69,2.08,2.01,2.32l.36-.02-.17-2.78,1.07-.07.25,4.05-1.41.09c-2.09-.22-3.17-1.76-3.28-3.57-.14-2.31,1.5-4.23,4.06-4.38,2.54-.16,4.4,1.54,4.55,3.87Z"/> <path d="M184.27,105.92l-.07,1.64-7.49,3.86,1.33-.28,5.99.27-.06,1.3-8.33-.38.08-1.82,7.17-3.69-1.48.26-5.52-.25.06-1.3,8.33.38Z"/> <path d="M179.19,117.2c.62.1,1.04.66.95,1.26-.09.59-.66.98-1.27.89-.61-.09-1.02-.62-.93-1.23.1-.63.64-1.01,1.25-.91Z"/> <path d="M181.51,124.6c-.03.52-.15,1.25-.32,1.93-.27,1.05-.63,1.68-1.18,2.04-.44.3-1.01.38-1.6.23-1.01-.26-1.51-1.06-1.58-1.93h-.03c-.35.53-.98.74-1.82.72-1.12-.02-1.9-.03-2.24.05l.26-1.02c.25-.07.94-.07,1.95-.04,1.11.04,1.61-.26,1.87-1.15l.24-.93-3.3-.84.25-.98,7.51,1.92ZM177.79,124.7l-.26,1.01c-.27,1.05.14,1.86,1.01,2.09.98.25,1.59-.35,1.87-1.39.12-.47.16-.82.16-.99l-2.78-.71Z"/> <path d="M174.35,130.63l-2.07-1.58.34-.99,6.54,5.09-.4,1.16-8.29-.04.35-1.02,2.61.02.91-2.63ZM174.25,133.32h2.39c.54.02,1.02.06,1.49.1v-.02c-.39-.26-.8-.54-1.21-.84l-1.89-1.47-.77,2.23Z"/> <path d="M176.88,139.16l-7.24-3.02.39-.93,7.24,3.02-.39.93Z"/> <path d="M176.06,141.07l-.44.91-6.31-3.03-1.45,3.03-.77-.37,1.89-3.94,7.08,3.4Z"/> <path d="M167.76,142.97c-.47.26-1,.72-1.34,1.33-.51.9-.34,1.7.35,2.09.64.36,1.21.21,2.09-.51,1.03-.89,2-1.25,2.96-.7,1.06.61,1.35,1.94.6,3.26-.4.7-.85,1.11-1.19,1.32l-.58-.65c.25-.15.71-.49,1.06-1.11.53-.93.18-1.6-.29-1.87-.64-.36-1.19-.13-2.09.61-1.1.9-1.99,1.17-3,.6-1.05-.6-1.52-1.9-.6-3.51.37-.66.98-1.27,1.43-1.49l.61.64Z"/> <path d="M163.36,155.11c-2.23-1.53-2.48-3.7-1.35-5.35,1.17-1.71,3.33-2,5.29-.66,2.06,1.41,2.52,3.61,1.34,5.34-1.21,1.77-3.35,1.98-5.28.66ZM166.7,150.01c-1.38-.95-3.14-1.05-4.04.26-.91,1.33-.21,2.91,1.27,3.92,1.29.88,3.1,1.14,4.05-.26.95-1.38.15-2.95-1.28-3.93Z"/> <path d="M159.34,153.72l6.01,5.05-.71.85-4.66-.63c-1.08-.15-2.01-.33-2.86-.56v.03c.86.6,1.6,1.2,2.54,1.99l2.52,2.11-.61.73-6.01-5.05.66-.78,4.66.65c1.02.14,2.05.32,2.95.56v-.03c-.78-.59-1.52-1.18-2.52-2.02l-2.57-2.16.61-.73Z"/> <path d="M158.2,166.78l-.73.7-4.83-5.07-2.43,2.32-.59-.62,3.17-3.02,5.42,5.69Z"/> <path d="M153.16,171.38l-5.12-5.96.77-.66,5.12,5.96-.77.66Z"/> <path d="M143.56,173.23c.7.85,1.53,1.87,2.1,2.66l.03-.02c-.33-.9-.65-1.88-.97-2.99l-1.14-3.89.62-.46,3.24,2.26c.96.67,1.81,1.3,2.54,1.92h.02c-.56-.82-1.29-1.91-1.93-2.9l-1.83-2.84.78-.57,4.21,6.65-1.04.77-3.33-2.27c-.84-.59-1.56-1.12-2.21-1.66l-.03.02c.31.76.6,1.62.9,2.62l1.12,3.89-1.04.77-5.05-6.04.8-.59,2.2,2.66Z"/> <path d="M139.66,174.56l-.55-2.54.9-.53,1.7,8.12-1.05.62-6.3-5.4.93-.55,1.98,1.7,2.4-1.42ZM137.85,176.55l1.81,1.55c.41.35.75.69,1.08,1.03h.02c-.14-.47-.27-.95-.38-1.44l-.49-2.35-2.04,1.2Z"/> <path d="M134.45,183.45c-.53.33-1.17.69-1.91,1.01-1.34.58-2.42.69-3.31.38-.9-.31-1.63-.98-2.14-2.14-.51-1.17-.57-2.29-.18-3.25.38-.97,1.33-1.81,2.73-2.43.66-.29,1.23-.5,1.73-.65l3.09,7.08ZM130.74,177.49c-.25.06-.6.2-.96.36-1.99.87-2.58,2.45-1.73,4.39.73,1.7,2.16,2.36,4.13,1.51.48-.21.83-.41,1.05-.57l-2.48-5.68Z"/> <path d="M121.68,184.08l2.89-.98-.91-2.68-3.22,1.09-.27-.81,4.18-1.42,2.53,7.44-4.02,1.36-.27-.81,3.06-1.04-.8-2.35-2.89.98-.27-.79Z"/> <path d="M119.5,182.17c-.51-.16-1.21-.21-1.89-.04-1,.26-1.45.95-1.25,1.71.19.71.7,1.01,1.83,1.14,1.36.12,2.29.56,2.57,1.63.31,1.19-.44,2.32-1.92,2.71-.78.2-1.39.17-1.78.07l.06-.87c.28.07.85.16,1.54-.02,1.04-.27,1.27-.99,1.13-1.51-.19-.71-.74-.94-1.89-1.07-1.42-.16-2.23-.61-2.52-1.73-.31-1.17.3-2.41,2.09-2.88.73-.19,1.59-.19,2.07-.02l-.03.89Z"/> <path d="M114.17,190.26l-1.58-7.7.99-.2,1.58,7.7-.99.2Z"/> <path d="M105.09,184.09c.43-.22,1.28-.61,2.33-.76,1.18-.16,2.19,0,3.05.62.76.55,1.32,1.54,1.49,2.75.31,2.32-1.05,4.24-3.66,4.6-.9.13-1.63.03-1.99-.09l.13-.85c.44.13.98.21,1.77.1,1.89-.26,2.97-1.61,2.7-3.56-.27-1.98-1.63-2.98-3.44-2.72-.66.09-1.1.25-1.31.39l.32,2.32,1.58-.22.11.81-2.56.36-.52-3.74Z"/> <path d="M103.69,183.86l.36,7.85-1.11.05-2.7-3.86c-.62-.89-1.12-1.7-1.52-2.49h-.02c.14,1.06.21,2.01.26,3.23l.15,3.28-.95.04-.36-7.85,1.02-.05,2.67,3.87c.59.85,1.15,1.72,1.59,2.55h.03c-.1-1-.17-1.94-.23-3.25l-.15-3.35.95-.04Z"/> <path d="M94.09,187.06c-.02.69-.61,1.19-1.28,1.16-.67-.03-1.19-.6-1.16-1.27.04-.69.6-1.19,1.28-1.16.67.04,1.19.59,1.16,1.27Z"/> <path d="M87.15,191.27c-.52.03-1.26-.01-1.95-.11-1.07-.15-1.74-.45-2.16-.95-.34-.4-.49-.96-.4-1.56.15-1.03.89-1.61,1.75-1.78v-.03c-.57-.29-.84-.9-.91-1.73-.1-1.12-.18-1.9-.3-2.22l1.04.15c.1.24.17.93.26,1.93.08,1.11.44,1.57,1.34,1.73l.95.13.48-3.37,1,.14-1.09,7.67ZM86.65,187.59l-1.03-.15c-1.07-.15-1.84.34-1.96,1.23-.14,1,.52,1.54,1.58,1.71.48.07.84.07,1,.05l.4-2.84Z"/> <path d="M80.33,184.8l1.35-2.22,1.02.23-4.36,7.06-1.19-.27-.85-8.25,1.06.24.26,2.6,2.71.62ZM77.65,185l.24,2.38c.06.54.06,1.02.08,1.49h.02c.22-.42.45-.86.7-1.29l1.26-2.04-2.31-.53Z"/> <path d="M72.16,188.26l2.22-7.54.97.29-2.22,7.54-.97-.29Z"/> <path d="M70.16,187.65l-.96-.34,2.33-6.6-3.16-1.12.28-.8,4.12,1.45-2.61,7.41Z"/> <path d="M67.39,179.61c-.31-.44-.82-.92-1.47-1.19-.95-.41-1.73-.15-2.04.58-.29.67-.07,1.23.74,2.02,1,.93,1.46,1.85,1.02,2.87-.49,1.12-1.78,1.56-3.18.95-.74-.32-1.2-.72-1.44-1.04l.59-.65c.18.23.57.65,1.22.93.98.43,1.61,0,1.83-.49.29-.67,0-1.2-.83-2.01-1.02-1-1.38-1.86-.92-2.91.48-1.11,1.72-1.72,3.42-.98.7.3,1.37.83,1.64,1.26l-.57.68Z"/> <path d="M54.84,176.53c1.28-2.38,3.41-2.86,5.17-1.91,1.82.98,2.34,3.09,1.22,5.18-1.18,2.19-3.32,2.89-5.16,1.9-1.89-1.02-2.33-3.12-1.22-5.17ZM60.26,179.3c.8-1.48.71-3.23-.7-3.99-1.41-.76-2.92.11-3.76,1.68-.74,1.37-.8,3.2.69,4,1.48.8,2.95-.17,3.77-1.69Z"/> <path d="M55.78,172.39l-4.38,6.52-.92-.62.13-4.7c.03-1.09.11-2.03.25-2.91h-.03c-.51.92-1.02,1.73-1.7,2.74l-1.83,2.73-.79-.53,4.38-6.52.85.57-.15,4.7c-.03,1.03-.1,2.07-.24,3h.04c.5-.84,1.01-1.64,1.74-2.73l1.87-2.79.79.53Z"/> <path d="M42.66,172.63l-.77-.65,4.52-5.34-2.56-2.17.55-.65,3.33,2.82-5.07,5.99Z"/> <path d="M37.55,168.12l5.38-5.72.74.69-5.38,5.72-.74-.69Z"/> <path d="M34.7,158.8c-.77.78-1.69,1.73-2.42,2.38l.02.03c.86-.43,1.8-.85,2.87-1.29l3.75-1.56.52.57-1.9,3.47c-.56,1.02-1.1,1.94-1.64,2.73l.02.02c.74-.64,1.75-1.49,2.66-2.24l2.62-2.12.65.71-6.16,4.91-.87-.95,1.89-3.56c.49-.89.95-1.68,1.41-2.37l-.02-.03c-.72.39-1.54.77-2.51,1.18l-3.74,1.54-.87-.95,5.46-5.67.67.73-2.41,2.48Z"/> <path d="M32.96,155.07l2.47-.83.63.84-7.89,2.57-.73-.98,4.69-6.86.65.87-1.48,2.15,1.67,2.23ZM30.79,153.48l-1.35,1.97c-.31.45-.61.82-.9,1.19v.02c.46-.19.92-.37,1.39-.53l2.28-.75-1.42-1.9Z"/> <path d="M23.57,150.83c-.39-.49-.81-1.09-1.21-1.79-.72-1.26-.94-2.33-.73-3.24.21-.92.79-1.73,1.9-2.36,1.11-.64,2.22-.81,3.21-.53,1,.27,1.95,1.13,2.7,2.45.36.63.63,1.17.83,1.64l-6.7,3.83ZM29.09,146.51c-.09-.25-.26-.57-.46-.92-1.08-1.88-2.71-2.3-4.55-1.25-1.61.91-2.11,2.4-1.05,4.26.26.45.5.78.68.98l5.38-3.08Z"/> <path d="M21.56,138.21l1.29,2.77,2.56-1.19-1.44-3.08.77-.36,1.86,4-7.11,3.31-1.79-3.84.77-.36,1.36,2.92,2.25-1.05-1.29-2.77.76-.35Z"/> <path d="M23.2,135.81c.1-.52.08-1.23-.17-1.88-.37-.97-1.1-1.34-1.84-1.06-.69.26-.93.8-.93,1.94.03,1.36-.31,2.34-1.34,2.73-1.14.44-2.35-.19-2.9-1.62-.29-.75-.32-1.36-.26-1.76l.87-.03c-.04.29-.07.86.18,1.53.38,1,1.13,1.15,1.63.96.69-.26.85-.84.86-2,0-1.42.36-2.28,1.44-2.69,1.13-.43,2.43.03,3.09,1.77.27.71.36,1.56.25,2.05l-.89.06Z"/> <path d="M14.59,131.38l7.48-2.4.31.97-7.48,2.4-.31-.97Z"/> <path d="M19.75,121.74c.27.4.75,1.2,1.01,2.23.29,1.15.24,2.17-.29,3.1-.47.81-1.38,1.48-2.57,1.78-2.27.56-4.33-.58-4.97-3.13-.22-.88-.2-1.62-.13-1.99l.86.03c-.08.45-.1,1,.1,1.77.47,1.85,1.92,2.77,3.83,2.29,1.93-.49,2.78-1.94,2.33-3.71-.16-.64-.36-1.06-.53-1.26l-2.27.57.39,1.55-.79.2-.63-2.51,3.66-.92Z"/> <path d="M19.83,120.33l-7.76,1.19-.17-1.09,3.55-3.09c.82-.72,1.57-1.29,2.31-1.78v-.02c-1.04.25-1.98.42-3.19.6l-3.25.5-.14-.94,7.76-1.19.16,1.01-3.56,3.07c-.78.67-1.59,1.33-2.37,1.85l.02.03c.97-.21,1.9-.37,3.19-.57l3.32-.51.14.94Z"/> <path d="M15.61,111.08c-.69.05-1.25-.48-1.29-1.16-.04-.67.47-1.25,1.14-1.29.69-.04,1.25.47,1.29,1.16.04.67-.46,1.25-1.14,1.29Z"/></g><g fill="currentColor"><path d="M91.11,139.56c-3.28,0-4.71,1.23-5.22,2.66l-.61,2.15h-1.64c.03-8.66.06-17.32.09-25.98h-15.95v31.81h58.81v-10.39c-11.82-.09-23.65-.17-35.47-.26Z"/> <path d="M83.72,103.18h.13s16.47,0,16.47,0c4.53,0,5.87,2.78,7,8.44l3.29,16.36h15.95l-4.43-20.07c-1.44-6.59-5.76-9.26-17.39-8.85v-1.75c14.51-1.75,19.66-7.62,19.66-17.81,0-12.04-8.03-19.45-20.48-19.45h-36.02v46.5h15.82v-3.38ZM83.85,70.45h15.95c5.15,0,8.75,3.4,8.75,11.94,0,7.31-3.4,11.63-9.47,11.63h-15.23v-23.57Z"/></g></symbol>
+</svg>
+
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader-in">
+    <div class="selo"><svg viewBox="0 0 200 200"><use href="#logo-rapido"/></svg></div>
+    <div class="loader-txt"><b>PESQUISA DE SATISFAÇÃO</b><span>Preparando sua pesquisa</span></div>
+    <div class="loader-linha"><i></i></div>
+  </div>
+</div>
+
+<div class="barra" id="barra" aria-hidden="true">
+  <div class="wrap">
+    <div class="selo"><svg viewBox="0 0 200 200"><use href="#logo"/></svg></div>
+    <div class="barra-seg" id="barraSeg"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="barra-num" id="barraNum"><b>0</b>/6</div>
+  </div>
+</div>
+
+<header class="topo" id="topo">
+  <div class="wrap">
+    <div class="topo-conteudo" id="topoConteudo">
+      <div class="topo-linha" data-in style="--d:0"><span class="rot">PESQUISA DE SATISFAÇÃO</span><span class="ano" id="ano">2026</span></div>
+      <div class="marca" data-in style="--d:90">
+        <div class="selo cor-viva" role="img" aria-label="Logo Railson Lima Design"><svg viewBox="0 0 200 200"><use href="#logo-gira"/></svg></div>
+        <div class="slogan"><b>DESIGN QUE POSICIONA.</b>ESTRATÉGIA QUE VENDE.</div>
+      </div>
+      <div class="textos">
+        <h1 id="titulo">Como está sendo trabalhar com o Railson Lima</h1>
+        <p class="intro" data-in style="--d:520">Sua opinião sincera me ajuda a entregar um trabalho cada vez melhor. Leva menos de 3 minutos, e as respostas são confidenciais.</p>
+      </div>
+      <div class="prog" data-in style="--d:640" aria-live="polite">
+        <div class="prog-barra" id="progBarra"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="prog-txt" id="progTxt"><b>0</b> de 6 etapas respondidas</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <form id="form" novalidate>
+
+      <div class="parte rv-linha">PARTE 1 · O TRABALHO</div>
+
+      <section class="card rv" id="c-servicos" data-aviso="Escolha pelo menos um serviço">
+        <fieldset>
+          <legend><span class="q-top"><span class="num">01<span class="ok"></span></span><span class="tag">Pode marcar mais de um</span></span>
+            <span class="q-tit">Quais serviços você contrata com Railson Lima?</span></legend>
+          <div class="q-corpo"><div class="opcoes" data-grupo="servicos"></div></div>
+          <div class="aviso" role="alert"></div>
+        </fieldset>
+      </section>
+
+      <section class="card rv" id="c-q2" data-aviso="Escolha uma nota de 1 a 5">
+        <fieldset>
+          <legend><span class="q-top"><span class="num">02<span class="ok"></span></span></span>
+            <span class="q-tit">Como você avalia a qualidade das entregas?</span>
+            <span class="q-sub">Artes, vídeos, textos, sites e materiais.</span></legend>
+          <div class="q-corpo"><div class="escala" data-escala="q2"></div></div>
+          <div class="aviso" role="alert"></div>
+        </fieldset>
+      </section>
+
+      <section class="card rv" id="c-q3" data-aviso="Escolha uma nota de 1 a 5">
+        <fieldset>
+          <legend><span class="q-top"><span class="num">03<span class="ok"></span></span></span>
+            <span class="q-tit">Como você avalia o atendimento e a comunicação?</span>
+            <span class="q-sub">Agilidade nas respostas, clareza e proximidade.</span></legend>
+          <div class="q-corpo"><div class="escala" data-escala="q3"></div></div>
+          <div class="aviso" role="alert"></div>
+        </fieldset>
+      </section>
+
+      <section class="card rv" id="c-q4" data-aviso="Escolha uma nota de 1 a 5">
+        <fieldset>
+          <legend><span class="q-top"><span class="num">04<span class="ok"></span></span></span>
+            <span class="q-tit">Como você avalia os prazos e a organização?</span>
+            <span class="q-sub">Cumprimento do combinado e planejamento.</span></legend>
+          <div class="q-corpo"><div class="escala" data-escala="q4"></div></div>
+          <div class="aviso" role="alert"></div>
+        </fieldset>
+      </section>
+
+      <section class="card rv" id="c-q5" data-aviso="Escolha uma nota de 1 a 5">
+        <fieldset>
+          <legend><span class="q-top"><span class="num">05<span class="ok"></span></span></span>
+            <span class="q-tit">Como você avalia a estratégia por trás do trabalho?</span>
+            <span class="q-sub">Se o que é feito tem objetivo claro para o seu negócio.</span></legend>
+          <div class="q-corpo"><div class="escala" data-escala="q5"></div></div>
+          <div class="aviso" role="alert"></div>
+        </fieldset>
+      </section>
+
+      <div class="parte rv-linha">PARTE 2 · RESULTADOS</div>
+
+      <section class="card rv" id="c-evolucao" data-aviso="Escolha uma opção">
+        <fieldset>
+          <legend><span class="q-top"><span class="num">06<span class="ok"></span></span></span>
+            <span class="q-tit">Você percebe evolução no seu negócio desde que começamos?</span></legend>
+          <div class="q-corpo"><div class="opcoes col" data-grupo="evolucao"></div></div>
+          <div class="aviso" role="alert"></div>
+        </fieldset>
+      </section>
+
+      <section class="card rv" id="c-valoriza" data-aviso="Escolha pelo menos uma opção">
+        <fieldset>
+          <legend><span class="q-top"><span class="num">07<span class="ok"></span></span><span class="tag">Pode marcar mais de um</span></span>
+            <span class="q-tit">O que você mais valoriza no trabalho do Railson Lima?</span></legend>
+          <div class="q-corpo"><div class="opcoes" data-grupo="valoriza"></div></div>
+          <div class="aviso" role="alert"></div>
+        </fieldset>
+      </section>
+
+      <section class="card escuro rv" id="c-nps" data-aviso="Escolha uma nota de 0 a 10">
+        <fieldset>
+          <legend><span class="q-top"><span class="num">08<span class="ok"></span></span></span>
+            <span class="q-tit">De 0 a 10, quanto você indicaria a RLSN para um amigo ou parceiro?</span></legend>
+          <div class="q-corpo"><div class="nps" id="nps"></div>
+            <div class="nps-leg"><span>0 · Não indicaria</span><span>10 · Com certeza</span></div></div>
+          <div class="aviso" role="alert"></div>
+        </fieldset>
+      </section>
+
+      <div class="parte rv-linha">PARTE 3 · SUA VOZ</div>
+
+      <section class="card rv" id="c-depo">
+        <fieldset>
+          <legend><span class="q-top"><span class="num">09<span class="ok"></span></span><span class="tag">Opcional</span></span>
+            <span class="q-tit">Posso usar seu comentário como depoimento?</span></legend>
+          <div class="q-corpo"><div class="opcoes col" data-grupo="depoimento"></div></div>
+        </fieldset>
+      </section>
+
+      <section class="card rv" id="c-nome" data-aviso="Informe seu nome ou o nome da empresa">
+        <div class="q-top"><span class="num">10<span class="ok"></span></span></div>
+        <label class="q-tit" for="nome">Seu nome ou o nome da empresa</label>
+        <div class="q-corpo"><input class="campo" id="nome" name="nome" type="text" autocomplete="name" enterkeyhint="next" placeholder="Ex.: Ana Souza · Clínica Bem Estar"></div>
+        <div class="aviso" role="alert"></div>
+      </section>
+
+      <section class="card azul rv" id="c-msg">
+        <div class="q-top"><span class="num">11<span class="ok"></span></span><span class="tag">Opcional</span></div>
+        <label class="q-tit" for="msg">Quer contar mais alguma coisa?</label>
+        <span class="q-sub">Espaço livre para elogios, críticas, sugestões, ideias para o seu negócio ou qualquer informação que você queira compartilhar comigo.</span>
+        <div class="q-corpo"><textarea class="campo" id="msg" name="msg" placeholder="Escreva aqui, sem pressa..."></textarea></div>
+      </section>
+
+      <div class="envio">
+        <button type="submit" class="btn btn-preto" id="enviar">Enviar minhas respostas <span class="seta" aria-hidden="true">→</span></button>
+        <p class="nota">Ao enviar, o WhatsApp abre com suas respostas prontas. É só tocar em enviar. Suas respostas ficam só comigo e servem para melhorar o atendimento da RLSN.</p>
+      </div>
+    </form>
+
+    <section class="final" id="final" hidden tabindex="-1" aria-live="polite">
+      <div class="selo cor-viva" style="--d:0" role="img" aria-label="Logo Railson Lima Design"><svg viewBox="0 0 200 200"><use href="#logo-gira"/></svg></div>
+
+      <div id="estadoPronto" style="display:flex;flex-direction:column;gap:20px">
+        <span class="rot" style="--d:80">RESPOSTAS PRONTAS</span>
+        <h2 id="prontoTit" style="--d:140">Tudo pronto.</h2>
+        <p style="--d:200">Toque no botão abaixo para enviar suas respostas no WhatsApp. O PDF com todas as informações também já está pronto.</p>
+        <div class="acoes" style="--d:260">
+          <a class="btn btn-turq" id="btnWhats" href="https://wa.me/5588999878583" target="_blank" rel="noopener">Enviar no WhatsApp <span class="seta" aria-hidden="true">→</span></a>
+        </div>
+      </div>
+
+      <div id="estadoObrigado" hidden style="display:flex;flex-direction:column;gap:20px">
+        <h2>Obrigado pelo seu tempo!</h2>
+        <p>Cada resposta vira ajuste real no nosso trabalho. Você vai sentir a diferença nas próximas entregas.</p>
+        <div class="acoes">
+          <a class="btn btn-branco" id="reenviar" href="https://wa.me/5588999878583" target="_blank" rel="noopener">O WhatsApp não abriu? Toque aqui para enviar</a>
+        </div>
+      </div>
+
+      <div class="acoes" style="--d:320">
+        <button type="button" class="btn btn-contorno" id="btnPdf">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 12v6"/><path d="m9 15 3 3 3-3"/></svg>
+          <span id="btnPdfTxt">Baixar o PDF</span>
+        </button>
+        <div class="pdf-msg" id="pdfMsg"></div>
+      </div>
+
+      <div class="indica" style="--d:380">
+        <h3>Conhece alguém que precisa se posicionar melhor?</h3>
+        <p>Quem chega por indicação tem condição especial para começar.</p>
+        <a class="btn btn-turq" id="indicar" href="https://wa.me/" target="_blank" rel="noopener">Indicar pelo WhatsApp</a>
+      </div>
+    </section>
+
+    <section class="final relatorio" id="relatorio" hidden aria-live="polite">
+      <div class="selo cor-viva" role="img" aria-label="Logo Railson Lima Design"><svg viewBox="0 0 200 200"><use href="#logo-gira"/></svg></div>
+      <span class="rot">RELATÓRIO DA PESQUISA</span>
+      <h2 id="relNome">Respostas</h2>
+      <p id="relData"></p>
+      <div class="acoes">
+        <button type="button" class="btn btn-turq" id="relPdf"><span id="relPdfTxt">Baixar o PDF</span> <span class="seta" aria-hidden="true">↓</span></button>
+        <div class="pdf-msg" id="relMsg">Preparando o PDF...</div>
+      </div>
+      <div class="rel-resumo">
+        <div class="rel-tile media"><span>MÉDIA</span><b id="relMedia">–</b><small>Notas de 1 a 5</small></div>
+        <div class="rel-tile nps"><span>INDICARIA</span><b id="relNps">–</b><small id="relPerfil"></small></div>
+      </div>
+      <dl class="rel-lista" id="relLista"></dl>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="selo" aria-hidden="true"><svg viewBox="0 0 200 200"><use href="#logo"/></svg></div>
+    <span>RAILSON LIMA · RLSN</span>
+  </div>
+</footer>
+
+<div class="enviando" id="enviando" aria-hidden="true">
+  <div class="env-in">
+    <div class="selo"><svg viewBox="0 0 200 200"><use href="#logo-rapido"/></svg></div>
+    <ol class="passos" id="passos">
+      <li><i></i>Organizando suas respostas</li>
+      <li><i></i>Gerando o PDF</li>
+      <li><i></i>Preparando o WhatsApp</li>
+    </ol>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var WHATSAPP = "5588999878583";
+  var JSPDF_URL = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+  var OPCOES = {
+    servicos:["Gestão de redes sociais","Identidade visual","Site ou landing page","Vídeos e fotos","Design avulso","Consultoria estratégica"],
+    evolucao:["Sim, bastante","Sim, um pouco","Ainda não","Prefiro não responder"],
+    valoriza:["Criatividade","Estratégia","Atendimento próximo","Agilidade","Organização","Qualidade visual","Resultados"],
+    depoimento:["Sim, com meu nome e empresa","Sim, sem identificação","Não"]
+  };
+  var MULTI = {servicos:true, valoriza:true};
+  var PALAVRAS = ["","Ruim","Regular","Bom","Ótimo","Excelente"];
+  var INDICACAO = "Oi! Quero te indicar o Railson Lima, da RLSN. Ele trabalha com identidade visual, gestão de redes sociais, sites e vídeos. Quem chega por indicação tem condição especial para começar. Chama ele no WhatsApp e diz que veio por minha indicação: https://wa.me/5588999878583";
+
+  var reduz = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var root = document.documentElement;
+  function $(id){return document.getElementById(id);}
+  function el(html){var d=document.createElement("div");d.innerHTML=html.trim();return d.firstChild;}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");}
+
+  $("ano").textContent = new Date().getFullYear();
+  $("indicar").href = "https://wa.me/?text=" + encodeURIComponent(INDICACAO);
+
+  /* ---------- Monta as opções ---------- */
+  document.querySelectorAll("[data-grupo]").forEach(function(box){
+    var g = box.dataset.grupo, tipo = MULTI[g] ? "checkbox" : "radio";
+    OPCOES[g].forEach(function(t,i){
+      box.appendChild(el('<label class="op'+(MULTI[g]?' check':'')+'" style="--i:'+i+'"><input class="sr" type="'+tipo+'" name="'+g+'" id="'+g+'-'+i+'" value="'+esc(t)+'"><span>'+esc(t)+'</span></label>'));
+    });
+  });
+  document.querySelectorAll("[data-escala]").forEach(function(box){
+    var q = box.dataset.escala;
+    for(var n=1;n<=5;n++){
+      box.appendChild(el('<label class="op" style="--i:'+n+'"><input class="sr" type="radio" name="'+q+'" id="'+q+'-'+n+'" value="'+n+'"><span><b class="n">'+n+'</b><span class="w">'+PALAVRAS[n]+'</span></span></label>'));
+    }
+  });
+  for(var k=0;k<=10;k++){
+    $("nps").appendChild(el('<label class="op" style="--i:'+k+'"><input class="sr" type="radio" name="nps" id="nps-'+k+'" value="'+k+'" aria-label="Nota '+k+'"><span>'+k+'</span></label>'));
+  }
+
+  /* ---------- Título palavra por palavra ---------- */
+  var h1 = $("titulo");
+  h1.innerHTML = h1.textContent.trim().split(/\s+/).map(function(w,i){
+    return '<span class="p"><span style="--d:'+(220+i*55)+'">'+esc(w)+'</span></span>';
+  }).join(" ");
+
+  /* ---------- Abertura ---------- */
+  if(!reduz) root.classList.add("anim");
+  document.body.classList.add("travado");
+  var abriu = false;
+  function abrir(){
+    if(abriu) return; abriu = true;
+    var ld = $("loader");
+    ld.classList.add("sai");
+    document.body.classList.remove("travado");
+    requestAnimationFrame(function(){ root.classList.add("pronto"); });
+    setTimeout(function(){ ld.remove(); }, reduz ? 50 : 900);
+    setTimeout(function(){ carregarJsPDF().catch(function(){}); }, 1500);
+  }
+  var minimo = reduz ? 250 : 1750;
+  var fontes = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+  Promise.all([fontes, new Promise(function(r){setTimeout(r, minimo);})]).then(abrir);
+  setTimeout(abrir, 3800);
+
+  /* ---------- Revelação ao rolar e cartão ativo ---------- */
+  var cards = Array.prototype.slice.call(document.querySelectorAll("#form .card"));
+  var linhas = document.querySelectorAll(".rv-linha");
+  if("IntersectionObserver" in window && !reduz){
+    var ioRev = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); ioRev.unobserve(e.target); } });
+    },{rootMargin:"0px 0px -8% 0px", threshold:.08});
+    cards.forEach(function(c){ioRev.observe(c);});
+    linhas.forEach(function(c){ioRev.observe(c);});
+    var ioAtivo = new IntersectionObserver(function(es){
+      es.forEach(function(e){ e.target.classList.toggle("ativo", e.isIntersecting); });
+    },{rootMargin:"-42% 0px -42% 0px"});
+    cards.forEach(function(c){ioAtivo.observe(c);});
+  } else {
+    cards.forEach(function(c){c.classList.add("in");});
+    linhas.forEach(function(c){c.classList.add("in");});
+  }
+
+  /* ---------- Topo com parallax e barra fixa ---------- */
+  var topo = $("topo"), topoC = $("topoConteudo"), barra = $("barra"), tick = false;
+  function aoRolar(){
+    tick = false;
+    var h = topo.offsetHeight, y = window.scrollY || 0;
+    var p = Math.min(Math.max(y / h, 0), 1);
+    if(!reduz){ topoC.style.transform = "translateY(" + (p*60).toFixed(1) + "px)"; topoC.style.opacity = (1 - p*.85).toFixed(3); }
+    barra.classList.toggle("on", y > h - 40 && !$("form").hidden && !document.body.classList.contains("modo-relatorio"));
+  }
+  window.addEventListener("scroll", function(){ if(!tick){ tick = true; requestAnimationFrame(aoRolar); } }, {passive:true});
+  aoRolar();
+
+  /* ---------- Estado das respostas ---------- */
+  var form = $("form");
+  function marcados(n){return Array.prototype.map.call(form.querySelectorAll('input[name="'+n+'"]:checked'),function(i){return i.value;});}
+  function um(n){var v=marcados(n);return v.length?v[0]:"";}
+  function nome(){return $("nome").value.trim();}
+  function nomeOk(){return nome().replace(/[^A-Za-zÀ-ÿ]/g,"").length>=2;}
+
+  var REGRAS = [
+    {id:"c-servicos", ok:function(){return marcados("servicos").length>0;}},
+    {id:"c-q2", ok:function(){return !!um("q2");}},
+    {id:"c-q3", ok:function(){return !!um("q3");}},
+    {id:"c-q4", ok:function(){return !!um("q4");}},
+    {id:"c-q5", ok:function(){return !!um("q5");}},
+    {id:"c-evolucao", ok:function(){return !!um("evolucao");}},
+    {id:"c-valoriza", ok:function(){return marcados("valoriza").length>0;}},
+    {id:"c-nps", ok:function(){return um("nps")!=="";}},
+    {id:"c-nome", ok:nomeOk}
+  ];
+  var OPCIONAIS = [
+    {id:"c-depo", ok:function(){return !!um("depoimento");}},
+    {id:"c-msg", ok:function(){return $("msg").value.trim().length>0;}}
+  ];
+  /* 6 etapas: serviços · notas 02 a 05 · evolução · o que valoriza · indicação · nome */
+  var ETAPAS = [
+    function(){return REGRAS[0].ok();},
+    function(){return REGRAS[1].ok()&&REGRAS[2].ok()&&REGRAS[3].ok()&&REGRAS[4].ok();},
+    function(){return REGRAS[5].ok();},
+    function(){return REGRAS[6].ok();},
+    function(){return REGRAS[7].ok();},
+    function(){return REGRAS[8].ok();}
+  ];
+  var segTopo = document.querySelectorAll("#progBarra span"), segBarra = document.querySelectorAll("#barraSeg span");
+  function atualizar(){
+    var feitas = ETAPAS.filter(function(f){return f();}).length;
+    for(var i=0;i<6;i++){ segTopo[i].classList.toggle("on", i<feitas); segBarra[i].classList.toggle("on", i<feitas); }
+    $("progTxt").innerHTML = "<b>"+feitas+"</b> de 6 etapas respondidas";
+    $("barraNum").innerHTML = "<b>"+feitas+"</b>/6";
+    $("enviar").classList.toggle("completo", feitas===6);
+    REGRAS.concat(OPCIONAIS).forEach(function(r){
+      var c=$(r.id), ok=r.ok();
+      c.classList.toggle("feito", ok);
+      if(ok && c.classList.contains("erro")) c.classList.remove("erro");
+    });
+  }
+  form.addEventListener("change", atualizar);
+  form.addEventListener("input", atualizar);
+
+  /* ---------- Toque: onda, vibração e avanço automático ---------- */
+  var porToque = false;
+  form.addEventListener("pointerdown", function(e){
+    var alvo = e.target.closest(".op > span");
+    if(!alvo) return;
+    porToque = true;
+    if(!reduz){
+      var r = alvo.getBoundingClientRect(), s = Math.max(r.width, r.height)*2.2;
+      var o = document.createElement("i"); o.className = "onda";
+      o.style.width = o.style.height = s+"px";
+      o.style.left = (e.clientX - r.left - s/2)+"px"; o.style.top = (e.clientY - r.top - s/2)+"px";
+      alvo.appendChild(o); setTimeout(function(){o.remove();}, 650);
+    }
+    if(navigator.vibrate){ try{navigator.vibrate(8);}catch(_){} }
+  });
+  document.addEventListener("keydown", function(){ porToque = false; }, true);
+
+  function rolarPara(elm, centro){
+    var r = elm.getBoundingClientRect();
+    var barraH = $("barra").offsetHeight;
+    var alvo = centro ? (window.scrollY + r.top - (window.innerHeight - r.height)/2)
+                      : (window.scrollY + r.top - barraH - 20);
+    window.scrollTo({top:Math.max(0,alvo), behavior: reduz ? "auto" : "smooth"});
+  }
+  var timerAvanco;
+  form.addEventListener("change", function(e){
+    var inp = e.target;
+    if(!porToque || inp.type !== "radio") return;
+    porToque = false;
+    var card = inp.closest(".card"), idx = cards.indexOf(card), prox = cards[idx+1];
+    if(!prox) return;
+    clearTimeout(timerAvanco);
+    timerAvanco = setTimeout(function(){
+      rolarPara(prox, false);
+      if(prox.id === "c-nome"){ setTimeout(function(){ $("nome").focus({preventScroll:true}); }, reduz?0:600); }
+    }, reduz ? 120 : 420);
+  });
+  $("nome").addEventListener("keydown", function(e){
+    if(e.key === "Enter"){ e.preventDefault(); rolarPara($("c-msg"), false); setTimeout(function(){ $("msg").focus({preventScroll:true}); }, reduz?0:600); }
+  });
+
+  /* ---------- Mensagem do WhatsApp ---------- */
+  function media(){ var s=["q2","q3","q4","q5"].reduce(function(a,q){return a+Number(um(q));},0); return s/4; }
+  function mediaTxt(){ return media().toFixed(1).replace(".",","); }
+  function perfil(n){n=Number(n);return n>=9?"Promotor":(n>=7?"Neutro":"Detrator");}
+  function nota(q){var n=um(q);return n+" ("+PALAVRAS[n]+")";}
+  function dados(){
+    return {
+      nome:nome(), servicos:marcados("servicos"),
+      notas:[["Qualidade das entregas",um("q2")],["Atendimento e comunicação",um("q3")],["Prazos e organização",um("q4")],["Estratégia",um("q5")]],
+      media:mediaTxt(), evolucao:um("evolucao"), valoriza:marcados("valoriza"),
+      nps:um("nps"), perfil:perfil(um("nps")),
+      depoimento:um("depoimento") || "Não respondeu",
+      mensagem:$("msg").value.trim() || "Sem mensagem.",
+      t:Date.now()
+    };
+  }
+  function mensagem(d){
+    return [
+      "*PESQUISA DE SATISFAÇÃO · RLSN*","",
+      "*Cliente:* "+d.nome,
+      "*Serviços:* "+d.servicos.join(", "),"",
+      "*Notas (1 a 5)*",
+      "Qualidade das entregas: "+nota("q2"),
+      "Atendimento e comunicação: "+nota("q3"),
+      "Prazos e organização: "+nota("q4"),
+      "Estratégia: "+nota("q5"),
+      "*Média:* "+d.media,"",
+      "*Evolução no negócio:* "+d.evolucao,
+      "*O que mais valoriza:* "+d.valoriza.join(", "),
+      "*Indicaria (0 a 10):* "+d.nps+" · "+d.perfil,
+      "*Depoimento:* "+d.depoimento,"",
+      "*Mensagem:*",
+      d.mensagem
+    ].concat(d.link ? ["","*PDF com as respostas:*", d.link] : []).join("\n");
+  }
+
+  /* ---------- PDF ---------- */
+  var jsPDFPronto = null;
+  function carregarJsPDF(){
+    if(jsPDFPronto) return jsPDFPronto;
+    jsPDFPronto = new Promise(function(ok, falha){
+      if(window.jspdf && window.jspdf.jsPDF) return ok(window.jspdf.jsPDF);
+      var s = document.createElement("script");
+      s.src = JSPDF_URL; s.async = true;
+      s.onload = function(){ (window.jspdf && window.jspdf.jsPDF) ? ok(window.jspdf.jsPDF) : falha(new Error("jsPDF indisponível")); };
+      s.onerror = function(){ jsPDFPronto = null; falha(new Error("jsPDF não carregou")); };
+      document.head.appendChild(s);
+    });
+    return jsPDFPronto;
+  }
+  function logoPNG(cor){
+    return new Promise(function(ok){
+      try{
+        var sym = document.getElementById("logo");
+        var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="400" height="400"><g fill="'+cor+'">'+sym.innerHTML.replace(/currentColor/g,cor)+'</g></svg>';
+        var img = new Image();
+        img.onload = function(){
+          try{ var c=document.createElement("canvas"); c.width=400; c.height=400; c.getContext("2d").drawImage(img,0,0,400,400); ok(c.toDataURL("image/png")); }
+          catch(_){ ok(null); }
+        };
+        img.onerror = function(){ ok(null); };
+        img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+      }catch(_){ ok(null); }
+    });
+  }
+  function hexRGB(h){ h=h.replace("#",""); return [parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16)]; }
+  function gerarPDF(d){
+    return Promise.all([carregarJsPDF(), logoPNG("#FFFFFF")]).then(function(res){
+      var JsPDF = res[0], logo = res[1];
+      var doc = new JsPDF({unit:"mm", format:"a4"});
+      var W = 210, M = 18, CW = W - M*2, y = 0;
+      var PRETO=hexRGB("#121212"), AZUL=hexRGB("#007BFF"), TURQ=hexRGB("#40E0D0"), LARANJA=hexRGB("#FF5733"), CINZA=hexRGB("#CDCDCD"), FUNDO=hexRGB("#EFEFED"), T2=hexRGB("#5B5B59");
+      function cor(c){doc.setTextColor(c[0],c[1],c[2]);}
+      function fill(c){doc.setFillColor(c[0],c[1],c[2]);}
+      function fonte(peso,tam){doc.setFont("helvetica",peso);doc.setFontSize(tam);}
+      function quebra(alt){ if(y + alt > 280){ rodape(); doc.addPage(); y = 20; } }
+      var pagina = 0;
+      function rodape(){
+        pagina++;
+        fill(FUNDO); doc.rect(0,284,W,13,"F");
+        fonte("bold",7.5); cor(PRETO);
+        doc.text("RAILSON LIMA · RLSN", M, 291.5, {charSpace:.6});
+        fonte("normal",7.5); cor(T2);
+        doc.text("Design que posiciona. Estratégia que vende.", W-M, 291.5, {align:"right"});
+      }
+      function secao(titulo){
+        quebra(16);
+        fill(LARANJA); doc.circle(M+1.6, y-1.3, 1.6, "F");
+        fonte("bold",8.5); cor(PRETO);
+        doc.text(titulo, M+6, y, {charSpace:.8});
+        doc.setDrawColor(220,220,217); doc.setLineWidth(.3);
+        doc.line(M+6+doc.getTextWidth(titulo)+titulo.length*.8+4, y-1.3, W-M, y-1.3);
+        y += 8;
+      }
+      function campo(rot, valor){
+        var linhas = doc.splitTextToSize(valor, CW-52);
+        var alt = Math.max(1, linhas.length)*5.4 + 3.2;
+        quebra(alt);
+        fonte("normal",9.5); cor(T2); doc.text(rot, M, y);
+        fonte("bold",10.5); cor(PRETO); doc.text(linhas, M+52, y, {lineHeightFactor:1.45});
+        y += alt;
+      }
+
+      /* Cabeçalho */
+      fill(PRETO); doc.rect(0,0,W,58,"F");
+      if(logo){ doc.addImage(logo, "PNG", W-M-30, 13, 30, 30); }
+      fonte("bold",8); cor(TURQ); doc.text("PESQUISA DE SATISFAÇÃO", M, 20, {charSpace:1});
+      fonte("bold",22); doc.setTextColor(255,255,255);
+      doc.text(doc.splitTextToSize(d.nome, CW-44), M, 33);
+      fonte("normal",9.5); cor(CINZA);
+      var agora = d.t ? new Date(d.t) : new Date();
+      var data = agora.toLocaleDateString("pt-BR") + " às " + agora.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+      doc.text("Respondida em " + data, M, 48);
+      y = 72;
+
+      /* Resumo em destaque */
+      var bw = (CW - 6)/2;
+      fill(FUNDO); doc.roundedRect(M, y, bw, 30, 4, 4, "F");
+      fill(PRETO); doc.roundedRect(M+bw+6, y, bw, 30, 4, 4, "F");
+      fonte("bold",7.5); cor(T2); doc.text("MÉDIA DAS NOTAS (1 A 5)", M+6, y+8, {charSpace:.5});
+      fonte("bold",26); cor(AZUL); doc.text(d.media, M+6, y+23);
+      fonte("bold",7.5); cor(CINZA); doc.text("INDICARIA (0 A 10)", M+bw+12, y+8, {charSpace:.5});
+      fonte("bold",26); cor(TURQ); doc.text(String(d.nps), M+bw+12, y+23);
+      fonte("bold",10); doc.setTextColor(255,255,255);
+      doc.text(d.perfil, M+bw+12 + doc.getTextWidth(String(d.nps))*(26/10) + 4, y+22.5);
+      y += 44;
+
+      secao("PARTE 1 · O TRABALHO");
+      campo("Serviços", d.servicos.join(", "));
+      y += 2;
+      fonte("bold",9.5); cor(PRETO); doc.text("Notas (1 a 5)", M, y); y += 6;
+      d.notas.forEach(function(n){
+        quebra(10);
+        var v = Number(n[1]);
+        fonte("normal",9.5); cor(PRETO); doc.text(n[0], M, y+3.2);
+        var bx = M+62, bwid = CW-62-32;
+        fill(FUNDO); doc.roundedRect(bx, y, bwid, 4.6, 2.3, 2.3, "F");
+        fill(AZUL); doc.roundedRect(bx, y, Math.max(4.6, bwid*v/5), 4.6, 2.3, 2.3, "F");
+        fonte("bold",9.5); cor(PRETO); doc.text(v + " · " + PALAVRAS[v], W-M, y+3.4, {align:"right"});
+        y += 9;
+      });
+      y += 6;
+
+      secao("PARTE 2 · RESULTADOS");
+      campo("Evolução no negócio", d.evolucao);
+      campo("O que mais valoriza", d.valoriza.join(", "));
+      campo("Indicaria (0 a 10)", d.nps + " · " + d.perfil);
+      y += 6;
+
+      secao("PARTE 3 · SUA VOZ");
+      campo("Depoimento", d.depoimento);
+      campo("Cliente", d.nome);
+      y += 2;
+      fonte("normal",10.5);
+      var linhasMsg = doc.splitTextToSize(d.mensagem, CW-14);
+      quebra(Math.min(linhasMsg.length,4)*5.6 + 24);
+      fonte("bold",9.5); cor(PRETO); doc.text("Mensagem", M, y); y += 5;
+      fonte("normal",10.5);
+      var i0 = 0;
+      while(i0 < linhasMsg.length){
+        var cabe = Math.max(1, Math.floor((280 - y - 10) / 5.6));
+        var parte = linhasMsg.slice(i0, i0+cabe);
+        var alt = parte.length*5.6 + 10;
+        fill(hexRGB("#E6F1FF")); doc.roundedRect(M, y, CW, alt, 4, 4, "F");
+        fill(AZUL); doc.rect(M, y+4, 1.2, alt-8, "F");
+        cor(PRETO); doc.text(parte, M+7, y+8, {lineHeightFactor:1.5});
+        y += alt + 4; i0 += cabe;
+        if(i0 < linhasMsg.length){ rodape(); doc.addPage(); y = 20; fonte("normal",10.5); }
+      }
+      rodape();
+      return doc.output("blob");
+    });
+  }
+  function nomeArquivo(n){
+    var slug = n.normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Za-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,40) || "cliente";
+    return "Pesquisa-RLSN-" + slug + ".pdf";
+  }
+
+  /* entrega do PDF: compartilhar (celular), salvar pelo visualizador do Claude ou baixar */
+  var downloadsCap = (window.claude && typeof window.claude.use === "function") ? window.claude.use("downloads").catch(function(){return null;}) : Promise.resolve(null);
+  var pdfBlob = null, pdfNome = "Pesquisa-RLSN.pdf";
+  function podeCompartilhar(){
+    try{ return !!(pdfBlob && navigator.canShare && navigator.canShare({files:[new File([pdfBlob], pdfNome, {type:"application/pdf"})]})); }catch(_){ return false; }
+  }
+  function msgPdf(t){ $("pdfMsg").textContent = t; }
+  function baixarDireto(){
+    try{
+      var url = URL.createObjectURL(pdfBlob), a = document.createElement("a");
+      a.href = url; a.download = pdfNome; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function(){URL.revokeObjectURL(url);}, 4000);
+      return true;
+    }catch(_){ return false; }
+  }
+  $("btnPdf").addEventListener("click", function(){
+    if(!pdfBlob){ msgPdf("O PDF não ficou pronto. Suas respostas seguem completas na mensagem do WhatsApp."); return; }
+    msgPdf("");
+    entregarPDF(pdfBlob, pdfNome, msgPdf);
+  });
+
+  /* ---------- Link do relatório (respostas dentro do link, sem servidor) ---------- */
+  /* Endereço público da página. Os links do relatório apontam para cá. */
+  var PAGINA_URL = "https://rlsn.com.br/pesquisa/";
+  var ART_URL = (/^https?:$/.test(location.protocol) && !/claude|anthropic/i.test(location.hostname))
+    ? location.origin + location.pathname
+    : PAGINA_URL;
+  function b64url(bytes){ var s=""; for(var i=0;i<bytes.length;i++) s+=String.fromCharCode(bytes[i]); return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
+  function deB64url(str){ str=str.replace(/-/g,"+").replace(/_/g,"/"); while(str.length%4) str+="="; var bin=atob(str), out=new Uint8Array(bin.length); for(var i=0;i<bin.length;i++) out[i]=bin.charCodeAt(i); return out; }
+  function lerStream(stream){ return new Response(stream).arrayBuffer().then(function(b){ return new Uint8Array(b); }); }
+  function compactar(d){
+    var idx = function(lista, v){ return OPCOES[lista].indexOf(v); };
+    return {v:1, t:d.t, n:d.nome,
+      s:d.servicos.map(function(x){return idx("servicos",x);}),
+      q:d.notas.map(function(n){return Number(n[1]);}),
+      e:idx("evolucao",d.evolucao),
+      a:d.valoriza.map(function(x){return idx("valoriza",x);}),
+      p:Number(d.nps), d:idx("depoimento",d.depoimento),
+      m:(d.mensagem === "Sem mensagem." ? "" : d.mensagem)};
+  }
+  function expandir(c){
+    var notas = c.q || [];
+    var med = notas.length ? (notas.reduce(function(a,b){return a+b;},0)/notas.length).toFixed(1).replace(".",",") : "–";
+    return {t:c.t, nome:c.n || "Cliente",
+      servicos:(c.s||[]).map(function(i){return OPCOES.servicos[i];}).filter(Boolean),
+      notas:[["Qualidade das entregas",notas[0]],["Atendimento e comunicação",notas[1]],["Prazos e organização",notas[2]],["Estratégia",notas[3]]],
+      media:med, evolucao:OPCOES.evolucao[c.e] || "Não respondeu",
+      valoriza:(c.a||[]).map(function(i){return OPCOES.valoriza[i];}).filter(Boolean),
+      nps:c.p, perfil:perfil(c.p),
+      depoimento:OPCOES.depoimento[c.d] || "Não respondeu",
+      mensagem:c.m || "Sem mensagem."};
+  }
+  function codificar(d){
+    var bytes = new TextEncoder().encode(JSON.stringify(compactar(d)));
+    if(typeof CompressionStream === "function"){
+      try{
+        var cs = new CompressionStream("deflate-raw");
+        return lerStream(new Blob([bytes]).stream().pipeThrough(cs)).then(function(z){ return "rz" + b64url(z); })
+          .catch(function(){ return "ru" + b64url(bytes); });
+      }catch(_){}
+    }
+    return Promise.resolve("ru" + b64url(bytes));
+  }
+  function decodificar(hash){
+    var tipo = hash.slice(0,2), bytes = deB64url(hash.slice(2));
+    var texto = tipo === "rz"
+      ? lerStream(new Blob([bytes]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).then(function(b){ return new TextDecoder().decode(b); })
+      : Promise.resolve(new TextDecoder().decode(bytes));
+    return texto.then(function(t){ return expandir(JSON.parse(t)); });
+  }
+
+  /* entrega de PDF reaproveitável (tela final e relatório) */
+  function entregarPDF(blob, nomeArq, msg){
+    var arquivo = new File([blob], nomeArq, {type:"application/pdf"});
+    var baixar = function(){
+      try{
+        var u = URL.createObjectURL(blob), a = document.createElement("a");
+        a.href = u; a.download = nomeArq; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(function(){URL.revokeObjectURL(u);}, 4000); return true;
+      }catch(_){ return false; }
+    };
+    var salvar = function(){
+      return downloadsCap.then(function(dl){
+        if(dl){
+          return dl.save({filename:nomeArq, data:blob}).then(function(){ msg("PDF salvo."); })
+            .catch(function(err){ if(err && err.code === "declined") return; if(!baixar()) msg("Não foi possível baixar o PDF neste aparelho."); });
+        }
+        if(!baixar()) msg("Não foi possível baixar o PDF neste aparelho.");
+      });
+    };
+    var share = false;
+    try{ share = !!(navigator.canShare && navigator.canShare({files:[arquivo]})); }catch(_){}
+    if(share){
+      navigator.share({files:[arquivo], title:"Pesquisa de satisfação · RLSN"}).catch(function(err){ if(err && err.name === "AbortError") return; salvar(); });
+    } else { salvar(); }
+  }
+
+  function modoRelatorio(hash){
+    document.body.classList.add("modo-relatorio");
+    $("topo").hidden = true; form.hidden = true;
+    var rel = $("relatorio"); rel.hidden = false;
+    var relMsg = function(t){ $("relMsg").textContent = t; };
+    decodificar(hash).then(function(d){
+      $("relNome").textContent = d.nome;
+      var quando = d.t ? new Date(d.t) : null;
+      $("relData").textContent = quando ? "Respondida em " + quando.toLocaleDateString("pt-BR") + " às " + quando.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}) : "";
+      $("relMedia").textContent = d.media;
+      $("relNps").textContent = d.nps;
+      $("relPerfil").textContent = d.perfil;
+      var linhas = [["Serviços", d.servicos.join(", ")]]
+        .concat(d.notas.map(function(n){ return [n[0], n[1] + " · " + PALAVRAS[n[1]]]; }))
+        .concat([["Evolução no negócio", d.evolucao],["O que mais valoriza", d.valoriza.join(", ")],["Depoimento", d.depoimento],["Mensagem", d.mensagem]]);
+      var dl = $("relLista");
+      linhas.forEach(function(l){
+        var w = document.createElement("div"), dt = document.createElement("dt"), dd = document.createElement("dd");
+        dt.textContent = l[0]; dd.textContent = l[1]; w.appendChild(dt); w.appendChild(dd); dl.appendChild(w);
+      });
+      var arq = nomeArquivo(d.nome), blob = null;
+      $("relPdf").addEventListener("click", function(){
+        if(!blob){ relMsg("O PDF ainda está sendo gerado. Tente de novo em instantes."); return; }
+        relMsg(""); entregarPDF(blob, arq, relMsg);
+      });
+      gerarPDF(d).then(function(b){
+        blob = b; relMsg("PDF pronto com todas as respostas.");
+      }).catch(function(){ relMsg("Não foi possível gerar o PDF agora. As respostas estão todas nesta página."); });
+    }).catch(function(){
+      $("relNome").textContent = "Link incompleto";
+      $("relData").textContent = "Não foi possível ler as respostas deste link. Peça para o cliente enviar a pesquisa de novo.";
+      $("relPdf").hidden = true; relMsg("");
+    });
+  }
+  var hashAtual = (location.hash || "").replace(/^#/, "");
+  if(/^r[zu][A-Za-z0-9_-]+$/.test(hashAtual)) modoRelatorio(hashAtual);
+
+  /* ---------- Envio ---------- */
+  function espera(ms){ return new Promise(function(r){ setTimeout(r, reduz ? Math.min(ms,150) : ms); }); }
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    atualizar();
+    var primeiro = null;
+    REGRAS.forEach(function(r){
+      var c = $(r.id);
+      if(!r.ok()){
+        c.classList.add("erro","in");
+        c.querySelector(".aviso").textContent = c.dataset.aviso;
+        c.classList.remove("treme"); void c.offsetWidth; c.classList.add("treme");
+        if(!primeiro) primeiro = c;
+      }
+    });
+    if(primeiro){
+      rolarPara(primeiro, true);
+      var foco = primeiro.querySelector("input");
+      if(foco) setTimeout(function(){ foco.focus({preventScroll:true}); }, reduz?0:500);
+      if(navigator.vibrate){ try{navigator.vibrate([10,40,10]);}catch(_){} }
+      return;
+    }
+
+    var d = dados();
+    var montarLink = function(){
+      var url = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(mensagem(d));
+      $("btnWhats").href = url; $("reenviar").href = url;
+    };
+    montarLink();
+    var linkP = codificar(d).then(function(h){ d.link = ART_URL + "#" + h; montarLink(); }).catch(function(){});
+    pdfNome = nomeArquivo(d.nome);
+    var primeiroNome = d.nome.split(/[\s·]+/)[0];
+    $("prontoTit").textContent = "Tudo pronto, " + primeiroNome + ".";
+
+    var tela = $("enviando"), passos = $("passos").children;
+    tela.classList.remove("sai"); tela.classList.add("on");
+    document.body.classList.add("travado");
+    $("barra").classList.remove("on");
+
+    var pdfP = gerarPDF(d).then(function(b){ pdfBlob = b; }).catch(function(){ pdfBlob = null; });
+    var limitePdf = new Promise(function(r){ setTimeout(r, 7000); });
+
+    passos[0].className = "vez";
+    espera(800).then(function(){
+      passos[0].className = "ok"; passos[1].className = "vez";
+      return Promise.all([Promise.race([pdfP, limitePdf]), espera(700)]);
+    }).then(function(){
+      passos[1].className = "ok"; passos[2].className = "vez";
+      return Promise.all([linkP, espera(700)]);
+    }).then(function(){
+      passos[2].className = "ok";
+      return espera(350);
+    }).then(function(){
+      form.hidden = true;
+      var fim = $("final");
+      fim.hidden = false;
+      var compartilha = podeCompartilhar();
+      $("btnPdfTxt").textContent = compartilha ? "Enviar o PDF no WhatsApp" : "Baixar o PDF";
+      if(compartilha && pdfBlob) msgPdf("No menu que abrir, escolha o WhatsApp e a conversa com o Railson Lima.");
+      if(!pdfBlob) msgPdf("O PDF não ficou pronto agora. Suas respostas seguem completas na mensagem do WhatsApp.");
+      window.scrollTo(0, Math.max(0, $("topo").offsetHeight - 8));
+      tela.classList.remove("on"); tela.classList.add("sai");
+      document.body.classList.remove("travado");
+      setTimeout(function(){ tela.classList.remove("sai"); for(var i=0;i<passos.length;i++) passos[i].className=""; }, 900);
+      setTimeout(function(){ $("btnWhats").focus({preventScroll:true}); }, 600);
+    });
+  });
+
+  /* depois de tocar em enviar no WhatsApp, mostra o agradecimento */
+  $("btnWhats").addEventListener("click", function(){
+    setTimeout(function(){
+      $("estadoPronto").hidden = true;
+      $("estadoPronto").style.display = "none";
+      var ob = $("estadoObrigado");
+      ob.hidden = false; ob.style.display = "flex";
+      ob.querySelectorAll("*").forEach(function(n){ n.style.animation = "sobe .7s var(--ease) both"; });
+    }, 400);
+  });
+})();
+</script>
+
+</body>
+</html>
