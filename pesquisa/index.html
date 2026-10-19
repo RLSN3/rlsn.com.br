@@ -296,6 +296,19 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
 .final h2{margin:0;font-size:clamp(28px,7.6vw,36px);line-height:1.08;font-weight:700;letter-spacing:-.028em;text-wrap:balance}
 .final p{margin:0;color:var(--cinza);line-height:1.55}
 .final .acoes{display:flex;flex-direction:column;gap:10px}
+.estado{display:flex;flex-direction:column;gap:18px}
+.estado[hidden]{display:none}
+.rot-alerta{color:var(--laranja)!important}
+.final .alerta{margin:0;background:rgba(255,87,51,.12);border:1px solid rgba(255,87,51,.45);border-radius:var(--r-in);padding:14px 16px;color:var(--branco);line-height:1.5}
+.final .alerta b{color:var(--branco)}
+.passos-envio{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;counter-reset:p}
+.passos-envio li{counter-increment:p;display:grid;grid-template-columns:30px 1fr;gap:12px;align-items:start;color:var(--cinza);line-height:1.5}
+.passos-envio li > span{min-width:0;padding-top:3px}
+.passos-envio li::before{content:counter(p);width:30px;height:30px;border-radius:50%;background:var(--turquesa);color:var(--preto);font-weight:900;font-size:15px;display:grid;place-items:center;font-variant-numeric:tabular-nums}
+.passos-envio li b{color:var(--branco)}
+.btn-chama{animation:chama 1.8s var(--ease) infinite}
+@keyframes chama{0%,100%{box-shadow:0 0 0 0 rgba(64,224,208,.55)}60%{box-shadow:0 0 0 14px rgba(64,224,208,0)}}
+.nota b{color:var(--preto);font-weight:700}
 .btn-turq{background:var(--turquesa);color:var(--preto)}
 .btn-turq .seta{color:var(--preto)}
 .btn-branco{background:var(--branco);color:var(--preto);font-size:15.5px;min-height:54px}
@@ -539,31 +552,38 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
 
       <div class="envio">
         <button type="submit" class="btn btn-preto" id="enviar">Enviar minhas respostas <span class="seta" aria-hidden="true">→</span></button>
-        <p class="nota">Ao enviar, o WhatsApp abre com a mensagem pronta. É só tocar em enviar. Suas respostas ficam só comigo e servem para melhorar o atendimento da RLSN.</p>
+        <p class="nota">No próximo passo, o WhatsApp abre com o link da sua pesquisa. <b>Ela só chega até mim quando você toca em enviar lá.</b> Suas respostas ficam só comigo e servem para melhorar o atendimento da RLSN.</p>
       </div>
     </form>
 
     <section class="final" id="final" hidden tabindex="-1" aria-live="polite">
       <div class="selo cor-viva" style="--d:0" role="img" aria-label="Logo Railson Lima Design"><svg viewBox="0 0 200 200"><use href="#logo-gira"/></svg></div>
 
-      <div id="estadoPronto" style="display:flex;flex-direction:column;gap:20px">
-        <span class="rot" style="--d:80">RESPOSTAS PRONTAS</span>
-        <h2 id="prontoTit" style="--d:140">Tudo pronto.</h2>
-        <p style="--d:200">Toque no botão abaixo para enviar suas respostas no WhatsApp.</p>
-        <div class="acoes" style="--d:260">
-          <a class="btn btn-turq" id="btnWhats" href="https://wa.me/5588999878583" target="_blank" rel="noopener">Enviar no WhatsApp <span class="seta" aria-hidden="true">→</span></a>
+      <div id="estadoPronto" class="estado">
+        <span class="rot rot-alerta" style="--d:80">ÚLTIMO PASSO · OBRIGATÓRIO</span>
+        <h2 id="prontoTit" style="--d:140">Falta só enviar.</h2>
+        <p class="alerta" style="--d:200"><b>Sua pesquisa ainda não chegou até mim.</b> Ela só é registrada quando você envia a mensagem com o link no WhatsApp.</p>
+        <ol class="passos-envio" style="--d:260">
+          <li><span><b>Toque no botão</b> "Enviar pesquisa no WhatsApp", logo abaixo.</span></li>
+          <li><span>O WhatsApp abre na conversa com o Railson Lima, com <b>a mensagem e o link da pesquisa já escritos</b>.</span></li>
+          <li><span><b>Toque em enviar</b> no WhatsApp. Não apague nem altere o link: é por ele que eu recebo suas respostas.</span></li>
+        </ol>
+        <div class="acoes" style="--d:320">
+          <a class="btn btn-turq btn-chama" id="btnWhats" href="https://wa.me/5588999878583" target="_blank" rel="noopener">Enviar pesquisa no WhatsApp <span class="seta" aria-hidden="true">→</span></a>
         </div>
       </div>
 
-      <div id="estadoObrigado" hidden style="display:flex;flex-direction:column;gap:20px">
+      <div id="estadoObrigado" class="estado" hidden>
+        <span class="rot">PESQUISA ENVIADA?</span>
         <h2>Obrigado pelo seu tempo!</h2>
+        <p class="alerta"><b>Confira no WhatsApp:</b> a mensagem com o link da pesquisa precisa aparecer como enviada na conversa com o Railson Lima. Se ela ainda estiver só escrita, toque em enviar.</p>
         <p>Cada resposta vira um ajuste real no meu trabalho. Você vai sentir a diferença nas próximas entregas.</p>
         <div class="acoes">
-          <a class="btn btn-branco" id="reenviar" href="https://wa.me/5588999878583" target="_blank" rel="noopener">O WhatsApp não abriu? Toque aqui para enviar</a>
+          <a class="btn btn-branco" id="reenviar" href="https://wa.me/5588999878583" target="_blank" rel="noopener">Ainda não enviei. Abrir o WhatsApp de novo</a>
         </div>
       </div>
 
-      <div class="indica" style="--d:380">
+      <div class="indica" id="blocoIndica" hidden style="--d:380">
         <h3>Conhece alguém que precisa se posicionar melhor?</h3>
         <p>Quem chega por indicação tem condição especial para começar.</p>
         <a class="btn btn-turq" id="indicar" href="https://wa.me/" target="_blank" rel="noopener">Indicar pelo WhatsApp</a>
@@ -1069,7 +1089,7 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
     montarLink();
     var linkP = codificar(d).then(function(h){ d.link = ART_URL + "#" + h; montarLink(); }).catch(function(){});
     var primeiroNome = d.nome.split(/[\s·]+/)[0];
-    $("prontoTit").textContent = "Tudo pronto, " + primeiroNome + ".";
+    $("prontoTit").textContent = primeiroNome + ", falta só enviar.";
 
     var tela = $("enviando"), passos = $("passos").children;
     tela.classList.remove("sai"); tela.classList.add("on");
@@ -1103,10 +1123,9 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
   $("btnWhats").addEventListener("click", function(){
     setTimeout(function(){
       $("estadoPronto").hidden = true;
-      $("estadoPronto").style.display = "none";
       var ob = $("estadoObrigado");
-      ob.hidden = false; ob.style.display = "flex";
-      ob.querySelectorAll("*").forEach(function(n){ n.style.animation = "sobe .7s var(--ease) both"; });
+      ob.hidden = false; $("blocoIndica").hidden = false;
+      [ob, $("blocoIndica")].forEach(function(b){ b.querySelectorAll("*").forEach(function(n){ n.style.animation = "sobe .7s var(--ease) both"; }); });
     }, 400);
   });
 })();
