@@ -900,7 +900,7 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
   /* ---------- Mensagem do WhatsApp ---------- */
   function media(){ var s=["q2","q3","q4","q5"].reduce(function(a,q){return a+Number(um(q));},0); return s/4; }
   function mediaTxt(){ return media().toFixed(1).replace(".",","); }
-  function perfil(n){n=Number(n);return n>=9?"Indica com certeza":(n>=7?"Talvez indique":"Não indicaria");}
+  function perfil(n){n=Number(n);return n>=9?"Indico com certeza":(n>=7?"Talvez indique":"Não indicaria");}
   function nota(q){var n=um(q);return n+" ("+PALAVRAS[n]+")";}
   function dados(){
     return {
