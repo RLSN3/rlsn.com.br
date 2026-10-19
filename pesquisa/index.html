@@ -330,6 +330,13 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
 .folha-rot{font-size:var(--t-rot);font-weight:700;letter-spacing:.16em;color:var(--turquesa)}
 .folha-nome{margin:0;font-size:clamp(24px,6.4vw,34px);line-height:1.15;font-weight:700;letter-spacing:-.02em;overflow-wrap:anywhere;text-wrap:balance}
 .folha-data{margin:0;font-size:var(--t-apoio);color:var(--cinza)}
+.folha-acoes{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin-top:6px}
+.folha-pdf{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 20px;border:0;border-radius:99px;background:var(--turquesa);color:var(--preto);font:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:transform .15s var(--ease),opacity .2s}
+.folha-pdf svg{width:18px;height:18px}
+.folha-pdf:active{transform:scale(.97)}
+.folha-pdf:focus-visible{outline:3px solid var(--branco);outline-offset:3px}
+.folha-pdf[disabled]{opacity:.6;cursor:progress}
+.folha-pdf-msg{font-size:13px;color:var(--cinza)}
 .folha-topo .selo{width:clamp(64px,18vw,96px);height:clamp(64px,18vw,96px);color:var(--branco);align-self:flex-start}
 .folha-corpo{padding:24px 24px 8px;display:flex;flex-direction:column;gap:30px}
 .folha-resumo{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -596,6 +603,13 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
           <span class="folha-rot">PESQUISA DE SATISFAÇÃO</span>
           <h1 class="folha-nome" id="relNome">Respostas</h1>
           <p class="folha-data" id="relData"></p>
+          <div class="folha-acoes">
+            <button type="button" class="folha-pdf" id="relPdf">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>
+              <span id="relPdfTxt">Baixar PDF</span>
+            </button>
+            <span class="folha-pdf-msg" id="relPdfMsg" aria-live="polite"></span>
+          </div>
         </div>
         <div class="selo" aria-hidden="true"><svg viewBox="0 0 200 200"><use href="#logo"/></svg></div>
       </header>
@@ -920,6 +934,149 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
     ].join("\n");
   }
 
+  /* ---------- PDF ---------- */
+  var JSPDF_URL = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+  var jsPDFPronto = null;
+  function carregarJsPDF(){
+    if(jsPDFPronto) return jsPDFPronto;
+    jsPDFPronto = new Promise(function(ok, falha){
+      if(window.jspdf && window.jspdf.jsPDF) return ok(window.jspdf.jsPDF);
+      var s = document.createElement("script");
+      s.src = JSPDF_URL; s.async = true;
+      s.onload = function(){ (window.jspdf && window.jspdf.jsPDF) ? ok(window.jspdf.jsPDF) : falha(new Error("jsPDF indisponível")); };
+      s.onerror = function(){ jsPDFPronto = null; falha(new Error("jsPDF não carregou")); };
+      document.head.appendChild(s);
+    });
+    return jsPDFPronto;
+  }
+  function logoPNG(cor){
+    return new Promise(function(ok){
+      try{
+        var sym = document.getElementById("logo");
+        var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="400" height="400"><g fill="'+cor+'">'+sym.innerHTML.replace(/currentColor/g,cor)+'</g></svg>';
+        var img = new Image();
+        img.onload = function(){
+          try{ var c=document.createElement("canvas"); c.width=400; c.height=400; c.getContext("2d").drawImage(img,0,0,400,400); ok(c.toDataURL("image/png")); }
+          catch(_){ ok(null); }
+        };
+        img.onerror = function(){ ok(null); };
+        img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+      }catch(_){ ok(null); }
+    });
+  }
+  function hexRGB(h){ h=h.replace("#",""); return [parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16)]; }
+  function gerarPDF(d){
+    return Promise.all([carregarJsPDF(), logoPNG("#FFFFFF")]).then(function(res){
+      var JsPDF = res[0], logo = res[1];
+      var doc = new JsPDF({unit:"mm", format:"a4"});
+      var W = 210, M = 18, CW = W - M*2, y = 0;
+      var PRETO=hexRGB("#121212"), AZUL=hexRGB("#007BFF"), TURQ=hexRGB("#40E0D0"), LARANJA=hexRGB("#FF5733"), CINZA=hexRGB("#CDCDCD"), FUNDO=hexRGB("#EFEFED"), T2=hexRGB("#5B5B59");
+      function cor(c){doc.setTextColor(c[0],c[1],c[2]);}
+      function fill(c){doc.setFillColor(c[0],c[1],c[2]);}
+      function fonte(peso,tam){doc.setFont("helvetica",peso);doc.setFontSize(tam);}
+      function quebra(alt){ if(y + alt > 279){ rodape(); doc.addPage(); y = 20; } }
+      var pagina = 0;
+      function rodape(){
+        pagina++;
+        fill(FUNDO); doc.rect(0,284,W,13,"F");
+        fonte("bold",7.5); cor(PRETO);
+        doc.text("RAILSON LIMA · RLSN", M, 291.5, {charSpace:.6});
+        fonte("normal",7.5); cor(T2);
+        doc.text("Design que posiciona. Estratégia que vende.", W-M, 291.5, {align:"right"});
+      }
+      function secao(titulo){
+        quebra(16);
+        fill(LARANJA); doc.circle(M+1.6, y-1.3, 1.6, "F");
+        fonte("bold",8.5); cor(PRETO);
+        doc.text(titulo, M+6, y, {charSpace:.8});
+        doc.setDrawColor(220,220,217); doc.setLineWidth(.3);
+        doc.line(M+6+doc.getTextWidth(titulo)+titulo.length*.8+4, y-1.3, W-M, y-1.3);
+        y += 7;
+      }
+      function campo(rot, valor){
+        var linhas = doc.splitTextToSize(valor, CW-52);
+        var alt = Math.max(1, linhas.length)*5.4 + 3.2;
+        quebra(alt);
+        fonte("normal",9.5); cor(T2); doc.text(rot, M, y);
+        fonte("bold",10.5); cor(PRETO); doc.text(linhas, M+52, y, {lineHeightFactor:1.45});
+        y += alt;
+      }
+
+      /* Cabeçalho */
+      fill(PRETO); doc.rect(0,0,W,52,"F");
+      if(logo){ doc.addImage(logo, "PNG", W-M-28, 12, 28, 28); }
+      fonte("bold",8); cor(TURQ); doc.text("PESQUISA DE SATISFAÇÃO", M, 20, {charSpace:1});
+      fonte("bold",22); doc.setTextColor(255,255,255);
+      doc.text(doc.splitTextToSize(d.nome, CW-44), M, 33);
+      fonte("normal",9.5); cor(CINZA);
+      var agora = d.t ? new Date(d.t) : new Date();
+      var data = agora.toLocaleDateString("pt-BR") + " às " + agora.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+      doc.text("Respondida em " + data, M, 44);
+      y = 62;
+
+      /* Resumo em destaque */
+      var bw = (CW - 6)/2;
+      fill(FUNDO); doc.roundedRect(M, y, bw, 30, 4, 4, "F");
+      fill(PRETO); doc.roundedRect(M+bw+6, y, bw, 30, 4, 4, "F");
+      fonte("bold",7.5); cor(T2); doc.text("MÉDIA DAS NOTAS (1 A 5)", M+6, y+8, {charSpace:.5});
+      fonte("bold",26); cor(AZUL); doc.text(d.media, M+6, y+23);
+      fonte("bold",7.5); cor(CINZA); doc.text("INDICARIA (0 A 10)", M+bw+12, y+8, {charSpace:.5});
+      fonte("bold",26); cor(TURQ); doc.text(String(d.nps), M+bw+12, y+23);
+      fonte("bold",10); doc.setTextColor(255,255,255);
+      doc.text(d.perfil, M+bw+12 + doc.getTextWidth(String(d.nps))*(26/10) + 4, y+22.5);
+      y += 40;
+
+      secao("PARTE 1 · O TRABALHO");
+      campo("Serviços contratados", d.servicos.join(", "));
+      y += 2;
+      fonte("bold",9.5); cor(PRETO); doc.text("Notas (1 a 5)", M, y); y += 6;
+      d.notas.forEach(function(n){
+        quebra(10);
+        var v = Number(n[1]);
+        fonte("normal",9.5); cor(PRETO); doc.text(n[0], M, y+3.2);
+        var bx = M+62, bwid = CW-62-32;
+        fill(FUNDO); doc.roundedRect(bx, y, bwid, 4.6, 2.3, 2.3, "F");
+        fill(AZUL); doc.roundedRect(bx, y, Math.max(4.6, bwid*v/5), 4.6, 2.3, 2.3, "F");
+        fonte("bold",9.5); cor(PRETO); doc.text(v + " · " + PALAVRAS[v], W-M, y+3.4, {align:"right"});
+        y += 8.5;
+      });
+      y += 4;
+
+      secao("PARTE 2 · RESULTADOS");
+      campo("Evolução no negócio", d.evolucao);
+      campo("O que mais valoriza", d.valoriza.join(", "));
+      campo("Indicaria (0 a 10)", d.nps + " · " + d.perfil);
+      y += 4;
+
+      secao("PARTE 3 · SUA VOZ");
+      campo("Depoimento", d.depoimento);
+      campo("Cliente", d.nome);
+      y += 2;
+      fonte("normal",10.5);
+      var linhasMsg = doc.splitTextToSize(d.mensagem, CW-14);
+      quebra(Math.min(linhasMsg.length,4)*5.6 + 24);
+      fonte("bold",9.5); cor(PRETO); doc.text("Mensagem", M, y); y += 5;
+      fonte("normal",10.5);
+      var i0 = 0;
+      while(i0 < linhasMsg.length){
+        var cabe = Math.max(1, Math.floor((280 - y - 10) / 5.6));
+        var parte = linhasMsg.slice(i0, i0+cabe);
+        var alt = parte.length*5.6 + 10;
+        fill(hexRGB("#E6F1FF")); doc.roundedRect(M, y, CW, alt, 4, 4, "F");
+        fill(AZUL); doc.rect(M, y+4, 1.2, alt-8, "F");
+        cor(PRETO); doc.text(parte, M+7, y+8, {lineHeightFactor:1.5});
+        y += alt + 4; i0 += cabe;
+        if(i0 < linhasMsg.length){ rodape(); doc.addPage(); y = 20; fonte("normal",10.5); }
+      }
+      rodape();
+      return doc.output("blob");
+    });
+  }
+  function nomeArquivo(n){
+    var slug = n.normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Za-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,40) || "cliente";
+    return "Pesquisa-RLSN-" + slug + ".pdf";
+  }
+
   /* ---------- Link do relatório (respostas dentro do link, sem servidor) ---------- */
   /* Endereço público da página. Os links do relatório apontam para cá. */
   var PAGINA_URL = "https://rlsn.com.br/pesquisa/";
@@ -1045,10 +1202,25 @@ footer .selo{width:34px;height:34px;color:var(--preto)}
       txt("relDepo", d.depoimento);
       txt("relCliente", d.nome);
       txt("relMsgTxt", d.mensagem);
+      var btn = $("relPdf"), msg = function(t){ $("relPdfMsg").textContent = t; };
+      carregarJsPDF().catch(function(){});
+      btn.addEventListener("click", function(){
+        btn.disabled = true; $("relPdfTxt").textContent = "Gerando PDF..."; msg("");
+        gerarPDF(d).then(function(blob){
+          var nomeArq = nomeArquivo(d.nome);
+          var url = URL.createObjectURL(blob), a = document.createElement("a");
+          a.href = url; a.download = nomeArq; document.body.appendChild(a); a.click(); a.remove();
+          setTimeout(function(){ URL.revokeObjectURL(url); }, 60000);
+          msg("PDF baixado: " + nomeArq);
+        }).catch(function(){
+          msg("Não foi possível gerar o PDF. Verifique a internet e tente de novo.");
+        }).then(function(){ btn.disabled = false; $("relPdfTxt").textContent = "Baixar PDF"; });
+      });
     }).catch(function(){
       txt("relNome", "Link incompleto");
       txt("relData", "Não foi possível ler as respostas deste link. Peça para o cliente enviar a pesquisa de novo.");
       $("relatorio").querySelector(".folha-corpo").hidden = true;
+      $("relPdf").hidden = true;
     });
   }
   var hashAtual = (location.hash || "").replace(/^#/, "");
